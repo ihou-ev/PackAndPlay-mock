@@ -313,6 +313,71 @@
       opacity: 0.9;
     }
 
+    .login-cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-cta-btn {
+      padding: 1rem 2.5rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.125rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 3px solid white;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .login-cta-btn-primary {
+      background: white;
+      color: #FF1B8D;
+    }
+
+    .login-cta-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(255, 27, 141, 0.4);
+      background: #FFD600;
+      color: #2D1B3D;
+    }
+
+    .login-cta-btn-secondary {
+      background: transparent;
+      color: white;
+      border-color: rgba(255, 255, 255, 0.9);
+    }
+
+    .login-cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-3px);
+      border-color: white;
+    }
+
+    .login-divider {
+      display: flex;
+      align-items: center;
+      margin: 2rem 0;
+      opacity: 0.7;
+    }
+
+    .login-divider::before,
+    .login-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .login-divider-text {
+      padding: 0 1rem;
+      font-size: 0.875rem;
+      color: white;
+      white-space: nowrap;
+    }
+
     .social-login-section {
       width: 100%;
     }
@@ -442,6 +507,18 @@
       .login-description {
         font-size: 1rem;
       }
+
+      .login-cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .login-cta-btn {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
@@ -517,8 +594,23 @@
           </div>
         </div>
 
+        <!-- ロール選択ボタン -->
+        <div class="login-cta-buttons">
+          <button class="login-cta-btn login-cta-btn-primary" onclick="quickLogin('viewer')">
+            👤 視聴者として始める
+          </button>
+          <button class="login-cta-btn login-cta-btn-secondary" onclick="quickLogin('creator')">
+            🎬 配信者として始める
+          </button>
+        </div>
+
         <!-- ロール選択（非表示だが内部で使用） -->
         <input type="hidden" id="selectedRole" value="viewer">
+
+        <!-- または区切り線 -->
+        <div class="login-divider">
+          <span class="login-divider-text">または、ログイン方法を選択</span>
+        </div>
 
         <!-- ソーシャルログイン -->
         <div class="social-login-section">
