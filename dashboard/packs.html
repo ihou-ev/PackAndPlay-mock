@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>パック管理 - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="../index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <div class="flex-between">
+          <div>
+            <h1 class="page-title">パック管理</h1>
+            <p class="page-description">カードパックの作成と管理を行います</p>
+          </div>
+          <button class="btn btn-primary" data-open-modal="createPackModal">
+            ＋ 新しいパックを作成
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <!-- パックリスト -->
+        <div class="grid grid-3" id="packGrid">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- パック作成モーダル -->
+  <div id="createPackModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">新しいパックを作成</h2>
+      </div>
+      <div class="modal-body">
+        <form id="createPackForm">
+          <div class="form-group">
+            <label class="form-label">パック名 *</label>
+            <input type="text" class="form-input" id="packName" required placeholder="例: 初心者応援パック">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">説明</label>
+            <textarea class="form-textarea" id="packDescription" placeholder="パックの説明を入力..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">価格（円） *</label>
+            <input type="number" class="form-input" id="packPrice" required placeholder="500" min="100" step="100">
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="isPublished" checked>
+              <span>公開する</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close-modal="createPackModal">キャンセル</button>
+        <button class="btn btn-primary" onclick="createPack()">作成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // 配信者ロールチェック
+    requireCreatorRole();
+
+    // パックデータ（ローカルストレージから取得）
+    let creatorPacks = loadFromStorage('creatorPacks', packs);
+
+    function renderPacks() {
+      const grid = document.getElementById('packGrid');
+
+      grid.innerHTML = creatorPacks.map(pack => `
+        <div class="card pack-card">
+          <div class="pack-card-image">
+            📦
+          </div>
+          <div class="card-body">
+            <div class="flex-between mb-2">
+              <div class="pack-card-title">${pack.name}</div>
+              ${pack.isPublished ? '<span class="badge badge-live">公開中</span>' : '<span class="badge" style="background: #6b7280;">非公開</span>'}
+            </div>
+            <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 1rem;">
+              ${pack.description}
+            </p>
+            <div class="pack-card-price mb-3">${formatPrice(pack.price)}</div>
+            <div class="flex gap-1">
+              <button class="btn btn-sm btn-outline" style="flex: 1;" onclick="editPack(${pack.id})">編集</button>
+              <button class="btn btn-sm ${pack.isPublished ? 'btn-secondary' : 'btn-primary'}" onclick="togglePublish(${pack.id})">
+                ${pack.isPublished ? '非公開' : '公開'}
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function createPack() {
+      const name = document.getElementById('packName').value;
+      const description = document.getElementById('packDescription').value;
+      const price = parseInt(document.getElementById('packPrice').value);
+      const isPublished = document.getElementById('isPublished').checked;
+
+      if (!name || !price) {
+        showToast('必須項目を入力してください', 'error');
+        return;
+      }
+
+      if (price < 100) {
+        showToast('価格は100円以上にしてください', 'error');
+        return;
+      }
+
+      const newPack = {
+        id: Date.now(),
+        creatorId: 1,
+        creatorSlug: 'tanaka',
+        name,
+        description,
+        price,
+        isPublished,
+        cards: []
+      };
+
+      creatorPacks.push(newPack);
+      saveToStorage('creatorPacks', creatorPacks);
+
+      closeModal('createPackModal');
+      showToast('パックを作成しました', 'success');
+      renderPacks();
+
+      // フォームをリセット
+      document.getElementById('createPackForm').reset();
+    }
+
+    function editPack(packId) {
+      showToast('編集機能は近日実装予定です', 'info');
+    }
+
+    function togglePublish(packId) {
+      const index = creatorPacks.findIndex(p => p.id === packId);
+      if (index === -1) return;
+
+      creatorPacks[index].isPublished = !creatorPacks[index].isPublished;
+      saveToStorage('creatorPacks', creatorPacks);
+
+      const status = creatorPacks[index].isPublished ? '公開' : '非公開';
+      showToast(`パックを${status}にしました`, 'success');
+      renderPacks();
+    }
+
+    // 初期表示
+    renderPacks();
+  </script>
+</body>
+</html>

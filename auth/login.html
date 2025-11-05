@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 2rem;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      max-width: 450px;
+      width: 100%;
+      overflow: hidden;
+    }
+
+    .login-header {
+      text-align: center;
+      padding: 3rem 2rem 2rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .login-logo {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .login-title {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .login-description {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    .login-body {
+      padding: 2rem;
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .role-option {
+      background: var(--surface);
+      border: 3px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-option:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .role-option.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(217, 70, 166, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    }
+
+    .role-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .role-name {
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .role-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .demo-notice {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+    }
+
+    .demo-notice-title {
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-notice-text {
+      font-size: 0.875rem;
+      color: #78350f;
+    }
+
+    .quick-login {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .quick-login-title {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .quick-login-buttons {
+      display: flex;
+      gap: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="login-box fade-in">
+      <!-- ヘッダー -->
+      <div class="login-header">
+        <div class="login-logo">🎴</div>
+        <h1 class="login-title">Pack&Play</h1>
+        <p class="login-description">配信者専用カードパック販売プラットフォーム</p>
+      </div>
+
+      <!-- ボディ -->
+      <div class="login-body">
+        <!-- デモ用注意書き -->
+        <div class="demo-notice">
+          <div class="demo-notice-title">📌 デモモード</div>
+          <div class="demo-notice-text">
+            このモックアップでは、実際の認証は行いません。<br>
+            ログインタイプを選択すると、そのロールでログインします。
+          </div>
+        </div>
+
+        <!-- ロール選択 -->
+        <div class="role-selector">
+          <div class="role-option" id="viewerOption" onclick="selectRole('viewer')">
+            <div class="role-icon">👤</div>
+            <div class="role-name">視聴者</div>
+            <div class="role-desc">カードを購入・使用</div>
+          </div>
+
+          <div class="role-option" id="creatorOption" onclick="selectRole('creator')">
+            <div class="role-icon">🎬</div>
+            <div class="role-name">配信者</div>
+            <div class="role-desc">カード・パック管理</div>
+          </div>
+        </div>
+
+        <!-- ログインフォーム -->
+        <form id="loginForm" onsubmit="handleLogin(event)">
+          <div class="form-group">
+            <label class="form-label">メールアドレス</label>
+            <input
+              type="email"
+              class="form-input"
+              id="email"
+              placeholder="example@email.com"
+              value="demo@packandplay.com"
+            >
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">パスワード</label>
+            <input
+              type="password"
+              class="form-input"
+              id="password"
+              placeholder="••••••••"
+              value="demo1234"
+            >
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;">
+            ログイン
+          </button>
+        </form>
+
+        <!-- クイックログイン -->
+        <div class="quick-login">
+          <div class="quick-login-title">クイックログイン（デモ用）</div>
+          <div class="quick-login-buttons">
+            <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="quickLogin('viewer')">
+              視聴者としてログイン
+            </button>
+            <button class="btn btn-outline btn-sm" style="flex: 1;" onclick="quickLogin('creator')">
+              配信者としてログイン
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    let selectedRole = 'viewer';
+
+    function selectRole(role) {
+      selectedRole = role;
+
+      // ビジュアル更新
+      document.getElementById('viewerOption').classList.remove('selected');
+      document.getElementById('creatorOption').classList.remove('selected');
+
+      if (role === 'viewer') {
+        document.getElementById('viewerOption').classList.add('selected');
+      } else {
+        document.getElementById('creatorOption').classList.add('selected');
+      }
+    }
+
+    function handleLogin(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      if (!email || !password) {
+        showToast('メールアドレスとパスワードを入力してください', 'error');
+        return;
+      }
+
+      performLogin(selectedRole, email);
+    }
+
+    function quickLogin(role) {
+      selectRole(role);
+      performLogin(role, `demo-${role}@packandplay.com`);
+    }
+
+    function performLogin(role, email) {
+      showLoading();
+
+      setTimeout(() => {
+        // セッション情報を保存
+        const session = {
+          isLoggedIn: true,
+          role: role,
+          email: email,
+          name: role === 'creator' ? '田中太郎' : 'テスト視聴者',
+          creatorSlug: role === 'creator' ? 'tanaka' : null,
+          loginTime: new Date().toISOString()
+        };
+
+        saveToStorage('session', session);
+
+        hideLoading();
+        showToast(`${role === 'creator' ? '配信者' : '視聴者'}としてログインしました`, 'success');
+
+        // リダイレクト
+        setTimeout(() => {
+          if (role === 'creator') {
+            window.location.href = '../dashboard/index.html';
+          } else {
+            window.location.href = '../index.html';
+          }
+        }, 1000);
+      }, 1500);
+    }
+
+    // 初期選択
+    selectRole('viewer');
+
+    // 既にログイン済みの場合はリダイレクト
+    const session = loadFromStorage('session');
+    if (session && session.isLoggedIn) {
+      showToast('既にログインしています', 'info');
+      setTimeout(() => {
+        if (session.role === 'creator') {
+          window.location.href = '../dashboard/index.html';
+        } else {
+          window.location.href = '../index.html';
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>Pack&Play｜引いて、使って、配信が動く。</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    body {
+      overflow-x: hidden;
+    }
+
+    .lp-container {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    /* ヒーローセクション */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      padding: 4rem 2rem;
+      position: relative;
+    }
+
+    .hero-icon {
+      font-size: 8rem;
+      margin-bottom: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .hero-catch {
+      font-size: 3rem;
+      font-weight: 900;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-sub {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      opacity: 0.95;
+    }
+
+    .hero-tagline {
+      font-size: 1.25rem;
+      font-weight: 500;
+      opacity: 0.9;
+      margin-bottom: 2rem;
+    }
+
+    .hero-cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .hero-cta-btn {
+      padding: 1rem 2.5rem;
+      border-radius: var(--radius-lg);
+      font-size: 1.125rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 3px solid white;
+      transition: all 0.3s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .hero-cta-btn-primary {
+      background: white;
+      color: #667eea;
+    }
+
+    .hero-cta-btn-primary:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .hero-cta-btn-secondary {
+      background: transparent;
+      color: white;
+    }
+
+    .hero-cta-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .scroll-indicator {
+      position: absolute;
+      bottom: 2rem;
+      animation: bounce 2s infinite;
+      cursor: pointer;
+      opacity: 0.7;
+    }
+
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-10px);
+      }
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    .scroll-indicator-text {
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .scroll-indicator-icon {
+      font-size: 2rem;
+    }
+
+    /* 説明セクション */
+    .description-section {
+      background: white;
+      padding: 5rem 2rem;
+    }
+
+    .description-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .description-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 2rem;
+    }
+
+    .description-text {
+      font-size: 1.125rem;
+      line-height: 2;
+      color: var(--text);
+      margin-bottom: 3rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      padding: 2rem 1rem;
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-md);
+    }
+
+    .feature-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .feature-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    /* ログインセクション */
+    .login-section {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 5rem 2rem;
+    }
+
+    .login-container {
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    .login-box {
+      background: var(--surface);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow-xl);
+      overflow: hidden;
+    }
+
+    .login-header {
+      text-align: center;
+      padding: 2rem;
+      background: rgba(102, 126, 234, 0.1);
+    }
+
+    .login-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .login-description {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .login-body {
+      padding: 2rem;
+    }
+
+    .role-selector {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .role-option {
+      background: var(--surface);
+      border: 3px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 2rem 1rem;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .role-option:hover {
+      border-color: var(--primary);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .role-option.selected {
+      border-color: var(--primary);
+      background: linear-gradient(135deg, rgba(217, 70, 166, 0.1) 0%, rgba(129, 140, 248, 0.1) 100%);
+    }
+
+    .role-icon {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .role-name {
+      font-weight: 700;
+      font-size: 1.125rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .role-desc {
+      font-size: 0.875rem;
+      color: var(--text-light);
+    }
+
+    .demo-notice {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+    }
+
+    .demo-notice-title {
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-notice-text {
+      font-size: 0.875rem;
+      color: #78350f;
+    }
+
+    .social-login-section {
+      margin-bottom: 1rem;
+    }
+
+    .social-login-title {
+      font-size: 0.875rem;
+      color: var(--text-light);
+      text-align: center;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .social-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .social-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 0.875rem 1.5rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      background: white;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+    }
+
+    .social-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .social-btn-youtube {
+      border-color: #FF0000;
+      color: #FF0000;
+    }
+
+    .social-btn-youtube:hover {
+      background: #FF0000;
+      color: white;
+    }
+
+    .social-btn-twitch {
+      border-color: #9146FF;
+      color: #9146FF;
+    }
+
+    .social-btn-twitch:hover {
+      background: #9146FF;
+      color: white;
+    }
+
+    .social-btn-x {
+      border-color: #000000;
+      color: #000000;
+    }
+
+    .social-btn-x:hover {
+      background: #000000;
+      color: white;
+    }
+
+    .social-btn-icon {
+      font-size: 1.5rem;
+    }
+
+    /* レスポンシブデザイン */
+    @media (max-width: 768px) {
+      .hero-catch {
+        font-size: 2rem;
+      }
+
+      .hero-sub {
+        font-size: 1.25rem;
+      }
+
+      .hero-tagline {
+        font-size: 1rem;
+      }
+
+      .hero-icon {
+        font-size: 6rem;
+      }
+
+      .hero-cta-buttons {
+        flex-direction: column;
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .hero-cta-btn {
+        width: 100%;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+      }
+
+      .description-title {
+        font-size: 1.5rem;
+      }
+
+      .description-text {
+        font-size: 1rem;
+        line-height: 1.8;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .social-buttons {
+        flex-direction: column;
+      }
+
+      .social-btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="lp-container">
+    <!-- ヒーローセクション -->
+    <section class="hero-section">
+      <div class="hero-icon">🎴</div>
+      <h1 class="hero-catch">Pack&Play｜<br>引いて、使って、配信が動く。</h1>
+      <p class="hero-sub">応援が"演出"になるカードパック。</p>
+      <p class="hero-tagline">スパチャの先へ——参加型の盛り上げツール。</p>
+
+      <div class="hero-cta-buttons">
+        <button class="hero-cta-btn hero-cta-btn-primary" onclick="quickLogin('viewer')">
+          👤 視聴者として始める
+        </button>
+        <button class="hero-cta-btn hero-cta-btn-secondary" onclick="quickLogin('creator')">
+          🎬 配信者として始める
+        </button>
+      </div>
+
+      <div class="scroll-indicator" onclick="document.querySelector('.description-section').scrollIntoView({behavior: 'smooth'})">
+        <div class="scroll-indicator-text">もっと詳しく</div>
+        <div class="scroll-indicator-icon">↓</div>
+      </div>
+    </section>
+
+    <!-- 説明セクション -->
+    <section class="description-section">
+      <div class="description-container">
+        <h2 class="description-title">配信者向け30秒説明</h2>
+        <p class="description-text">
+          Pack&Playは、配信者が作ったカード入りの"パック"を視聴者が購入して開封し、<br>
+          当たったカードを使うと配信画面でエフェクトが出たり、配信者にお題・リクエストが届くサービスです。<br>
+          スパチャのように応援しつつ、"参加して一緒に遊ぶ"体験を作れます。
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📦</div>
+            <div class="feature-title">パックを作成</div>
+            <div class="feature-desc">独自のカードパックを自由にデザイン</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🎴</div>
+            <div class="feature-title">カードを開封</div>
+            <div class="feature-desc">視聴者がパックを購入して開封</div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">✨</div>
+            <div class="feature-title">演出が発動</div>
+            <div class="feature-desc">配信画面にリアルタイムでエフェクト表示</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ログインセクション -->
+    <section class="login-section">
+      <div class="login-container">
+        <div class="login-box fade-in">
+          <!-- ヘッダー -->
+          <div class="login-header">
+            <h2 class="login-title">ログイン方法を選択</h2>
+            <p class="login-description">上のボタンからもログインできます</p>
+          </div>
+
+          <!-- ボディ -->
+          <div class="login-body">
+            <!-- デモ用注意書き -->
+            <div class="demo-notice">
+              <div class="demo-notice-title">📌 デモモード</div>
+              <div class="demo-notice-text">
+                このモックアップでは、実際の認証は行いません。<br>
+                ログインボタンをクリックすると自動的にログインされます。
+              </div>
+            </div>
+
+            <!-- ロール選択（非表示だが内部で使用） -->
+            <input type="hidden" id="selectedRole" value="viewer">
+
+            <!-- ソーシャルログイン -->
+            <div class="social-login-section">
+              <div class="social-buttons">
+                <button class="social-btn social-btn-youtube" onclick="socialLogin('youtube')">
+                  <span class="social-btn-icon">▶️</span>
+                  <span>YouTube</span>
+                </button>
+                <button class="social-btn social-btn-twitch" onclick="socialLogin('twitch')">
+                  <span class="social-btn-icon">📺</span>
+                  <span>Twitch</span>
+                </button>
+                <button class="social-btn social-btn-x" id="xLoginBtn" onclick="socialLogin('x')">
+                  <span class="social-btn-icon">𝕏</span>
+                  <span>X</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // PWA Service Worker 登録
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(registration => {
+            console.log('ServiceWorker registered:', registration);
+          })
+          .catch(error => {
+            console.log('ServiceWorker registration failed:', error);
+          });
+      });
+    }
+
+    let selectedRole = 'viewer';
+
+    // ヒーローのボタンから直接ログイン（デフォルトはYouTube）
+    function quickLogin(role) {
+      selectedRole = role;
+      document.getElementById('selectedRole').value = role;
+
+      // 配信者の場合はXボタンを非表示
+      if (role === 'creator') {
+        document.getElementById('xLoginBtn').style.display = 'none';
+      } else {
+        document.getElementById('xLoginBtn').style.display = 'flex';
+      }
+
+      // YouTubeで自動ログイン
+      socialLogin('youtube');
+    }
+
+    function socialLogin(platform) {
+      // hiddenフィールドからロールを取得
+      selectedRole = document.getElementById('selectedRole').value;
+
+      // プラットフォーム名を取得
+      const platformNames = {
+        'youtube': 'YouTube',
+        'twitch': 'Twitch',
+        'x': 'X (Twitter)'
+      };
+
+      const platformName = platformNames[platform];
+
+      showLoading();
+
+      // デモ用：実際のOAuth認証をシミュレート
+      setTimeout(() => {
+        // セッション情報を保存
+        const session = {
+          isLoggedIn: true,
+          role: selectedRole,
+          email: `demo-${platform}@packandplay.com`,
+          name: selectedRole === 'creator' ? '田中太郎' : 'テスト視聴者',
+          creatorSlug: selectedRole === 'creator' ? 'tanaka' : null,
+          loginMethod: platform,
+          loginPlatform: platformName,
+          loginTime: new Date().toISOString()
+        };
+
+        saveToStorage('session', session);
+
+        hideLoading();
+
+        const roleText = selectedRole === 'creator' ? '配信者' : '視聴者';
+        showToast(`${platformName}で${roleText}としてログインしました`, 'success');
+
+        // リダイレクト
+        setTimeout(() => {
+          if (selectedRole === 'creator') {
+            window.location.href = 'dashboard/index.html';
+          } else {
+            window.location.href = 'discover.html';
+          }
+        }, 1000);
+      }, 1500);
+    }
+
+    // 既にログイン済みの場合はリダイレクト
+    const session = loadFromStorage('session');
+    if (session && session.isLoggedIn) {
+      showToast('既にログインしています', 'info');
+      setTimeout(() => {
+        if (session.role === 'creator') {
+          window.location.href = 'dashboard/index.html';
+        } else {
+          window.location.href = 'discover.html';
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

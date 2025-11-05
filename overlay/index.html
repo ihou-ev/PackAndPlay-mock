@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>OBS Overlay - Pack&Play</title>
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 1920px;
+      height: 1080px;
+      background: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .card-effect {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 2rem;
+      padding: 3rem;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      min-width: 400px;
+      animation: cardAppear 0.5s ease-out;
+      z-index: 100;
+    }
+
+    @keyframes cardAppear {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.5) rotate(-10deg);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1) rotate(0deg);
+      }
+    }
+
+    .card-effect.fadeOut {
+      animation: cardDisappear 0.5s ease-out forwards;
+    }
+
+    @keyframes cardDisappear {
+      from {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+      }
+    }
+
+    .card-icon {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    .card-name {
+      font-size: 3rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-rarity {
+      display: inline-block;
+      padding: 0.5rem 1.5rem;
+      border-radius: 9999px;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 1rem;
+    }
+
+    .card-rarity.n {
+      background: #9ca3af;
+    }
+
+    .card-rarity.r {
+      background: #3b82f6;
+    }
+
+    .card-rarity.sr {
+      background: #8b5cf6;
+    }
+
+    .card-rarity.ur {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      animation: rainbowPulse 2s infinite;
+    }
+
+    @keyframes rainbowPulse {
+      0%, 100% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+      50% {
+        transform: scale(1.1);
+        filter: brightness(1.2);
+      }
+    }
+
+    .viewer-message {
+      font-size: 1.5rem;
+      color: #1f2937;
+      margin-top: 1rem;
+      padding: 1.5rem;
+      background: #f3f4f6;
+      border-radius: 1rem;
+      border-left: 4px solid #d946a6;
+    }
+
+    .viewer-name {
+      font-size: 1.25rem;
+      color: #6b7280;
+      margin-top: 0.5rem;
+    }
+
+    /* パーティクルエフェクト */
+    .particle {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      pointer-events: none;
+      animation: particleFloat 3s ease-out forwards;
+    }
+
+    @keyframes particleFloat {
+      from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+      to {
+        opacity: 0;
+        transform: translateY(-200px) scale(0);
+      }
+    }
+
+    /* きらきらエフェクト */
+    .sparkle {
+      position: absolute;
+      width: 0;
+      height: 0;
+      background: transparent;
+    }
+
+    .sparkle::before,
+    .sparkle::after {
+      content: '';
+      position: absolute;
+      width: 30px;
+      height: 4px;
+      background: white;
+      top: 0;
+      left: -15px;
+    }
+
+    .sparkle::after {
+      transform: rotate(90deg);
+    }
+
+    .sparkle {
+      animation: sparkleRotate 1s linear infinite, sparkleFade 2s ease-out forwards;
+    }
+
+    @keyframes sparkleRotate {
+      from {
+        transform: rotate(0deg);
+      }
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    @keyframes sparkleFade {
+      from {
+        opacity: 1;
+      }
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* テストボタン（開発用） */
+    .test-controls {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1rem;
+      border-radius: 0.5rem;
+      color: white;
+      z-index: 1000;
+    }
+
+    .test-btn {
+      display: block;
+      width: 100%;
+      padding: 0.5rem 1rem;
+      margin-bottom: 0.5rem;
+      background: #d946a6;
+      color: white;
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .test-btn:hover {
+      background: #b8358a;
+    }
+  </style>
+</head>
+<body>
+  <!-- エフェクトコンテナ -->
+  <div id="effectContainer"></div>
+
+  <!-- テストコントロール（開発用） -->
+  <div class="test-controls">
+    <div style="margin-bottom: 1rem; font-weight: 700;">テスト用コントロール</div>
+    <button class="test-btn" onclick="testCard('action', 'N')">アクション (N)</button>
+    <button class="test-btn" onclick="testCard('visual', 'SR')">ビジュアル (SR)</button>
+    <button class="test-btn" onclick="testCard('message', 'UR')">メッセージ (UR)</button>
+  </div>
+
+  <script>
+    // カードエフェクトを表示
+    function displayCardEffect(cardData) {
+      const container = document.getElementById('effectContainer');
+
+      // カードエフェクト要素を作成
+      const cardEffect = document.createElement('div');
+      cardEffect.className = 'card-effect';
+
+      // カードアイコン
+      const icons = {
+        'action': '⚡',
+        'visual': '✨',
+        'message': '💬'
+      };
+
+      cardEffect.innerHTML = `
+        <div class="card-icon">${icons[cardData.type] || '🎴'}</div>
+        <div class="card-name">${cardData.name}</div>
+        <div class="card-rarity ${cardData.rarity.toLowerCase()}">${cardData.rarity}</div>
+        ${cardData.viewerMessage ? `
+          <div class="viewer-message">
+            ${cardData.viewerMessage}
+          </div>
+          <div class="viewer-name">- ${cardData.viewerName || '視聴者'} -</div>
+        ` : ''}
+      `;
+
+      container.appendChild(cardEffect);
+
+      // パーティクルエフェクトを生成
+      if (cardData.rarity === 'UR' || cardData.rarity === 'SR') {
+        createParticles(50);
+      } else {
+        createParticles(20);
+      }
+
+      // きらきらエフェクト
+      if (cardData.type === 'visual' || cardData.rarity === 'UR') {
+        createSparkles(30);
+      }
+
+      // 効果音（モックアップなので実際には再生しない）
+      console.log('Playing sound effect for card:', cardData);
+
+      // 5秒後にフェードアウト
+      setTimeout(() => {
+        cardEffect.classList.add('fadeOut');
+        setTimeout(() => {
+          container.removeChild(cardEffect);
+        }, 500);
+      }, 5000);
+    }
+
+    // パーティクルを生成
+    function createParticles(count) {
+      const container = document.getElementById('effectContainer');
+
+      for (let i = 0; i < count; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+
+        // ランダムな位置
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+
+        particle.style.left = x + 'px';
+        particle.style.top = y + 'px';
+
+        // ランダムな色
+        const colors = ['#d946a6', '#818cf8', '#fbbf24', '#10b981'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+        // ランダムな遅延
+        particle.style.animationDelay = Math.random() * 0.5 + 's';
+
+        container.appendChild(particle);
+
+        // 3秒後に削除
+        setTimeout(() => {
+          if (particle.parentNode) {
+            container.removeChild(particle);
+          }
+        }, 3000);
+      }
+    }
+
+    // きらきらエフェクトを生成
+    function createSparkles(count) {
+      const container = document.getElementById('effectContainer');
+
+      for (let i = 0; i < count; i++) {
+        const sparkle = document.createElement('div');
+        sparkle.className = 'sparkle';
+
+        // ランダムな位置
+        const x = Math.random() * window.innerWidth;
+        const y = Math.random() * window.innerHeight;
+
+        sparkle.style.left = x + 'px';
+        sparkle.style.top = y + 'px';
+
+        // ランダムな遅延
+        sparkle.style.animationDelay = Math.random() * 0.5 + 's';
+
+        container.appendChild(sparkle);
+
+        // 2秒後に削除
+        setTimeout(() => {
+          if (sparkle.parentNode) {
+            container.removeChild(sparkle);
+          }
+        }, 2000);
+      }
+    }
+
+    // テスト用関数
+    function testCard(type, rarity) {
+      const testData = {
+        name: 'テストカード',
+        type: type,
+        rarity: rarity,
+        viewerName: 'テスト視聴者',
+        viewerMessage: type === 'message' ? 'これはテストメッセージです！' : null
+      };
+
+      displayCardEffect(testData);
+    }
+
+    // 実際のアプリケーションでは、ここでSupabase Realtimeに接続して
+    // 承認されたカードのイベントをリスニングします
+    console.log('OBS Overlay initialized');
+    console.log('Waiting for card redemption events...');
+
+    // ローカルストレージから承認イベントを監視（デモ用）
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'overlayEvent' && e.newValue) {
+        const event = JSON.parse(e.newValue);
+        displayCardEffect(event.card);
+
+        // イベントをクリア
+        localStorage.removeItem('overlayEvent');
+      }
+    });
+
+    // 定期的にチェック（デモ用）
+    setInterval(() => {
+      const event = localStorage.getItem('overlayEvent');
+      if (event) {
+        const data = JSON.parse(event);
+        displayCardEffect(data.card);
+        localStorage.removeItem('overlayEvent');
+      }
+    }, 1000);
+  </script>
+</body>
+</html>

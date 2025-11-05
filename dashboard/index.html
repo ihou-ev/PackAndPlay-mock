@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>ダッシュボード - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="../index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <div class="flex-between">
+          <div>
+            <h1 class="page-title">ダッシュボード</h1>
+            <p class="page-description">配信者管理画面</p>
+          </div>
+          <div class="flex gap-2">
+            <button id="liveToggle" class="btn btn-success" onclick="toggleLiveStatus()">
+              🔴 配信開始
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <!-- 統計カード -->
+        <div class="grid grid-4 mb-4">
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">今日の売上</div>
+              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">¥12,500</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">総売上</div>
+              <div style="font-size: 2rem; font-weight: 700; color: var(--primary);">¥250,000</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">承認待ち</div>
+              <div style="font-size: 2rem; font-weight: 700; color: var(--warning);">2</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">公開中のパック</div>
+              <div style="font-size: 2rem; font-weight: 700;">3</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- クイックアクション -->
+        <div class="grid grid-3 mb-4">
+          <a href="cards.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">🎴</div>
+              <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">カードライブラリ</div>
+              <div style="color: var(--text-light); font-size: 0.875rem;">カードの作成と管理</div>
+            </div>
+          </a>
+
+          <a href="packs.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">📦</div>
+              <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">パック管理</div>
+              <div style="color: var(--text-light); font-size: 0.875rem;">パックの作成と編集</div>
+            </div>
+          </a>
+
+          <a href="redemptions.html" class="card" style="text-decoration: none; color: inherit;">
+            <div class="card-body text-center">
+              <div style="font-size: 3rem; margin-bottom: 1rem;">✅</div>
+              <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">承認待ちキュー</div>
+              <div style="color: var(--text-light); font-size: 0.875rem;">視聴者のカード使用を承認</div>
+              <div class="badge badge-live mt-2">2件の承認待ち</div>
+            </div>
+          </a>
+        </div>
+
+        <!-- OBS オーバーレイ設定 -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h3 style="font-size: 1.125rem; font-weight: 700;">OBSオーバーレイ設定</h3>
+          </div>
+          <div class="card-body">
+            <p style="color: var(--text-light); margin-bottom: 1rem;">
+              配信ソフト（OBS）にブラウザソースとして追加してください
+            </p>
+            <div style="background: #f9fafb; padding: 1rem; border-radius: var(--radius-md); font-family: var(--font-mono); font-size: 0.875rem; margin-bottom: 1rem;">
+              http://localhost/overlay/tanaka
+            </div>
+            <button class="btn btn-outline btn-sm" onclick="copyOverlayUrl()">
+              📋 URLをコピー
+            </button>
+          </div>
+        </div>
+
+        <!-- 最近のアクティビティ -->
+        <div class="card">
+          <div class="card-header">
+            <h3 style="font-size: 1.125rem; font-weight: 700;">最近のアクティビティ</h3>
+          </div>
+          <div class="card-body">
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div style="border-left: 4px solid var(--success); padding-left: 1rem;">
+                <div style="font-weight: 600;">視聴者Aさんがカードを使用</div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">「こんにちは」- 承認済み - 5分前</div>
+              </div>
+              <div style="border-left: 4px solid var(--primary); padding-left: 1rem;">
+                <div style="font-weight: 600;">初心者応援パックが購入されました</div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">¥500 - 10分前</div>
+              </div>
+              <div style="border-left: 4px solid var(--warning); padding-left: 1rem;">
+                <div style="font-weight: 600;">視聴者Bさんがカード使用を申請</div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">「ありがとう」- 承認待ち - 15分前</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // 配信者ロールチェック
+    if (!requireCreatorRole()) {
+      // requireCreatorRole()でリダイレクト処理されるため、ここでは何もしない
+    }
+
+    let isLive = false;
+
+    function toggleLiveStatus() {
+      isLive = !isLive;
+      const button = document.getElementById('liveToggle');
+
+      if (isLive) {
+        button.textContent = '⏸️ 配信終了';
+        button.className = 'btn btn-danger';
+        showToast('配信を開始しました', 'success');
+      } else {
+        button.textContent = '🔴 配信開始';
+        button.className = 'btn btn-success';
+        showToast('配信を終了しました', 'info');
+      }
+    }
+
+    function copyOverlayUrl() {
+      copyToClipboard('http://localhost/overlay/tanaka');
+    }
+  </script>
+</body>
+</html>

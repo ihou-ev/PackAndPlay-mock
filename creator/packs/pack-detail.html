@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>パック詳細 - Pack&Play</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="manifest" href="../../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="../../index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <div class="container" style="padding: 3rem 0;">
+      <a href="../tanaka.html" style="color: var(--text-light); text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem; margin-bottom: 2rem;">
+        ← 田中太郎に戻る
+      </a>
+
+      <div class="grid grid-2" style="gap: 3rem;">
+        <!-- パック画像 -->
+        <div>
+          <div class="card">
+            <div class="pack-card-image" style="height: 400px; font-size: 8rem;">
+              📦
+            </div>
+          </div>
+        </div>
+
+        <!-- パック情報 -->
+        <div>
+          <h1 id="packName" class="page-title" style="margin-bottom: 1rem;"></h1>
+          <p id="packDescription" class="page-description" style="margin-bottom: 2rem;"></p>
+
+          <div style="background: var(--surface); padding: 2rem; border-radius: var(--radius-lg); box-shadow: var(--shadow-md); margin-bottom: 2rem;">
+            <div class="flex-between" style="margin-bottom: 1rem;">
+              <span style="font-size: 1.125rem; font-weight: 600;">価格</span>
+              <span id="packPrice" style="font-size: 2rem; font-weight: 700; color: var(--primary);"></span>
+            </div>
+            <button class="btn btn-primary btn-lg" style="width: 100%;" onclick="purchasePack()">
+              購入する
+            </button>
+          </div>
+
+          <!-- 排出率表示（景表法対応） -->
+          <div class="card">
+            <div class="card-header">
+              <h3 style="font-size: 1.125rem; font-weight: 700;">排出率（景品表示法に基づく表示）</h3>
+            </div>
+            <div class="card-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>カード名</th>
+                    <th>レアリティ</th>
+                    <th style="text-align: right;">排出率</th>
+                  </tr>
+                </thead>
+                <tbody id="dropRatesTable">
+                  <!-- JavaScriptで動的に生成 -->
+                </tbody>
+                <tfoot>
+                  <tr style="font-weight: 700; background: #f9fafb;">
+                    <td colspan="2">合計</td>
+                    <td style="text-align: right;">100%</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+
+          <!-- カードタイプ説明 -->
+          <div class="card mt-3">
+            <div class="card-header">
+              <h3 style="font-size: 1.125rem; font-weight: 700;">カードタイプについて</h3>
+            </div>
+            <div class="card-body">
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div>
+                  <span style="font-weight: 600;">アクション：</span>
+                  <span style="color: var(--text-light);">アニメーションと音声が再生されます</span>
+                </div>
+                <div>
+                  <span style="font-weight: 600;">ビジュアル：</span>
+                  <span style="color: var(--text-light);">画面エフェクトが表示されます</span>
+                </div>
+                <div>
+                  <span style="font-weight: 600;">メッセージ：</span>
+                  <span style="color: var(--text-light);">メッセージを配信者に送信できます</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/mock-data.js"></script>
+  <script src="../../js/main.js"></script>
+  <script>
+    // URLパラメータからパックIDを取得
+    const packId = getUrlParam('id') || 1;
+    const pack = getPackById(parseInt(packId));
+
+    if (!pack) {
+      window.location.href = '../tanaka.html';
+    }
+
+    // パック情報を表示
+    document.getElementById('packName').textContent = pack.name;
+    document.getElementById('packDescription').textContent = pack.description;
+    document.getElementById('packPrice').textContent = formatPrice(pack.price);
+
+    // 排出率テーブルを表示
+    const dropRatesTable = document.getElementById('dropRatesTable');
+    dropRatesTable.innerHTML = pack.cards.map(card => `
+      <tr>
+        <td>${card.name}</td>
+        <td>
+          <span class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</span>
+        </td>
+        <td style="text-align: right; font-weight: 600;">${card.dropRate}%</td>
+      </tr>
+    `).join('');
+
+    function purchasePack() {
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        showToast('購入が完了しました！', 'success');
+        setTimeout(() => {
+          window.location.href = `pack-open.html?id=${packId}`;
+        }, 1500);
+      }, 1500);
+    }
+  </script>
+</body>
+</html>

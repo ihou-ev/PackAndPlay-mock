@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>Pack&Play - 配信者を探す</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="discover.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <!-- ヒーローセクション -->
+    <section class="page-header" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom: none;">
+      <div class="container">
+        <h1 class="page-title" style="color: white; font-size: 3rem;">お気に入りの配信者を見つけよう</h1>
+        <p class="page-description" style="color: rgba(255,255,255,0.9); font-size: 1.25rem;">カードパックを購入して、配信を盛り上げよう！</p>
+        <div style="margin-top: 2rem;">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="配信者を検索..."
+            class="form-input"
+            style="max-width: 500px; margin: 0 auto; padding: 1rem;"
+          >
+        </div>
+      </div>
+    </section>
+
+    <!-- 配信者リスト -->
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <div class="flex-between mb-4">
+          <h2 style="font-size: 1.5rem; font-weight: 700;">配信者一覧</h2>
+          <div class="flex gap-2">
+            <button class="btn btn-sm btn-outline" onclick="filterLive()">
+              🔴 配信中のみ
+            </button>
+            <button class="btn btn-sm btn-outline" onclick="showAll()">
+              すべて表示
+            </button>
+          </div>
+        </div>
+
+        <div id="creatorGrid" class="grid grid-3">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-state-icon">🔍</div>
+          <div class="empty-state-text">配信者が見つかりませんでした</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // 配信者を表示
+    let currentFilter = 'all';
+
+    function renderCreators(creatorsToRender) {
+      const grid = document.getElementById('creatorGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      if (creatorsToRender.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      grid.innerHTML = creatorsToRender.map(creator => `
+        <div class="card creator-card fade-in" onclick="window.location.href='creator/${creator.slug}.html'">
+          <div class="creator-avatar">
+            ${creator.name.charAt(0)}
+          </div>
+          <div class="creator-info">
+            <div class="flex-between mb-1">
+              <div class="creator-name">${creator.name}</div>
+              ${creator.isLive ? '<span class="badge badge-live">🔴 配信中</span>' : ''}
+            </div>
+            <div class="creator-stats">
+              <span>📦 ${creator.packCount}パック</span>
+              <span>💰 ${formatPrice(creator.totalSales)}</span>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterLive() {
+      currentFilter = 'live';
+      const liveCreators = creators.filter(c => c.isLive);
+      renderCreators(liveCreators);
+    }
+
+    function showAll() {
+      currentFilter = 'all';
+      renderCreators(creators);
+    }
+
+    // 検索機能
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', debounce(function(e) {
+      const query = e.target.value;
+      let filtered = creators;
+
+      if (currentFilter === 'live') {
+        filtered = filtered.filter(c => c.isLive);
+      }
+
+      if (query) {
+        filtered = filterItems(filtered, query, ['name', 'displayName']);
+      }
+
+      renderCreators(filtered);
+    }, 300));
+
+    // 初期表示
+    renderCreators(creators);
+  </script>
+</body>
+</html>

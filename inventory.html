@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>マイカード - Pack&Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    .card-item {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      border: 2px solid var(--border);
+      transition: all 0.2s;
+    }
+
+    .card-item:hover {
+      border-color: var(--primary);
+      box-shadow: var(--shadow-md);
+    }
+
+    .card-item.used {
+      opacity: 0.6;
+      background: #f9fafb;
+    }
+
+    .card-icon-large {
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <h1 class="page-title">マイカード</h1>
+        <p class="page-description">あなたが所持しているカードの一覧です</p>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <!-- フィルター -->
+        <div class="filters">
+          <select id="creatorFilter" class="form-select" style="width: 200px;" onchange="applyFilters()">
+            <option value="">すべての配信者</option>
+          </select>
+
+          <select id="rarityFilter" class="form-select" style="width: 150px;" onchange="applyFilters()">
+            <option value="">すべてのレアリティ</option>
+            <option value="N">N（ノーマル）</option>
+            <option value="R">R（レア）</option>
+            <option value="SR">SR（スーパーレア）</option>
+            <option value="UR">UR（ウルトラレア）</option>
+          </select>
+
+          <select id="statusFilter" class="form-select" style="width: 150px;" onchange="applyFilters()">
+            <option value="">すべて</option>
+            <option value="unused">未使用のみ</option>
+            <option value="used">使用済みのみ</option>
+          </select>
+        </div>
+
+        <!-- 統計情報 -->
+        <div class="grid grid-4 mb-4">
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">総カード数</div>
+              <div id="totalCards" style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">未使用</div>
+              <div id="unusedCards" style="font-size: 2rem; font-weight: 700; color: var(--success);">0</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">使用済み</div>
+              <div id="usedCards" style="font-size: 2rem; font-weight: 700; color: var(--text-light);">0</div>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body text-center">
+              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">UR カード</div>
+              <div id="urCards" style="font-size: 2rem; font-weight: 700; color: var(--warning);">0</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- カードリスト -->
+        <div id="cardGrid" class="grid grid-4">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-state-icon">🎴</div>
+          <div class="empty-state-text">カードがありません</div>
+          <a href="index.html" class="btn btn-primary mt-3">配信者を探してパックを購入</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- カード使用モーダル -->
+  <div id="useCardModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">カードを使用</h2>
+      </div>
+      <div class="modal-body">
+        <div id="modalCardInfo"></div>
+        <div id="messageInput" class="hidden">
+          <div class="form-group mt-3">
+            <label class="form-label">メッセージ（任意）</label>
+            <textarea id="viewerMessage" class="form-textarea" placeholder="配信者へのメッセージを入力..."></textarea>
+          </div>
+        </div>
+        <p style="color: var(--text-light); font-size: 0.875rem; margin-top: 1rem;">
+          配信者が配信中の場合のみカードを使用できます。
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close-modal="useCardModal">キャンセル</button>
+        <button class="btn btn-primary" onclick="submitCardUse()">使用する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // インベントリデータを取得（ローカルストレージ + モックデータ）
+    let inventory = loadFromStorage('inventory', []);
+
+    // モックデータも追加（デモ用）
+    if (inventory.length === 0) {
+      inventory = [
+        { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
+        { id: 2, name: 'いいね！', rarity: 'R', type: 'action', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
+        { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: true, acquiredAt: '2025-11-01' },
+        { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' }
+      ];
+    }
+
+    let currentFilters = {
+      creator: '',
+      rarity: '',
+      status: ''
+    };
+
+    let selectedCard = null;
+
+    // 配信者フィルターの選択肢を生成
+    const creators = [...new Set(inventory.map(c => c.creatorName))];
+    const creatorFilter = document.getElementById('creatorFilter');
+    creators.forEach(creator => {
+      const option = document.createElement('option');
+      option.value = creator;
+      option.textContent = creator;
+      creatorFilter.appendChild(option);
+    });
+
+    function renderCards(cards) {
+      const grid = document.getElementById('cardGrid');
+      const emptyState = document.getElementById('emptyState');
+
+      if (cards.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
+
+      grid.innerHTML = cards.map((card, index) => `
+        <div class="card-item ${card.isUsed ? 'used' : ''} fade-in">
+          <div class="card-icon-large">${cardIcons[card.type]}</div>
+          <div style="text-align: center;">
+            <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">${card.name}</div>
+            <div class="badge badge-rarity-${card.rarity.toLowerCase()} mb-2">${card.rarity}</div>
+            <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 1rem;">
+              ${card.creatorName}
+            </div>
+            ${card.isUsed
+              ? '<div class="status status-approved">使用済み</div>'
+              : `<button class="btn btn-primary btn-sm" style="width: 100%;" onclick="openUseModal(${index})">使う</button>`
+            }
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function applyFilters() {
+      currentFilters.creator = document.getElementById('creatorFilter').value;
+      currentFilters.rarity = document.getElementById('rarityFilter').value;
+      currentFilters.status = document.getElementById('statusFilter').value;
+
+      let filtered = inventory;
+
+      if (currentFilters.creator) {
+        filtered = filtered.filter(c => c.creatorName === currentFilters.creator);
+      }
+
+      if (currentFilters.rarity) {
+        filtered = filtered.filter(c => c.rarity === currentFilters.rarity);
+      }
+
+      if (currentFilters.status === 'unused') {
+        filtered = filtered.filter(c => !c.isUsed);
+      } else if (currentFilters.status === 'used') {
+        filtered = filtered.filter(c => c.isUsed);
+      }
+
+      renderCards(filtered);
+      updateStats();
+    }
+
+    function updateStats() {
+      document.getElementById('totalCards').textContent = inventory.length;
+      document.getElementById('unusedCards').textContent = inventory.filter(c => !c.isUsed).length;
+      document.getElementById('usedCards').textContent = inventory.filter(c => c.isUsed).length;
+      document.getElementById('urCards').textContent = inventory.filter(c => c.rarity === 'UR').length;
+    }
+
+    function openUseModal(index) {
+      // フィルター適用後のカードから選択
+      const filtered = getFilteredCards();
+      selectedCard = filtered[index];
+
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
+
+      document.getElementById('modalCardInfo').innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+          <div style="font-size: 4rem;">${cardIcons[selectedCard.type]}</div>
+          <div style="font-size: 1.5rem; font-weight: 700; margin: 1rem 0;">${selectedCard.name}</div>
+          <div class="badge badge-rarity-${selectedCard.rarity.toLowerCase()}">${selectedCard.rarity}</div>
+        </div>
+      `;
+
+      const messageInput = document.getElementById('messageInput');
+      if (selectedCard.type === 'message') {
+        messageInput.classList.remove('hidden');
+      } else {
+        messageInput.classList.add('hidden');
+      }
+
+      openModal('useCardModal');
+    }
+
+    function getFilteredCards() {
+      let filtered = inventory;
+
+      if (currentFilters.creator) {
+        filtered = filtered.filter(c => c.creatorName === currentFilters.creator);
+      }
+
+      if (currentFilters.rarity) {
+        filtered = filtered.filter(c => c.rarity === currentFilters.rarity);
+      }
+
+      if (currentFilters.status === 'unused') {
+        filtered = filtered.filter(c => !c.isUsed);
+      } else if (currentFilters.status === 'used') {
+        filtered = filtered.filter(c => c.isUsed);
+      }
+
+      return filtered;
+    }
+
+    function submitCardUse() {
+      const message = document.getElementById('viewerMessage').value;
+
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        closeModal('useCardModal');
+
+        // カードを使用済みにマーク
+        const index = inventory.findIndex(c => c.id === selectedCard.id && c.acquiredAt === selectedCard.acquiredAt);
+        if (index !== -1) {
+          inventory[index].isUsed = true;
+          saveToStorage('inventory', inventory);
+        }
+
+        showToast('カードを使用しました！承認待ちキューに追加されました', 'success');
+
+        // 再描画
+        applyFilters();
+      }, 1500);
+    }
+
+    // 初期表示
+    applyFilters();
+  </script>
+</body>
+</html>

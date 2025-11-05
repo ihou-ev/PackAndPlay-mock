@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>田中太郎 - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="../index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <!-- 配信者情報 -->
+    <section class="page-header">
+      <div class="container">
+        <div class="flex gap-3" style="align-items: flex-start;">
+          <div class="creator-avatar" style="width: 120px; height: 120px; font-size: 3rem;">
+            田
+          </div>
+          <div style="flex: 1;">
+            <div class="flex gap-2 mb-2" style="align-items: center;">
+              <h1 class="page-title" style="margin-bottom: 0;">田中太郎</h1>
+              <span class="badge badge-live">🔴 配信中</span>
+            </div>
+            <p class="page-description">いつも応援ありがとうございます！カードを使って配信を盛り上げてね！</p>
+            <div class="flex gap-3 mt-3">
+              <div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">パック数</div>
+                <div style="font-size: 1.5rem; font-weight: 700;">3</div>
+              </div>
+              <div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">総売上</div>
+                <div style="font-size: 1.5rem; font-weight: 700;">¥250,000</div>
+              </div>
+              <div>
+                <div style="color: var(--text-light); font-size: 0.875rem;">チャンネル</div>
+                <a href="https://youtube.com/@tanaka" target="_blank" class="btn btn-sm btn-secondary mt-1">
+                  YouTube で見る
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- パックリスト -->
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem;">パック一覧</h2>
+
+        <div id="packGrid" class="grid grid-3">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // 配信者のslugを取得（実際のアプリではURLから取得）
+    const creatorSlug = 'tanaka';
+    const creator = getCreatorBySlug(creatorSlug);
+    const creatorPacks = getPacksByCreator(creatorSlug);
+
+    function renderPacks() {
+      const grid = document.getElementById('packGrid');
+
+      if (creatorPacks.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <div class="empty-state-icon">📦</div>
+            <div class="empty-state-text">まだパックがありません</div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = creatorPacks.map(pack => `
+        <div class="card pack-card" onclick="window.location.href='packs/pack-detail.html?id=${pack.id}'">
+          <div class="pack-card-image">
+            📦
+          </div>
+          <div class="card-body">
+            <div class="pack-card-title">${pack.name}</div>
+            <p style="color: var(--text-light); font-size: 0.875rem; margin: 0.5rem 0;">
+              ${pack.description}
+            </p>
+            <div class="flex-between" style="align-items: center; margin-top: 1rem;">
+              <div class="pack-card-price">${formatPrice(pack.price)}</div>
+              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); purchasePack(${pack.id})">
+                購入する
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function purchasePack(packId) {
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        showToast('購入が完了しました！', 'success');
+        // パック開封画面へ遷移
+        setTimeout(() => {
+          window.location.href = `packs/pack-open.html?id=${packId}`;
+        }, 1500);
+      }, 1500);
+    }
+
+    // 初期表示
+    renderPacks();
+  </script>
+</body>
+</html>

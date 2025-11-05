@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>カードライブラリ - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header>
+    <nav class="navbar container">
+      <a href="../index.html" class="logo">
+        🎴 Pack&Play
+      </a>
+      <ul class="nav-links">
+        <!-- JavaScriptで動的に生成 -->
+      </ul>
+    </nav>
+  </header>
+
+  <!-- メインコンテンツ -->
+  <main>
+    <section class="page-header">
+      <div class="container">
+        <div class="flex-between">
+          <div>
+            <h1 class="page-title">カードライブラリ</h1>
+            <p class="page-description">カードを作成・管理します。パックに追加する前にここで作成してください。</p>
+          </div>
+          <button class="btn btn-primary" data-open-modal="createCardModal">
+            ＋ 新しいカードを作成
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section style="padding: 3rem 0;">
+      <div class="container">
+        <!-- フィルター -->
+        <div class="flex gap-2 mb-4">
+          <select id="rarityFilter" class="form-select" style="width: 150px;" onchange="filterCards()">
+            <option value="">すべてのレアリティ</option>
+            <option value="N">N（ノーマル）</option>
+            <option value="R">R（レア）</option>
+            <option value="SR">SR（スーパーレア）</option>
+            <option value="UR">UR（ウルトラレア）</option>
+          </select>
+
+          <select id="typeFilter" class="form-select" style="width: 150px;" onchange="filterCards()">
+            <option value="">すべてのタイプ</option>
+            <option value="action">アクション</option>
+            <option value="visual">ビジュアル</option>
+            <option value="message">メッセージ</option>
+          </select>
+        </div>
+
+        <!-- カードテーブル -->
+        <div class="card">
+          <table class="table">
+            <thead>
+              <tr>
+                <th>カード名</th>
+                <th>レアリティ</th>
+                <th>タイプ</th>
+                <th>承認要否</th>
+                <th>使用回数</th>
+                <th style="text-align: right;">アクション</th>
+              </tr>
+            </thead>
+            <tbody id="cardsTable">
+              <!-- JavaScriptで動的に生成 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- カード作成モーダル -->
+  <div id="createCardModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">新しいカードを作成</h2>
+      </div>
+      <div class="modal-body">
+        <form id="createCardForm">
+          <div class="form-group">
+            <label class="form-label">カード名 *</label>
+            <input type="text" class="form-input" id="cardName" required placeholder="例: きらきら">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">レアリティ *</label>
+            <select class="form-select" id="cardRarity" required>
+              <option value="N">N（ノーマル）</option>
+              <option value="R">R（レア）</option>
+              <option value="SR">SR（スーパーレア）</option>
+              <option value="UR">UR（ウルトラレア）</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">タイプ *</label>
+            <select class="form-select" id="cardType" required>
+              <option value="action">アクション（アニメーション + 音声）</option>
+              <option value="visual">ビジュアル（画面エフェクト）</option>
+              <option value="message">メッセージ（視聴者メッセージ）</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">説明</label>
+            <textarea class="form-textarea" id="cardDescription" placeholder="カードの説明を入力..."></textarea>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="requiresApproval" checked>
+              <span>使用時に承認が必要</span>
+            </label>
+            <p style="color: var(--text-light); font-size: 0.875rem; margin-top: 0.5rem;">
+              チェックを外すと、視聴者が使用した瞬間に自動的にオーバーレイに表示されます
+            </p>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close-modal="createCardModal">キャンセル</button>
+        <button class="btn btn-primary" onclick="createCard()">作成</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- カード編集モーダル -->
+  <div id="editCardModal" class="modal-overlay" style="display: none;">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">カードを編集</h2>
+      </div>
+      <div class="modal-body">
+        <form id="editCardForm">
+          <div class="form-group">
+            <label class="form-label">カード名 *</label>
+            <input type="text" class="form-input" id="editCardName" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">レアリティ *</label>
+            <select class="form-select" id="editCardRarity" required>
+              <option value="N">N（ノーマル）</option>
+              <option value="R">R（レア）</option>
+              <option value="SR">SR（スーパーレア）</option>
+              <option value="UR">UR（ウルトラレア）</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">タイプ *</label>
+            <select class="form-select" id="editCardType" required>
+              <option value="action">アクション</option>
+              <option value="visual">ビジュアル</option>
+              <option value="message">メッセージ</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="editRequiresApproval">
+              <span>使用時に承認が必要</span>
+            </label>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" data-close-modal="editCardModal">キャンセル</button>
+        <button class="btn btn-primary" onclick="updateCard()">更新</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
+    <div class="container">
+      <div class="flex-between">
+        <div>
+          <div class="logo mb-2">🎴 Pack&Play</div>
+          <p style="color: var(--text-light); font-size: 0.875rem;">
+            © 2025 Pack&Play. All rights reserved.
+          </p>
+        </div>
+        <div class="flex gap-3">
+          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
+          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script>
+    // 配信者ロールチェック
+    requireCreatorRole();
+
+    // カードデータ（ローカルストレージから取得）
+    let creatorCards = loadFromStorage('creatorCards', [
+      { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', requiresApproval: true, usageCount: 5 },
+      { id: 2, name: 'いいね！', rarity: 'R', type: 'action', requiresApproval: false, usageCount: 12 },
+      { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', requiresApproval: false, usageCount: 8 },
+      { id: 4, name: '激レアカード', rarity: 'UR', type: 'action', requiresApproval: false, usageCount: 2 }
+    ]);
+
+    let editingCardId = null;
+
+    function renderCards(cards) {
+      const tbody = document.getElementById('cardsTable');
+
+      const typeLabels = {
+        'action': 'アクション',
+        'visual': 'ビジュアル',
+        'message': 'メッセージ'
+      };
+
+      tbody.innerHTML = cards.map(card => `
+        <tr>
+          <td style="font-weight: 600;">${card.name}</td>
+          <td>
+            <span class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</span>
+          </td>
+          <td>${typeLabels[card.type]}</td>
+          <td>${card.requiresApproval ? '必要' : '不要'}</td>
+          <td>${card.usageCount || 0}回</td>
+          <td style="text-align: right;">
+            <button class="btn btn-sm btn-outline" onclick="editCard(${card.id})">編集</button>
+            <button class="btn btn-sm btn-danger" onclick="deleteCard(${card.id})">削除</button>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function filterCards() {
+      const rarityFilter = document.getElementById('rarityFilter').value;
+      const typeFilter = document.getElementById('typeFilter').value;
+
+      let filtered = creatorCards;
+
+      if (rarityFilter) {
+        filtered = filtered.filter(c => c.rarity === rarityFilter);
+      }
+
+      if (typeFilter) {
+        filtered = filtered.filter(c => c.type === typeFilter);
+      }
+
+      renderCards(filtered);
+    }
+
+    function createCard() {
+      const name = document.getElementById('cardName').value;
+      const rarity = document.getElementById('cardRarity').value;
+      const type = document.getElementById('cardType').value;
+      const requiresApproval = document.getElementById('requiresApproval').checked;
+
+      if (!name) {
+        showToast('カード名を入力してください', 'error');
+        return;
+      }
+
+      const newCard = {
+        id: Date.now(),
+        name,
+        rarity,
+        type,
+        requiresApproval,
+        usageCount: 0
+      };
+
+      creatorCards.push(newCard);
+      saveToStorage('creatorCards', creatorCards);
+
+      closeModal('createCardModal');
+      showToast('カードを作成しました', 'success');
+      filterCards();
+
+      // フォームをリセット
+      document.getElementById('createCardForm').reset();
+    }
+
+    function editCard(cardId) {
+      const card = creatorCards.find(c => c.id === cardId);
+      if (!card) return;
+
+      editingCardId = cardId;
+
+      document.getElementById('editCardName').value = card.name;
+      document.getElementById('editCardRarity').value = card.rarity;
+      document.getElementById('editCardType').value = card.type;
+      document.getElementById('editRequiresApproval').checked = card.requiresApproval;
+
+      openModal('editCardModal');
+    }
+
+    function updateCard() {
+      const index = creatorCards.findIndex(c => c.id === editingCardId);
+      if (index === -1) return;
+
+      creatorCards[index].name = document.getElementById('editCardName').value;
+      creatorCards[index].rarity = document.getElementById('editCardRarity').value;
+      creatorCards[index].type = document.getElementById('editCardType').value;
+      creatorCards[index].requiresApproval = document.getElementById('editRequiresApproval').checked;
+
+      saveToStorage('creatorCards', creatorCards);
+
+      closeModal('editCardModal');
+      showToast('カードを更新しました', 'success');
+      filterCards();
+    }
+
+    function deleteCard(cardId) {
+      confirmAction('このカードを削除してもよろしいですか？', () => {
+        creatorCards = creatorCards.filter(c => c.id !== cardId);
+        saveToStorage('creatorCards', creatorCards);
+        showToast('カードを削除しました', 'success');
+        filterCards();
+      });
+    }
+
+    // 初期表示
+    filterCards();
+  </script>
+</body>
+</html>
