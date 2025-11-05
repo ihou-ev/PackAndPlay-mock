@@ -206,40 +206,45 @@
     .login-section {
       background: linear-gradient(135deg, #00D4FF 0%, #AF52DE 50%, #FF1B8D 100%);
       padding: 5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      color: white;
+      min-height: 100vh;
     }
 
     .login-container {
-      max-width: 500px;
+      max-width: 600px;
       margin: 0 auto;
     }
 
     .login-box {
-      background: var(--surface);
-      border-radius: var(--radius-xl);
-      box-shadow: var(--shadow-xl);
-      overflow: hidden;
+      /* ボックススタイルを削除してシンプルに */
     }
 
     .login-header {
       text-align: center;
-      padding: 2rem;
-      background: linear-gradient(135deg, rgba(255, 27, 141, 0.1) 0%, rgba(0, 212, 255, 0.1) 100%);
+      margin-bottom: 2rem;
     }
 
     .login-title {
-      font-size: 1.75rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
-      color: var(--text);
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     }
 
     .login-description {
-      font-size: 0.875rem;
-      color: var(--text-light);
+      font-size: 1.125rem;
+      color: white;
+      opacity: 0.9;
     }
 
     .login-body {
-      padding: 2rem;
+      /* パディングを削除 */
     }
 
     .role-selector {
@@ -287,40 +292,45 @@
     }
 
     .demo-notice {
-      background: #fef3c7;
-      border-left: 4px solid #f59e0b;
-      padding: 1rem;
-      border-radius: var(--radius-md);
-      margin-bottom: 2rem;
+      background: rgba(255, 255, 255, 0.15);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-lg);
+      margin-bottom: 2.5rem;
+      backdrop-filter: blur(10px);
     }
 
     .demo-notice-title {
       font-weight: 700;
-      color: #92400e;
+      color: white;
       margin-bottom: 0.5rem;
+      font-size: 1rem;
     }
 
     .demo-notice-text {
       font-size: 0.875rem;
-      color: #78350f;
+      color: white;
+      opacity: 0.9;
     }
 
     .social-login-section {
-      margin-bottom: 1rem;
+      width: 100%;
     }
 
     .social-login-title {
       font-size: 0.875rem;
-      color: var(--text-light);
+      color: white;
       text-align: center;
       margin-bottom: 1rem;
       font-weight: 600;
+      opacity: 0.9;
     }
 
     .social-buttons {
       display: flex;
       flex-direction: column;
-      gap: 0.75rem;
+      gap: 1rem;
+      align-items: center;
     }
 
     .social-btn {
@@ -328,56 +338,47 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      padding: 0.875rem 1.5rem;
-      border: 2px solid var(--border);
+      padding: 1rem 2.5rem;
+      border: 3px solid white;
       border-radius: var(--radius-lg);
       background: white;
-      font-weight: 600;
-      font-size: 1rem;
+      font-weight: 700;
+      font-size: 1.125rem;
       cursor: pointer;
-      transition: all 0.2s;
-      width: 100%;
+      transition: all 0.3s;
+      min-width: 280px;
     }
 
     .social-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     }
 
     .social-btn-youtube {
-      border-color: #FF3B30;
       color: #FF3B30;
-      background: rgba(255, 59, 48, 0.05);
     }
 
     .social-btn-youtube:hover {
-      background: #FF3B30;
-      color: white;
-      border-color: #FF3B30;
+      background: #FFD600;
+      color: #2D1B3D;
     }
 
     .social-btn-twitch {
-      border-color: #AF52DE;
       color: #AF52DE;
-      background: rgba(175, 82, 222, 0.05);
     }
 
     .social-btn-twitch:hover {
-      background: #AF52DE;
-      color: white;
-      border-color: #AF52DE;
+      background: #FFD600;
+      color: #2D1B3D;
     }
 
     .social-btn-x {
-      border-color: #2D1B3D;
       color: #2D1B3D;
-      background: rgba(45, 27, 61, 0.05);
     }
 
     .social-btn-x:hover {
-      background: #2D1B3D;
-      color: white;
-      border-color: #2D1B3D;
+      background: #FFD600;
+      color: #2D1B3D;
     }
 
     .social-btn-icon {
@@ -427,12 +428,19 @@
         grid-template-columns: 1fr;
       }
 
-      .social-buttons {
-        flex-direction: column;
-      }
-
       .social-btn {
         width: 100%;
+        min-width: auto;
+        padding: 0.875rem 1.5rem;
+        font-size: 1rem;
+      }
+
+      .login-title {
+        font-size: 2rem;
+      }
+
+      .login-description {
+        font-size: 1rem;
       }
     }
   </style>
@@ -494,44 +502,39 @@
     <!-- ログインセクション -->
     <section class="login-section">
       <div class="login-container">
-        <div class="login-box fade-in">
-          <!-- ヘッダー -->
-          <div class="login-header">
-            <h2 class="login-title">ログイン方法を選択</h2>
-            <p class="login-description">上のボタンからもログインできます</p>
+        <!-- ヘッダー -->
+        <div class="login-header">
+          <h2 class="login-title">ログイン方法を選択</h2>
+          <p class="login-description">上のボタンからもログインできます</p>
+        </div>
+
+        <!-- デモ用注意書き -->
+        <div class="demo-notice">
+          <div class="demo-notice-title">📌 デモモード</div>
+          <div class="demo-notice-text">
+            このモックアップでは、実際の認証は行いません。<br>
+            ログインボタンをクリックすると自動的にログインされます。
           </div>
+        </div>
 
-          <!-- ボディ -->
-          <div class="login-body">
-            <!-- デモ用注意書き -->
-            <div class="demo-notice">
-              <div class="demo-notice-title">📌 デモモード</div>
-              <div class="demo-notice-text">
-                このモックアップでは、実際の認証は行いません。<br>
-                ログインボタンをクリックすると自動的にログインされます。
-              </div>
-            </div>
+        <!-- ロール選択（非表示だが内部で使用） -->
+        <input type="hidden" id="selectedRole" value="viewer">
 
-            <!-- ロール選択（非表示だが内部で使用） -->
-            <input type="hidden" id="selectedRole" value="viewer">
-
-            <!-- ソーシャルログイン -->
-            <div class="social-login-section">
-              <div class="social-buttons">
-                <button class="social-btn social-btn-youtube" onclick="socialLogin('youtube')">
-                  <span class="social-btn-icon">▶️</span>
-                  <span>YouTube</span>
-                </button>
-                <button class="social-btn social-btn-twitch" onclick="socialLogin('twitch')">
-                  <span class="social-btn-icon">📺</span>
-                  <span>Twitch</span>
-                </button>
-                <button class="social-btn social-btn-x" id="xLoginBtn" onclick="socialLogin('x')">
-                  <span class="social-btn-icon">𝕏</span>
-                  <span>X</span>
-                </button>
-              </div>
-            </div>
+        <!-- ソーシャルログイン -->
+        <div class="social-login-section">
+          <div class="social-buttons">
+            <button class="social-btn social-btn-youtube" onclick="socialLogin('youtube')">
+              <span class="social-btn-icon">▶️</span>
+              <span>YouTube</span>
+            </button>
+            <button class="social-btn social-btn-twitch" onclick="socialLogin('twitch')">
+              <span class="social-btn-icon">📺</span>
+              <span>Twitch</span>
+            </button>
+            <button class="social-btn social-btn-x" id="xLoginBtn" onclick="socialLogin('x')">
+              <span class="social-btn-icon">𝕏</span>
+              <span>X</span>
+            </button>
           </div>
         </div>
       </div>
