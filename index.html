@@ -20,12 +20,6 @@
 
     .lp-container {
       min-height: 100vh;
-      background-color: white;
-      background-image: url('image/Top2.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
     }
 
     /* ヘッダー */
@@ -96,6 +90,12 @@
       color: #2d1b3d;
       padding: 4rem 4rem 4rem 2rem;
       position: relative;
+      background-color: white;
+      background-image: url('image/Top2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
     }
 
     .hero-catch {
@@ -436,10 +436,6 @@
 
     /* レスポンシブデザイン */
     @media (max-width: 768px) {
-      .lp-container {
-        background-attachment: scroll;
-      }
-
       .lp-header {
         padding: 1rem 1.5rem;
       }
@@ -457,6 +453,7 @@
         align-items: center;
         text-align: center;
         padding: 4rem 2rem;
+        background-attachment: scroll;
       }
 
       .login-section {
