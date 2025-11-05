@@ -252,15 +252,19 @@
 
     /* ログインセクション */
     .login-section {
-      background: linear-gradient(135deg, #00D4FF 0%, #AF52DE 50%, #FF1B8D 100%);
-      padding: 5rem 2rem;
+      background-color: white;
+      background-image: url('image/Top2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      padding: 4rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       text-align: center;
-      color: white;
-      min-height: 100vh;
+      color: #2d1b3d;
+      min-height: auto;
     }
 
     .login-container {
@@ -333,15 +337,16 @@
       font-size: 1.125rem;
       font-weight: 700;
       cursor: pointer;
-      border: 3px solid white;
+      border: 3px solid #2d1b3d;
       transition: all 0.3s;
       text-decoration: none;
       display: inline-block;
     }
 
     .login-cta-btn-primary {
-      background: white;
-      color: #FF1B8D;
+      background: #FF1B8D;
+      color: white;
+      border-color: #FF1B8D;
     }
 
     .login-cta-btn-primary:hover {
@@ -349,18 +354,20 @@
       box-shadow: 0 10px 30px rgba(255, 27, 141, 0.4);
       background: #FFD600;
       color: #2D1B3D;
+      border-color: #FFD600;
     }
 
     .login-cta-btn-secondary {
-      background: transparent;
-      color: white;
-      border-color: rgba(255, 255, 255, 0.9);
+      background: white;
+      color: #2d1b3d;
+      border-color: #2d1b3d;
     }
 
     .login-cta-btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: #00D4FF;
+      color: white;
       transform: translateY(-3px);
-      border-color: white;
+      border-color: #00D4FF;
     }
 
     /* フッター */
