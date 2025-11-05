@@ -7,7 +7,12 @@
   <link rel="stylesheet" href="css/style.css">
   <style>
     body {
-      background: linear-gradient(135deg, #FF1B8D 0%, #00D4FF 50%, #FFD600 100%);
+      background-color: white;
+      background-image: url('image/Top1.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
       min-height: 100vh;
       display: flex;
       align-items: center;
@@ -27,33 +32,33 @@
 
     .login-back {
       display: inline-block;
-      color: white;
+      color: #2d1b3d;
       text-decoration: none;
       font-weight: 600;
       margin-bottom: 2rem;
       padding: 0.5rem 1rem;
       border-radius: var(--radius-md);
-      background: rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.8);
       backdrop-filter: blur(10px);
       transition: all 0.2s;
     }
 
     .login-back:hover {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(255, 255, 255, 1);
       transform: translateX(-2px);
     }
 
     .login-title {
       font-size: 2.5rem;
       font-weight: 900;
-      color: white;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      color: #2d1b3d;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
       margin-bottom: 0.75rem;
     }
 
     .login-description {
       font-size: 1.125rem;
-      color: white;
+      color: #2d1b3d;
       opacity: 0.9;
     }
 
@@ -118,6 +123,10 @@
     }
 
     @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+      }
+
       .login-title {
         font-size: 2rem;
       }
