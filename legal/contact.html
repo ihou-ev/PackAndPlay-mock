@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>お問い合わせ - Pack&Play</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <style>
+    body {
+      background: var(--background);
+    }
+
+    .legal-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 1.5rem;
+      min-height: 100vh;
+    }
+
+    .legal-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-top: 2rem;
+    }
+
+    .legal-title {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .legal-description {
+      font-size: 1rem;
+      color: var(--text-light);
+    }
+
+    .legal-content {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      box-shadow: var(--shadow-md);
+      margin-bottom: 2rem;
+    }
+
+    .contact-info {
+      background: #f9fafb;
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .contact-info-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .contact-info-text {
+      font-size: 0.9375rem;
+      line-height: 1.8;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-form {
+      background: var(--surface);
+      padding: 2rem;
+      border-radius: var(--radius-md);
+      border: 2px solid var(--border);
+    }
+
+    .demo-notice {
+      background: #fef3c7;
+      border-left: 4px solid #f59e0b;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 2rem;
+    }
+
+    .demo-notice-title {
+      font-weight: 700;
+      color: #92400e;
+      margin-bottom: 0.5rem;
+    }
+
+    .demo-notice-text {
+      font-size: 0.875rem;
+      color: #78350f;
+    }
+
+    .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: var(--text);
+    }
+
+    .form-input,
+    .form-textarea,
+    .form-select {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid var(--border);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+
+    .form-input:focus,
+    .form-textarea:focus,
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .form-textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    .form-required {
+      color: var(--error);
+      margin-left: 0.25rem;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .submit-btn:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .back-link {
+      text-align: center;
+      margin-top: 2rem;
+    }
+
+    .back-link a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .back-link a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="legal-container">
+    <div class="legal-header">
+      <h1 class="legal-title">お問い合わせ</h1>
+      <p class="legal-description">ご不明な点やお困りのことがございましたら、お気軽にお問い合わせください。</p>
+    </div>
+
+    <div class="legal-content">
+      <div class="contact-info">
+        <h2 class="contact-info-title">📧 メールでのお問い合わせ</h2>
+        <p class="contact-info-text">
+          <strong>サポート窓口:</strong> support@packandplay.example.com（デモ表記）
+        </p>
+        <p class="contact-info-text">
+          <strong>営業時間:</strong> 平日 10:00 - 18:00（土日祝日を除く）
+        </p>
+        <p class="contact-info-text">
+          <strong>回答目安:</strong> 通常1〜3営業日以内にご返信いたします
+        </p>
+      </div>
+
+      <div class="demo-form">
+        <div class="demo-notice">
+          <div class="demo-notice-title">📌 デモモード</div>
+          <div class="demo-notice-text">
+            このフォームはデモ用です。実際の送信は行われません。
+          </div>
+        </div>
+
+        <form id="contactForm" onsubmit="handleSubmit(event)">
+          <div class="form-group">
+            <label class="form-label">
+              お問い合わせ種別<span class="form-required">*</span>
+            </label>
+            <select class="form-select" required>
+              <option value="">選択してください</option>
+              <option value="service">サービスについて</option>
+              <option value="payment">決済・購入について</option>
+              <option value="technical">技術的な問題</option>
+              <option value="account">アカウントについて</option>
+              <option value="creator">配信者向けお問い合わせ</option>
+              <option value="other">その他</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              お名前<span class="form-required">*</span>
+            </label>
+            <input type="text" class="form-input" required placeholder="山田 太郎">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              メールアドレス<span class="form-required">*</span>
+            </label>
+            <input type="email" class="form-input" required placeholder="example@email.com">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              件名<span class="form-required">*</span>
+            </label>
+            <input type="text" class="form-input" required placeholder="お問い合わせの件名を入力してください">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">
+              お問い合わせ内容<span class="form-required">*</span>
+            </label>
+            <textarea class="form-textarea" required placeholder="お問い合わせ内容を詳しくご記入ください"></textarea>
+          </div>
+
+          <button type="submit" class="submit-btn">送信する</button>
+        </form>
+      </div>
+
+      <div class="contact-info" style="margin-top: 2rem;">
+        <h2 class="contact-info-title">よくあるご質問</h2>
+        <p class="contact-info-text">
+          お問い合わせの前に、よくあるご質問をご確認いただくと、すぐに解決できる場合があります。
+        </p>
+        <p class="contact-info-text">
+          <strong>Q: パックを購入したのに反映されません</strong><br>
+          A: 決済完了後、数分かかる場合があります。時間をおいてページを再読み込みしてください。
+        </p>
+        <p class="contact-info-text">
+          <strong>Q: カードの使用が承認されません</strong><br>
+          A: 配信者が承認待ちキューを確認していない可能性があります。配信者にお問い合わせください。
+        </p>
+        <p class="contact-info-text">
+          <strong>Q: 返金は可能ですか？</strong><br>
+          A: デジタルコンテンツの性質上、原則として返金は承っておりません。詳しくは特定商取引法に基づく表記をご確認ください。
+        </p>
+      </div>
+    </div>
+
+    <div class="back-link">
+      <a href="../index.html">← トップページに戻る</a>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    function handleSubmit(event) {
+      event.preventDefault();
+      showToast('デモモードのため、送信は行われません', 'info');
+      return false;
+    }
+  </script>
+</body>
+</html>
