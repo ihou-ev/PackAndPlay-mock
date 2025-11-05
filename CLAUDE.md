@@ -104,7 +104,7 @@ When the user selects the "配信者" (Creator) role, the X login button is auto
 
 **HTML Pages**:
 - `index.html` - **Landing page with LP design (entry point)**
-  - Hero section with catchphrase: "Pack&Play｜引いて、使って、配信が動く。"
+  - Hero section with catchphrase: "Pack&Play 引いて、使って、配信が動く。"
   - Description section with 30-second pitch
   - Login section with role selection and social authentication
 - `discover.html` - Creator discovery page (formerly index.html)

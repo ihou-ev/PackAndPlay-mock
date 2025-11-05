@@ -8,26 +8,26 @@
 }
 
 :root {
-  /* カラーパレット - 和風テーマ */
-  --primary: #d946a6; /* マゼンタピンク */
-  --primary-dark: #b8358a;
-  --secondary: #818cf8; /* インディゴ */
-  --accent: #fbbf24; /* ゴールド */
-  --background: #fafafa;
+  /* カラーパレット - ビビッドな絵の具テーマ */
+  --primary: #FF1B8D; /* ビビッドマゼンタ */
+  --primary-dark: #D4006E;
+  --secondary: #00D4FF; /* ビビッドシアン */
+  --accent: #FFD600; /* ビビッドイエロー */
+  --background: #FFF8F0;
   --surface: #ffffff;
-  --text: #1f2937;
-  --text-light: #6b7280;
-  --border: #e5e7eb;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --error: #ef4444;
-  --live-badge: #10b981;
+  --text: #2D1B3D;
+  --text-light: #7B6B8F;
+  --border: #E8D5FF;
+  --success: #00E676;
+  --warning: #FF9500;
+  --error: #FF3B30;
+  --live-badge: #00E676;
 
-  /* レアリティカラー */
-  --rarity-n: #9ca3af;
-  --rarity-r: #3b82f6;
-  --rarity-sr: #8b5cf6;
-  --rarity-ur: #f59e0b;
+  /* レアリティカラー - ビビッド */
+  --rarity-n: #9B9B9B;
+  --rarity-r: #007AFF;
+  --rarity-sr: #AF52DE;
+  --rarity-ur: #FF9500;
 
   /* スペーシング */
   --spacing-xs: 0.25rem;
