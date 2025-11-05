@@ -13,81 +13,471 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    body {
+      overflow-x: hidden;
+      background: #f9fafb;
+    }
+
+    /* ヘッダー */
+    .discover-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      background: rgba(45, 27, 61, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .discover-header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .discover-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .discover-logo:hover {
+      transform: scale(1.05);
+      color: #FFD600;
+    }
+
+    .discover-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .discover-nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .discover-nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+      color: #FFD600;
+    }
+
+    /* ヒーローセクション */
+    .discover-hero {
+      background-color: white;
+      background-image: url('image/Top2.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      padding: 6rem 2rem 4rem;
+      text-align: center;
+      color: #2d1b3d;
+    }
+
+    .discover-hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .discover-hero-title {
+      font-size: 3rem;
+      font-weight: 900;
+      margin-bottom: 1rem;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    }
+
+    .discover-hero-description {
+      font-size: 1.25rem;
+      margin-bottom: 2.5rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .search-box {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 1.25rem 1.5rem;
+      border: 3px solid #2d1b3d;
+      border-radius: 1rem;
+      font-size: 1.125rem;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      transition: all 0.3s;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: #FF1B8D;
+      box-shadow: 0 8px 30px rgba(255, 27, 141, 0.3);
+    }
+
+    /* コンテンツエリア */
+    .discover-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 800;
+      color: #2d1b3d;
+    }
+
+    .filter-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .filter-btn {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      background: white;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #4b5563;
+    }
+
+    .filter-btn:hover {
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 27, 141, 0.2);
+    }
+
+    .filter-btn.active {
+      background: #FF1B8D;
+      color: white;
+      border-color: #FF1B8D;
+    }
+
+    /* クリエイターグリッド */
+    .creator-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2rem;
+    }
+
+    .creator-card {
+      background: white;
+      border-radius: 1.25rem;
+      padding: 2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .creator-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+      border-color: #FF1B8D;
+    }
+
+    .creator-avatar {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 800;
+      color: white;
+      margin: 0 auto 1.5rem;
+    }
+
+    .creator-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .creator-name {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2d1b3d;
+    }
+
+    .badge-live {
+      background: #ef4444;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+
+    .creator-stats {
+      display: flex;
+      gap: 1.5rem;
+      color: #6b7280;
+      font-size: 0.9375rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .stat-label {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d1b3d;
+    }
+
+    /* 空状態 */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #9ca3af;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* フッター */
+    .footer {
+      background: #2d1b3d;
+      color: white;
+      padding: 3rem 2rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+    }
+
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-description {
+      font-size: 0.9375rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .footer-heading {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-size: 0.9375rem;
+    }
+
+    .footer-links a:hover {
+      color: #FFD600;
+    }
+
+    .footer-copyright {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      opacity: 0.6;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .discover-hero {
+        background-attachment: scroll;
+        padding: 4rem 1.5rem 3rem;
+      }
+
+      .discover-hero-title {
+        font-size: 2rem;
+      }
+
+      .discover-hero-description {
+        font-size: 1.125rem;
+      }
+
+      .discover-header {
+        padding: 1rem 1.5rem;
+      }
+
+      .discover-logo {
+        font-size: 1.25rem;
+      }
+
+      .discover-nav {
+        gap: 0.5rem;
+      }
+
+      .discover-nav-link {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .section-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .creator-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- ヘッダー -->
-  <header>
-    <nav class="navbar container">
-      <a href="discover.html" class="logo">
-        🎴 Pack&Play
-      </a>
-      <ul class="nav-links">
+  <header class="discover-header">
+    <div class="discover-header-container">
+      <a href="index.html" class="discover-logo">Pack&Play</a>
+      <nav class="discover-nav">
         <!-- JavaScriptで動的に生成 -->
-      </ul>
-    </nav>
+      </nav>
+    </div>
   </header>
 
+  <!-- ヒーローセクション -->
+  <section class="discover-hero">
+    <div class="discover-hero-content">
+      <h1 class="discover-hero-title">お気に入りの配信者を見つけよう</h1>
+      <p class="discover-hero-description">カードパックを購入して、配信を盛り上げよう</p>
+      <div class="search-box">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="配信者を検索..."
+          class="search-input"
+        >
+      </div>
+    </div>
+  </section>
+
   <!-- メインコンテンツ -->
-  <main>
-    <!-- ヒーローセクション -->
-    <section class="page-header" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-bottom: none;">
-      <div class="container">
-        <h1 class="page-title" style="color: white; font-size: 3rem;">お気に入りの配信者を見つけよう</h1>
-        <p class="page-description" style="color: rgba(255,255,255,0.9); font-size: 1.25rem;">カードパックを購入して、配信を盛り上げよう！</p>
-        <div style="margin-top: 2rem;">
-          <input
-            type="search"
-            id="searchInput"
-            placeholder="配信者を検索..."
-            class="form-input"
-            style="max-width: 500px; margin: 0 auto; padding: 1rem;"
-          >
-        </div>
+  <main class="discover-content">
+    <div class="section-header">
+      <h2 class="section-title">配信者一覧</h2>
+      <div class="filter-buttons">
+        <button class="filter-btn" id="liveBtn" onclick="filterLive()">
+          配信中のみ
+        </button>
+        <button class="filter-btn active" id="allBtn" onclick="showAll()">
+          すべて表示
+        </button>
       </div>
-    </section>
+    </div>
 
-    <!-- 配信者リスト -->
-    <section style="padding: 3rem 0;">
-      <div class="container">
-        <div class="flex-between mb-4">
-          <h2 style="font-size: 1.5rem; font-weight: 700;">配信者一覧</h2>
-          <div class="flex gap-2">
-            <button class="btn btn-sm btn-outline" onclick="filterLive()">
-              🔴 配信中のみ
-            </button>
-            <button class="btn btn-sm btn-outline" onclick="showAll()">
-              すべて表示
-            </button>
-          </div>
-        </div>
+    <div id="creatorGrid" class="creator-grid">
+      <!-- JavaScriptで動的に生成 -->
+    </div>
 
-        <div id="creatorGrid" class="grid grid-3">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
-
-        <div id="emptyState" class="empty-state hidden">
-          <div class="empty-state-icon">🔍</div>
-          <div class="empty-state-text">配信者が見つかりませんでした</div>
-        </div>
-      </div>
-    </section>
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-state-icon">🔍</div>
+      <div class="empty-state-text">配信者が見つかりませんでした</div>
+    </div>
   </main>
 
   <!-- フッター -->
-  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
-    <div class="container">
-      <div class="flex-between">
-        <div>
-          <div class="logo mb-2">🎴 Pack&Play</div>
-          <p style="color: var(--text-light); font-size: 0.875rem;">
-            © 2025 Pack&Play. All rights reserved.
-          </p>
-        </div>
-        <div class="flex gap-3">
-          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
-        </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">Pack&Play</h3>
+        <p class="footer-description">応援を"演出"にする。</p>
+        <p class="footer-copyright">© 2025 Pack&Play. All rights reserved.</p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">法的情報</h4>
+        <ul class="footer-links">
+          <li><a href="legal/terms.html">利用規約</a></li>
+          <li><a href="legal/commerce.html">特定商取引法に基づく表記</a></li>
+          <li><a href="legal/privacy.html">プライバシーポリシー</a></li>
+          <li><a href="legal/scta.html">資金決済法に基づく表示</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">サポート</h4>
+        <ul class="footer-links">
+          <li><a href="legal/contact.html">お問い合わせ</a></li>
+        </ul>
       </div>
     </div>
   </footer>
@@ -111,18 +501,22 @@
       emptyState.classList.add('hidden');
 
       grid.innerHTML = creatorsToRender.map(creator => `
-        <div class="card creator-card fade-in" onclick="window.location.href='creator/${creator.slug}.html'">
+        <div class="creator-card" onclick="window.location.href='creator/${creator.slug}.html'">
           <div class="creator-avatar">
             ${creator.name.charAt(0)}
           </div>
-          <div class="creator-info">
-            <div class="flex-between mb-1">
-              <div class="creator-name">${creator.name}</div>
-              ${creator.isLive ? '<span class="badge badge-live">🔴 配信中</span>' : ''}
+          <div class="creator-header">
+            <div class="creator-name">${creator.name}</div>
+            ${creator.isLive ? '<span class="badge-live">配信中</span>' : ''}
+          </div>
+          <div class="creator-stats">
+            <div class="stat-item">
+              <span class="stat-label">パック数</span>
+              <span class="stat-value">${creator.packCount}</span>
             </div>
-            <div class="creator-stats">
-              <span>📦 ${creator.packCount}パック</span>
-              <span>💰 ${formatPrice(creator.totalSales)}</span>
+            <div class="stat-item">
+              <span class="stat-label">総売上</span>
+              <span class="stat-value">${formatPrice(creator.totalSales)}</span>
             </div>
           </div>
         </div>
@@ -131,34 +525,38 @@
 
     function filterLive() {
       currentFilter = 'live';
-      const liveCreators = creators.filter(c => c.isLive);
+      document.getElementById('liveBtn').classList.add('active');
+      document.getElementById('allBtn').classList.remove('active');
+      const liveCreators = mockCreators.filter(c => c.isLive);
       renderCreators(liveCreators);
     }
 
     function showAll() {
       currentFilter = 'all';
-      renderCreators(creators);
+      document.getElementById('allBtn').classList.add('active');
+      document.getElementById('liveBtn').classList.remove('active');
+      renderCreators(mockCreators);
     }
 
     // 検索機能
-    const searchInput = document.getElementById('searchInput');
-    searchInput.addEventListener('input', debounce(function(e) {
-      const query = e.target.value;
-      let filtered = creators;
+    document.getElementById('searchInput').addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      const filtered = mockCreators.filter(creator =>
+        creator.name.toLowerCase().includes(searchTerm)
+      );
 
       if (currentFilter === 'live') {
-        filtered = filtered.filter(c => c.isLive);
+        renderCreators(filtered.filter(c => c.isLive));
+      } else {
+        renderCreators(filtered);
       }
-
-      if (query) {
-        filtered = filterItems(filtered, query, ['name', 'displayName']);
-      }
-
-      renderCreators(filtered);
-    }, 300));
+    });
 
     // 初期表示
-    renderCreators(creators);
+    renderCreators(mockCreators);
+
+    // ナビゲーション生成
+    renderNav();
   </script>
 </body>
 </html>
