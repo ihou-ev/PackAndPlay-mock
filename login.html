@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ログイン - Pack&Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    body {
+      background: linear-gradient(135deg, #FF1B8D 0%, #00D4FF 50%, #FFD600 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-container {
+      max-width: 500px;
+      width: 100%;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-back {
+      display: inline-block;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      transition: all 0.2s;
+    }
+
+    .login-back:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateX(-2px);
+    }
+
+    .login-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: white;
+      text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+      margin-bottom: 0.75rem;
+    }
+
+    .login-description {
+      font-size: 1.125rem;
+      color: white;
+      opacity: 0.9;
+    }
+
+    .platform-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1.25rem 2rem;
+      border: 3px solid white;
+      border-radius: var(--radius-lg);
+      background: white;
+      font-weight: 700;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+    }
+
+    .platform-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+    }
+
+    .platform-btn-youtube {
+      border-color: white;
+      color: #FF3B30;
+    }
+
+    .platform-btn-youtube:hover {
+      background: #FF3B30;
+      color: white;
+      border-color: #FF3B30;
+    }
+
+    .platform-btn-twitch {
+      border-color: white;
+      color: #AF52DE;
+    }
+
+    .platform-btn-twitch:hover {
+      background: #AF52DE;
+      color: white;
+      border-color: #AF52DE;
+    }
+
+    .platform-btn-x {
+      border-color: white;
+      color: #2D1B3D;
+    }
+
+    .platform-btn-x:hover {
+      background: #2D1B3D;
+      color: white;
+      border-color: #2D1B3D;
+    }
+
+    @media (max-width: 768px) {
+      .login-title {
+        font-size: 2rem;
+      }
+
+      .login-description {
+        font-size: 1rem;
+      }
+
+      .platform-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <a href="index.html" class="login-back">← トップページに戻る</a>
+
+    <div class="login-header">
+      <h1 class="login-title" id="loginTitle">ログイン</h1>
+      <p class="login-description">ログイン方法を選択してください</p>
+    </div>
+
+    <div class="platform-buttons">
+      <button class="platform-btn platform-btn-youtube" onclick="selectPlatform('youtube')">
+        <span>YouTube</span>
+      </button>
+      <button class="platform-btn platform-btn-twitch" onclick="selectPlatform('twitch')">
+        <span>Twitch</span>
+      </button>
+      <button class="platform-btn platform-btn-x" id="xPlatformBtn" onclick="selectPlatform('x')">
+        <span>X</span>
+      </button>
+    </div>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // URLパラメータからロールを取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const role = urlParams.get('role') || 'viewer';
+
+    // ロールに応じた表示を設定
+    const roleText = role === 'creator' ? '配信者' : '視聴者';
+
+    document.getElementById('loginTitle').textContent = `${roleText}としてログイン`;
+
+    // 配信者の場合はXボタンを非表示
+    if (role === 'creator') {
+      document.getElementById('xPlatformBtn').style.display = 'none';
+    }
+
+    // プラットフォームを選択してログイン
+    function selectPlatform(platform) {
+      // プラットフォーム名を取得
+      const platformNames = {
+        'youtube': 'YouTube',
+        'twitch': 'Twitch',
+        'x': 'X (Twitter)'
+      };
+
+      const platformName = platformNames[platform];
+
+      showLoading();
+
+      // デモ用：実際のOAuth認証をシミュレート
+      setTimeout(() => {
+        // セッション情報を保存
+        const session = {
+          isLoggedIn: true,
+          role: role,
+          email: `demo-${platform}@packandplay.com`,
+          name: role === 'creator' ? '田中太郎' : 'テスト視聴者',
+          creatorSlug: role === 'creator' ? 'tanaka' : null,
+          loginMethod: platform,
+          loginPlatform: platformName,
+          loginTime: new Date().toISOString()
+        };
+
+        saveToStorage('session', session);
+
+        hideLoading();
+
+        showToast(`${platformName}で${roleText}としてログインしました`, 'success');
+
+        // リダイレクト
+        setTimeout(() => {
+          if (role === 'creator') {
+            window.location.href = 'dashboard/index.html';
+          } else {
+            window.location.href = 'discover.html';
+          }
+        }, 1000);
+      }, 1500);
+    }
+
+    // 既にログイン済みの場合はリダイレクト
+    const session = loadFromStorage('session');
+    if (session && session.isLoggedIn) {
+      showToast('既にログインしています', 'info');
+      setTimeout(() => {
+        if (session.role === 'creator') {
+          window.location.href = 'dashboard/index.html';
+        } else {
+          window.location.href = 'discover.html';
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
