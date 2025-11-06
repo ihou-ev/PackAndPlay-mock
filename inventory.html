@@ -14,17 +14,203 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
   <style>
-    .card-item {
-      background: var(--surface);
-      border-radius: var(--radius-lg);
-      padding: 1.5rem;
-      border: 2px solid var(--border);
+    body {
+      overflow-x: hidden;
+      background: #f9fafb;
+    }
+
+    /* ヘッダー */
+    .inventory-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      background: rgba(45, 27, 61, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .inventory-header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .inventory-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .inventory-logo:hover {
+      transform: scale(1.05);
+      color: #FFD600;
+    }
+
+    .inventory-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .inventory-nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
       transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .inventory-nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+      color: #FFD600;
+    }
+
+    /* ヒーローセクション */
+    .inventory-hero {
+      background-color: white;
+      background-image: url('image/discover1.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      color: #2d1b3d;
+    }
+
+    .inventory-hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .inventory-hero-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    }
+
+    .inventory-hero-description {
+      font-size: 1.125rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* コンテンツエリア */
+    .inventory-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    /* 統計カード */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: #FF1B8D;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2d1b3d;
+    }
+
+    .stat-value.primary {
+      color: #FF1B8D;
+    }
+
+    .stat-value.success {
+      color: #10b981;
+    }
+
+    .stat-value.warning {
+      color: #f59e0b;
+    }
+
+    /* フィルター */
+    .filters {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 0.75rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      background: white;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #4b5563;
+      min-width: 150px;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+    }
+
+    /* カードグリッド */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card-item {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      transition: all 0.3s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
     .card-item:hover {
-      border-color: var(--primary);
-      box-shadow: var(--shadow-md);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: #FF1B8D;
     }
 
     .card-item.used {
@@ -33,104 +219,408 @@
     }
 
     .card-icon-large {
-      font-size: 4rem;
-      text-align: center;
+      font-size: 3.5rem;
       margin-bottom: 1rem;
     }
 
-    .filters {
+    .card-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #2d1b3d;
+      text-align: center;
+    }
+
+    .card-creator {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .badge-rarity-n {
+      background: #e5e7eb;
+      color: #4b5563;
+    }
+
+    .badge-rarity-r {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .badge-rarity-sr {
+      background: #ede9fe;
+      color: #6b21a8;
+    }
+
+    .badge-rarity-ur {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .use-btn {
+      width: 100%;
+      padding: 0.75rem;
+      background: linear-gradient(135deg, #FF1B8D, #d946a6);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .use-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 27, 141, 0.3);
+    }
+
+    .status-used {
+      padding: 0.5rem 1rem;
+      background: #e5e7eb;
+      color: #6b7280;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      width: 100%;
+      text-align: center;
+    }
+
+    /* 空状態 */
+    .empty-state {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #9ca3af;
+    }
+
+    .empty-state-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state-text {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+
+    .empty-btn {
+      display: inline-block;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #FF1B8D, #d946a6);
+      color: white;
+      text-decoration: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      transition: all 0.3s;
+    }
+
+    .empty-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 27, 141, 0.3);
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* モーダル */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 2rem;
+    }
+
+    .modal {
+      background: white;
+      border-radius: 1.25rem;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      padding: 1.5rem 2rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+    }
+
+    .modal-body {
+      padding: 2rem;
+    }
+
+    .modal-footer {
+      padding: 1.5rem 2rem;
+      border-top: 1px solid #e5e7eb;
       display: flex;
       gap: 1rem;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .modal-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+    }
+
+    .modal-btn-outline {
+      background: white;
+      color: #6b7280;
+      border: 2px solid #e5e7eb;
+    }
+
+    .modal-btn-outline:hover {
+      background: #f9fafb;
+    }
+
+    .modal-btn-primary {
+      background: linear-gradient(135deg, #FF1B8D, #d946a6);
+      color: white;
+    }
+
+    .modal-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 27, 141, 0.3);
+    }
+
+    .form-group {
+      margin-top: 1rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      color: #2d1b3d;
+    }
+
+    .form-textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 0.9375rem;
+      resize: vertical;
+      min-height: 100px;
+      transition: all 0.3s;
+    }
+
+    .form-textarea:focus {
+      outline: none;
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+    }
+
+    /* フッター */
+    .footer {
+      background: #2d1b3d;
+      color: white;
+      padding: 3rem 2rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+    }
+
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-description {
+      font-size: 0.9375rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .footer-heading {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-size: 0.9375rem;
+    }
+
+    .footer-links a:hover {
+      color: #FFD600;
+    }
+
+    .footer-copyright {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      opacity: 0.6;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .inventory-hero {
+        background-attachment: scroll;
+        padding: 3rem 1.5rem 2rem;
+      }
+
+      .inventory-hero-title {
+        font-size: 2rem;
+      }
+
+      .inventory-header {
+        padding: 1rem 1.5rem;
+      }
+
+      .inventory-logo {
+        font-size: 1.25rem;
+      }
+
+      .inventory-nav {
+        gap: 0.5rem;
+      }
+
+      .inventory-nav-link {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
     }
   </style>
 </head>
 <body>
   <!-- ヘッダー -->
-  <header>
-    <nav class="navbar container">
-      <a href="index.html" class="logo">
-        🎴 Pack&Play
-      </a>
-      <ul class="nav-links">
+  <header class="inventory-header">
+    <div class="inventory-header-container">
+      <a href="index.html" class="inventory-logo">Pack&Play</a>
+      <nav class="inventory-nav">
         <!-- JavaScriptで動的に生成 -->
-      </ul>
-    </nav>
+      </nav>
+    </div>
   </header>
 
+  <!-- ヒーローセクション -->
+  <section class="inventory-hero">
+    <div class="inventory-hero-content">
+      <h1 class="inventory-hero-title">マイカード</h1>
+      <p class="inventory-hero-description">あなたが所持しているカードの一覧です</p>
+    </div>
+  </section>
+
   <!-- メインコンテンツ -->
-  <main>
-    <section class="page-header">
-      <div class="container">
-        <h1 class="page-title">マイカード</h1>
-        <p class="page-description">あなたが所持しているカードの一覧です</p>
+  <main class="inventory-content">
+    <!-- 統計情報 -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-label">総カード数</div>
+        <div id="totalCards" class="stat-value primary">0</div>
       </div>
-    </section>
-
-    <section style="padding: 3rem 0;">
-      <div class="container">
-        <!-- フィルター -->
-        <div class="filters">
-          <select id="creatorFilter" class="form-select" style="width: 200px;" onchange="applyFilters()">
-            <option value="">すべての配信者</option>
-          </select>
-
-          <select id="rarityFilter" class="form-select" style="width: 150px;" onchange="applyFilters()">
-            <option value="">すべてのレアリティ</option>
-            <option value="N">N（ノーマル）</option>
-            <option value="R">R（レア）</option>
-            <option value="SR">SR（スーパーレア）</option>
-            <option value="UR">UR（ウルトラレア）</option>
-          </select>
-
-          <select id="statusFilter" class="form-select" style="width: 150px;" onchange="applyFilters()">
-            <option value="">すべて</option>
-            <option value="unused">未使用のみ</option>
-            <option value="used">使用済みのみ</option>
-          </select>
-        </div>
-
-        <!-- 統計情報 -->
-        <div class="grid grid-4 mb-4">
-          <div class="card">
-            <div class="card-body text-center">
-              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">総カード数</div>
-              <div id="totalCards" style="font-size: 2rem; font-weight: 700; color: var(--primary);">0</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body text-center">
-              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">未使用</div>
-              <div id="unusedCards" style="font-size: 2rem; font-weight: 700; color: var(--success);">0</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body text-center">
-              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">使用済み</div>
-              <div id="usedCards" style="font-size: 2rem; font-weight: 700; color: var(--text-light);">0</div>
-            </div>
-          </div>
-          <div class="card">
-            <div class="card-body text-center">
-              <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.5rem;">UR カード</div>
-              <div id="urCards" style="font-size: 2rem; font-weight: 700; color: var(--warning);">0</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- カードリスト -->
-        <div id="cardGrid" class="grid grid-4">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
-
-        <div id="emptyState" class="empty-state hidden">
-          <div class="empty-state-icon">🎴</div>
-          <div class="empty-state-text">カードがありません</div>
-          <a href="index.html" class="btn btn-primary mt-3">配信者を探してパックを購入</a>
-        </div>
+      <div class="stat-card">
+        <div class="stat-label">未使用</div>
+        <div id="unusedCards" class="stat-value success">0</div>
       </div>
-    </section>
+      <div class="stat-card">
+        <div class="stat-label">使用済み</div>
+        <div id="usedCards" class="stat-value">0</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">UR カード</div>
+        <div id="urCards" class="stat-value warning">0</div>
+      </div>
+    </div>
+
+    <!-- フィルター -->
+    <div class="filters">
+      <select id="creatorFilter" class="filter-select" onchange="applyFilters()">
+        <option value="">すべての配信者</option>
+      </select>
+
+      <select id="rarityFilter" class="filter-select" onchange="applyFilters()">
+        <option value="">すべてのレアリティ</option>
+        <option value="N">N（ノーマル）</option>
+        <option value="R">R（レア）</option>
+        <option value="SR">SR（スーパーレア）</option>
+        <option value="UR">UR（ウルトラレア）</option>
+      </select>
+
+      <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+        <option value="">すべて</option>
+        <option value="unused">未使用のみ</option>
+        <option value="used">使用済みのみ</option>
+      </select>
+    </div>
+
+    <!-- カードリスト -->
+    <div id="cardGrid" class="card-grid">
+      <!-- JavaScriptで動的に生成 -->
+    </div>
+
+    <div id="emptyState" class="empty-state hidden">
+      <div class="empty-state-icon">🎴</div>
+      <div class="empty-state-text">カードがありません</div>
+      <a href="discover.html" class="empty-btn">配信者を探してパックを購入</a>
+    </div>
   </main>
 
   <!-- カード使用モーダル -->
@@ -142,37 +632,44 @@
       <div class="modal-body">
         <div id="modalCardInfo"></div>
         <div id="messageInput" class="hidden">
-          <div class="form-group mt-3">
+          <div class="form-group">
             <label class="form-label">メッセージ（任意）</label>
             <textarea id="viewerMessage" class="form-textarea" placeholder="配信者へのメッセージを入力..."></textarea>
           </div>
         </div>
-        <p style="color: var(--text-light); font-size: 0.875rem; margin-top: 1rem;">
+        <p style="color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
           配信者が配信中の場合のみカードを使用できます。
         </p>
       </div>
       <div class="modal-footer">
-        <button class="btn btn-outline" data-close-modal="useCardModal">キャンセル</button>
-        <button class="btn btn-primary" onclick="submitCardUse()">使用する</button>
+        <button class="modal-btn modal-btn-outline" onclick="closeModal('useCardModal')">キャンセル</button>
+        <button class="modal-btn modal-btn-primary" onclick="submitCardUse()">使用する</button>
       </div>
     </div>
   </div>
 
   <!-- フッター -->
-  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
-    <div class="container">
-      <div class="flex-between">
-        <div>
-          <div class="logo mb-2">🎴 Pack&Play</div>
-          <p style="color: var(--text-light); font-size: 0.875rem;">
-            © 2025 Pack&Play. All rights reserved.
-          </p>
-        </div>
-        <div class="flex gap-3">
-          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
-        </div>
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">Pack&Play</h3>
+        <p class="footer-description">応援を"演出"にする。</p>
+        <p class="footer-copyright">© 2025 Pack&Play. All rights reserved.</p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">法的情報</h4>
+        <ul class="footer-links">
+          <li><a href="legal/terms.html">利用規約</a></li>
+          <li><a href="legal/commerce.html">特定商取引法に基づく表記</a></li>
+          <li><a href="legal/privacy.html">プライバシーポリシー</a></li>
+          <li><a href="legal/scta.html">資金決済法に基づく表示</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">サポート</h4>
+        <ul class="footer-links">
+          <li><a href="legal/contact.html">お問い合わせ</a></li>
+        </ul>
       </div>
     </div>
   </footer>
@@ -189,7 +686,11 @@
         { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
         { id: 2, name: 'いいね！', rarity: 'R', type: 'action', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
         { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: true, acquiredAt: '2025-11-01' },
-        { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' }
+        { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' },
+        { id: 5, name: '花火', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-03' },
+        { id: 6, name: 'ありがとう', rarity: 'R', type: 'message', creatorName: 'ゲームマスター', isUsed: false, acquiredAt: '2025-11-03' },
+        { id: 7, name: 'レインボー', rarity: 'UR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-04' },
+        { id: 8, name: 'キラキラ', rarity: 'R', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-04' }
       ];
     }
 
@@ -230,19 +731,15 @@
       };
 
       grid.innerHTML = cards.map((card, index) => `
-        <div class="card-item ${card.isUsed ? 'used' : ''} fade-in">
+        <div class="card-item ${card.isUsed ? 'used' : ''}">
           <div class="card-icon-large">${cardIcons[card.type]}</div>
-          <div style="text-align: center;">
-            <div style="font-size: 1.125rem; font-weight: 700; margin-bottom: 0.5rem;">${card.name}</div>
-            <div class="badge badge-rarity-${card.rarity.toLowerCase()} mb-2">${card.rarity}</div>
-            <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 1rem;">
-              ${card.creatorName}
-            </div>
-            ${card.isUsed
-              ? '<div class="status status-approved">使用済み</div>'
-              : `<button class="btn btn-primary btn-sm" style="width: 100%;" onclick="openUseModal(${index})">使う</button>`
-            }
-          </div>
+          <div class="card-name">${card.name}</div>
+          <div class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</div>
+          <div class="card-creator">${card.creatorName}</div>
+          ${card.isUsed
+            ? '<div class="status-used">使用済み</div>'
+            : `<button class="use-btn" onclick="openUseModal(${index})">使う</button>`
+          }
         </div>
       `).join('');
     }
@@ -350,7 +847,27 @@
       }, 1500);
     }
 
+    // ナビゲーション生成
+    function renderInventoryNav() {
+      const session = getCurrentSession();
+      const nav = document.querySelector('.inventory-nav');
+
+      if (!nav) return;
+
+      if (isLoggedIn()) {
+        nav.innerHTML = `
+          <a href="discover.html" class="inventory-nav-link">配信者を探す</a>
+          <a href="javascript:void(0)" onclick="logout()" class="inventory-nav-link">ログアウト</a>
+        `;
+      } else {
+        nav.innerHTML = `
+          <a href="index.html" class="inventory-nav-link">ログイン</a>
+        `;
+      }
+    }
+
     // 初期表示
+    renderInventoryNav();
     applyFilters();
   </script>
 </body>
