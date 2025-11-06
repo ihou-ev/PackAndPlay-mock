@@ -577,11 +577,13 @@
         if (role === 'creator') {
           nav.innerHTML = `
             <a href="dashboard/index.html" class="discover-nav-link">ダッシュボード</a>
+            <a href="profile.html" class="discover-nav-link">プロフィール</a>
             <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
           `;
         } else {
           nav.innerHTML = `
             <a href="inventory.html" class="discover-nav-link">マイカード</a>
+            <a href="profile.html" class="discover-nav-link">プロフィール</a>
             <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
           `;
         }

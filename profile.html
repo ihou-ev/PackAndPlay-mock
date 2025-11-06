@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>マイプロフィール - Pack&Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    body {
+      overflow-x: hidden;
+      background: #f9fafb;
+    }
+
+    /* ヘッダー */
+    .profile-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1.5rem 2rem;
+      background: rgba(45, 27, 61, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .profile-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: white;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .profile-logo:hover {
+      transform: scale(1.05);
+      color: #FFD600;
+    }
+
+    .profile-nav {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .profile-nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .profile-nav-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: translateY(-1px);
+      color: #FFD600;
+    }
+
+    /* ヒーローセクション */
+    .profile-hero {
+      background-color: white;
+      background-image: url('image/discover1.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      padding: 4rem 2rem 3rem;
+      text-align: center;
+      color: #2d1b3d;
+    }
+
+    .profile-hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .profile-hero-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      margin-bottom: 0.75rem;
+      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
+    }
+
+    .profile-hero-description {
+      font-size: 1.125rem;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    /* コンテンツエリア */
+    .profile-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+    }
+
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr;
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    /* プロフィールカード */
+    .profile-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .profile-avatar-section {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .profile-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3rem;
+      font-weight: 800;
+      color: white;
+      margin: 0 auto 1rem;
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-role {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background: #ede9fe;
+      color: #6b21a8;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+      font-weight: 700;
+    }
+
+    .profile-info {
+      margin-top: 2rem;
+    }
+
+    .profile-info-item {
+      padding: 1rem 0;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .profile-info-item:last-child {
+      border-bottom: none;
+    }
+
+    .profile-info-label {
+      font-size: 0.875rem;
+      color: #6b7280;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .profile-info-value {
+      font-size: 1rem;
+      color: #2d1b3d;
+      font-weight: 700;
+    }
+
+    /* 統計カード */
+    .stats-section {
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin-bottom: 1.5rem;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      text-align: center;
+      transition: all 0.3s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: #FF1B8D;
+    }
+
+    .stat-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #2d1b3d;
+    }
+
+    .stat-value.primary {
+      color: #FF1B8D;
+    }
+
+    .stat-value.success {
+      color: #10b981;
+    }
+
+    .stat-value.warning {
+      color: #f59e0b;
+    }
+
+    /* アクションボタン */
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .action-btn {
+      flex: 1;
+      min-width: 200px;
+      padding: 1rem 2rem;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: none;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .action-btn-primary {
+      background: linear-gradient(135deg, #FF1B8D, #d946a6);
+      color: white;
+    }
+
+    .action-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(255, 27, 141, 0.3);
+    }
+
+    .action-btn-outline {
+      background: white;
+      color: #2d1b3d;
+      border: 2px solid #e5e7eb;
+    }
+
+    .action-btn-outline:hover {
+      background: #f9fafb;
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+    }
+
+    /* 設定セクション */
+    .settings-section {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .settings-item {
+      padding: 1.5rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .settings-item:last-child {
+      border-bottom: none;
+    }
+
+    .settings-info {
+      flex: 1;
+    }
+
+    .settings-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      margin-bottom: 0.25rem;
+    }
+
+    .settings-description {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .settings-btn {
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: #2d1b3d;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .settings-btn:hover {
+      background: #f9fafb;
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+    }
+
+    .settings-btn.danger {
+      color: #ef4444;
+      border-color: #fecaca;
+    }
+
+    .settings-btn.danger:hover {
+      background: #fef2f2;
+      border-color: #ef4444;
+    }
+
+    /* フッター */
+    .footer {
+      background: #2d1b3d;
+      color: white;
+      padding: 3rem 2rem 2rem;
+      margin-top: 4rem;
+    }
+
+    .footer-content {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+    }
+
+    .footer-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .footer-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-description {
+      font-size: 0.9375rem;
+      opacity: 0.8;
+      line-height: 1.6;
+    }
+
+    .footer-heading {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .footer-links {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .footer-links a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      transition: color 0.2s;
+      font-size: 0.9375rem;
+    }
+
+    .footer-links a:hover {
+      color: #FFD600;
+    }
+
+    .footer-copyright {
+      margin-top: 0.5rem;
+      font-size: 0.875rem;
+      opacity: 0.6;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      .profile-hero {
+        background-attachment: scroll;
+        padding: 3rem 1.5rem 2rem;
+      }
+
+      .profile-hero-title {
+        font-size: 2rem;
+      }
+
+      .profile-header {
+        padding: 1rem 1.5rem;
+      }
+
+      .profile-logo {
+        font-size: 1.25rem;
+      }
+
+      .profile-nav {
+        gap: 0.5rem;
+      }
+
+      .profile-nav-link {
+        font-size: 0.875rem;
+        padding: 0.375rem 0.75rem;
+      }
+
+      .profile-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+      }
+
+      .action-btn {
+        width: 100%;
+      }
+
+      .settings-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .settings-btn {
+        width: 100%;
+      }
+
+      .footer-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- ヘッダー -->
+  <header class="profile-header">
+    <div class="profile-header-container">
+      <a href="index.html" class="profile-logo">Pack&Play</a>
+      <nav class="profile-nav">
+        <!-- JavaScriptで動的に生成 -->
+      </nav>
+    </div>
+  </header>
+
+  <!-- ヒーローセクション -->
+  <section class="profile-hero">
+    <div class="profile-hero-content">
+      <h1 class="profile-hero-title">マイプロフィール</h1>
+      <p class="profile-hero-description">アカウント情報と設定</p>
+    </div>
+  </section>
+
+  <!-- メインコンテンツ -->
+  <main class="profile-content">
+    <div class="profile-grid">
+      <!-- プロフィールカード -->
+      <div class="profile-card">
+        <div class="profile-avatar-section">
+          <div class="profile-avatar" id="profileAvatar">?</div>
+          <div class="profile-name" id="profileName">ユーザー名</div>
+          <span class="profile-role" id="profileRole">視聴者</span>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-info-item">
+            <div class="profile-info-label">メールアドレス</div>
+            <div class="profile-info-value" id="profileEmail">-</div>
+          </div>
+          <div class="profile-info-item">
+            <div class="profile-info-label">ログイン方法</div>
+            <div class="profile-info-value" id="profileLoginMethod">-</div>
+          </div>
+          <div class="profile-info-item">
+            <div class="profile-info-label">登録日</div>
+            <div class="profile-info-value" id="profileJoinDate">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 統計セクション -->
+      <div>
+        <h2 class="section-title">アクティビティ</h2>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon">🎴</div>
+            <div class="stat-label">所持カード数</div>
+            <div id="totalCards" class="stat-value primary">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">✨</div>
+            <div class="stat-label">使用済みカード</div>
+            <div id="usedCards" class="stat-value success">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">📦</div>
+            <div class="stat-label">購入パック数</div>
+            <div id="purchasedPacks" class="stat-value warning">0</div>
+          </div>
+        </div>
+
+        <h2 class="section-title" style="margin-top: 2rem;">クイックアクション</h2>
+        <div class="action-buttons">
+          <a href="inventory.html" class="action-btn action-btn-primary">マイカードを見る</a>
+          <a href="discover.html" class="action-btn action-btn-outline">配信者を探す</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 設定セクション -->
+    <div class="settings-section">
+      <h2 class="section-title">設定</h2>
+
+      <div class="settings-item">
+        <div class="settings-info">
+          <div class="settings-title">プロフィール編集</div>
+          <div class="settings-description">表示名やアバターを変更</div>
+        </div>
+        <button class="settings-btn" onclick="showToast('プロフィール編集機能は準備中です', 'info')">編集</button>
+      </div>
+
+      <div class="settings-item">
+        <div class="settings-info">
+          <div class="settings-title">通知設定</div>
+          <div class="settings-description">カード使用通知やお知らせの受信設定</div>
+        </div>
+        <button class="settings-btn" onclick="showToast('通知設定機能は準備中です', 'info')">設定</button>
+      </div>
+
+      <div class="settings-item">
+        <div class="settings-info">
+          <div class="settings-title">購入履歴</div>
+          <div class="settings-description">パック購入履歴を確認</div>
+        </div>
+        <button class="settings-btn" onclick="showToast('購入履歴機能は準備中です', 'info')">確認</button>
+      </div>
+
+      <div class="settings-item">
+        <div class="settings-info">
+          <div class="settings-title">アカウント削除</div>
+          <div class="settings-description">アカウントを完全に削除します</div>
+        </div>
+        <button class="settings-btn danger" onclick="confirmDeleteAccount()">削除</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- フッター -->
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3 class="footer-title">Pack&Play</h3>
+        <p class="footer-description">応援を"演出"にする。</p>
+        <p class="footer-copyright">© 2025 Pack&Play. All rights reserved.</p>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">法的情報</h4>
+        <ul class="footer-links">
+          <li><a href="legal/terms.html">利用規約</a></li>
+          <li><a href="legal/commerce.html">特定商取引法に基づく表記</a></li>
+          <li><a href="legal/privacy.html">プライバシーポリシー</a></li>
+          <li><a href="legal/scta.html">資金決済法に基づく表示</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h4 class="footer-heading">サポート</h4>
+        <ul class="footer-links">
+          <li><a href="legal/contact.html">お問い合わせ</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // ログインチェック
+    if (!requireLogin()) {
+      // ログインが必要な場合、requireLogin関数内でリダイレクトされる
+    }
+
+    // セッション情報を取得
+    const session = getCurrentSession();
+
+    // プロフィール情報を表示
+    function renderProfile() {
+      if (!session) return;
+
+      // アバター（名前の頭文字）
+      const initial = session.name ? session.name.charAt(0) : '?';
+      document.getElementById('profileAvatar').textContent = initial;
+
+      // 名前
+      document.getElementById('profileName').textContent = session.name || 'ユーザー名';
+
+      // ロール
+      const roleText = session.role === 'creator' ? '配信者' : '視聴者';
+      document.getElementById('profileRole').textContent = roleText;
+
+      // メールアドレス
+      document.getElementById('profileEmail').textContent = session.email || '-';
+
+      // ログイン方法
+      document.getElementById('profileLoginMethod').textContent = session.loginPlatform || '-';
+
+      // 登録日（ログイン日時を使用）
+      if (session.loginTime) {
+        const date = new Date(session.loginTime);
+        const formattedDate = date.toLocaleDateString('ja-JP', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        document.getElementById('profileJoinDate').textContent = formattedDate;
+      }
+    }
+
+    // 統計情報を表示
+    function renderStats() {
+      // インベントリデータを取得
+      const inventory = loadFromStorage('inventory', []);
+
+      // モックデータを追加（デモ用）
+      let cards = inventory;
+      if (cards.length === 0) {
+        cards = [
+          { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
+          { id: 2, name: 'いいね！', rarity: 'R', type: 'action', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
+          { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: true, acquiredAt: '2025-11-01' },
+          { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' },
+          { id: 5, name: '花火', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-03' },
+          { id: 6, name: 'ありがとう', rarity: 'R', type: 'message', creatorName: 'ゲームマスター', isUsed: false, acquiredAt: '2025-11-03' },
+          { id: 7, name: 'レインボー', rarity: 'UR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-04' },
+          { id: 8, name: 'キラキラ', rarity: 'R', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-04' }
+        ];
+      }
+
+      // 統計情報を計算
+      document.getElementById('totalCards').textContent = cards.length;
+      document.getElementById('usedCards').textContent = cards.filter(c => c.isUsed).length;
+
+      // 購入パック数（カードの取得日でユニークカウント）
+      const uniqueDates = [...new Set(cards.map(c => c.acquiredAt))];
+      document.getElementById('purchasedPacks').textContent = uniqueDates.length;
+    }
+
+    // アカウント削除確認
+    function confirmDeleteAccount() {
+      if (confirm('本当にアカウントを削除しますか？\nこの操作は取り消せません。')) {
+        showLoading();
+        setTimeout(() => {
+          hideLoading();
+          // セッションとデータを削除
+          localStorage.removeItem('session');
+          localStorage.removeItem('inventory');
+          showToast('アカウントを削除しました', 'success');
+          setTimeout(() => {
+            window.location.href = 'index.html';
+          }, 1500);
+        }, 1500);
+      }
+    }
+
+    // ナビゲーション生成
+    function renderProfileNav() {
+      const nav = document.querySelector('.profile-nav');
+
+      if (!nav) return;
+
+      if (isLoggedIn()) {
+        const role = session.role;
+
+        if (role === 'creator') {
+          nav.innerHTML = `
+            <a href="discover.html" class="profile-nav-link">配信者を探す</a>
+            <a href="dashboard/index.html" class="profile-nav-link">ダッシュボード</a>
+            <a href="javascript:void(0)" onclick="logout()" class="profile-nav-link">ログアウト</a>
+          `;
+        } else {
+          nav.innerHTML = `
+            <a href="discover.html" class="profile-nav-link">配信者を探す</a>
+            <a href="inventory.html" class="profile-nav-link">マイカード</a>
+            <a href="javascript:void(0)" onclick="logout()" class="profile-nav-link">ログアウト</a>
+          `;
+        }
+      } else {
+        nav.innerHTML = `
+          <a href="index.html" class="profile-nav-link">ログイン</a>
+        `;
+      }
+    }
+
+    // 初期表示
+    renderProfileNav();
+    renderProfile();
+    renderStats();
+  </script>
+</body>
+</html>
