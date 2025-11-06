@@ -31,8 +31,111 @@ const creators = [
     isLive: true,
     packCount: 2,
     totalSales: 180000
+  },
+  {
+    id: 4,
+    slug: 'yamada_cooking',
+    name: '山田花子の料理チャンネル',
+    displayName: 'やまだはなこ',
+    channelUrl: 'https://youtube.com/@yamadacooking',
+    isLive: false,
+    packCount: 4,
+    totalSales: 320000
+  },
+  {
+    id: 5,
+    slug: 'sato_sports',
+    name: 'サトケンスポーツ',
+    displayName: '佐藤健一',
+    channelUrl: 'https://twitch.tv/satosports',
+    isLive: true,
+    packCount: 3,
+    totalSales: 280000
+  },
+  {
+    id: 6,
+    slug: 'suzuki_music',
+    name: '鈴木美咲の歌枠',
+    displayName: 'すずきみさき',
+    channelUrl: 'https://youtube.com/@suzukimusic',
+    isLive: false,
+    packCount: 6,
+    totalSales: 650000
+  },
+  {
+    id: 7,
+    slug: 'takahashi_art',
+    name: 'たかはしイラスト工房',
+    displayName: '高橋良太',
+    channelUrl: 'https://youtube.com/@takahashiart',
+    isLive: true,
+    packCount: 4,
+    totalSales: 380000
+  },
+  {
+    id: 8,
+    slug: 'ito_game',
+    name: 'いとさくらのゲーム実況',
+    displayName: '伊藤さくら',
+    channelUrl: 'https://twitch.tv/itogame',
+    isLive: false,
+    packCount: 7,
+    totalSales: 720000
+  },
+  {
+    id: 9,
+    slug: 'watanabe_talk',
+    name: 'わたなべ雑談ルーム',
+    displayName: '渡辺翔太',
+    channelUrl: 'https://youtube.com/@watanabetalk',
+    isLive: true,
+    packCount: 2,
+    totalSales: 150000
+  },
+  {
+    id: 10,
+    slug: 'nakamura_asmr',
+    name: 'ゆいASMR',
+    displayName: '中村ゆい',
+    channelUrl: 'https://youtube.com/@nakamuraasmr',
+    isLive: false,
+    packCount: 5,
+    totalSales: 480000
+  },
+  {
+    id: 11,
+    slug: 'kobayashi_code',
+    name: 'コバヤシコーディング',
+    displayName: '小林大輝',
+    channelUrl: 'https://twitch.tv/kobayashicode',
+    isLive: true,
+    packCount: 3,
+    totalSales: 220000
+  },
+  {
+    id: 12,
+    slug: 'kato_horror',
+    name: 'かとまりホラー実況',
+    displayName: '加藤真理',
+    channelUrl: 'https://youtube.com/@katohorror',
+    isLive: false,
+    packCount: 6,
+    totalSales: 590000
+  },
+  {
+    id: 13,
+    slug: 'yoshida_retro',
+    name: 'ヨシダレトロゲーム',
+    displayName: '吉田隆',
+    channelUrl: 'https://youtube.com/@yoshidaretro',
+    isLive: false,
+    packCount: 4,
+    totalSales: 340000
   }
 ];
+
+// discover.html用のエイリアス
+const mockCreators = creators;
 
 // パックデータ
 const packs = [
