@@ -74,6 +74,94 @@
       color: #FFD600;
     }
 
+    /* ハンバーガーメニュー */
+    .hamburger-menu {
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      padding: 0.5rem;
+      z-index: 101;
+    }
+
+    .hamburger-line {
+      width: 24px;
+      height: 3px;
+      background: white;
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(2) {
+      opacity: 0;
+    }
+
+    .hamburger-menu.active .hamburger-line:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* モバイルメニューオーバーレイ */
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(4px);
+      z-index: 99;
+    }
+
+    .mobile-menu-overlay.active {
+      display: block;
+    }
+
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 280px;
+      background: #2d1b3d;
+      padding: 5rem 2rem 2rem;
+      transform: translateX(100%);
+      transition: transform 0.3s;
+      z-index: 100;
+      overflow-y: auto;
+    }
+
+    .mobile-menu.active {
+      transform: translateX(0);
+    }
+
+    .mobile-menu-links {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .mobile-menu-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: rgba(255, 255, 255, 0.1);
+      text-align: center;
+    }
+
+    .mobile-menu-link:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     /* ヒーローセクション */
     .inventory-hero {
       background-color: white;
@@ -524,12 +612,15 @@
       }
 
       .inventory-nav {
-        gap: 0.5rem;
+        display: none;
       }
 
-      .inventory-nav-link {
-        font-size: 0.875rem;
-        padding: 0.375rem 0.75rem;
+      .hamburger-menu {
+        display: flex;
+      }
+
+      .mobile-menu {
+        display: block;
       }
 
       .stats-grid {
@@ -557,8 +648,21 @@
       <nav class="inventory-nav">
         <!-- JavaScriptで動的に生成 -->
       </nav>
+      <div class="hamburger-menu" onclick="toggleMobileMenu()">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
     </div>
   </header>
+
+  <!-- モバイルメニュー -->
+  <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
+  <div class="mobile-menu">
+    <div class="mobile-menu-links" id="mobileMenuLinks">
+      <!-- JavaScriptで動的に生成 -->
+    </div>
+  </div>
 
   <!-- ヒーローセクション -->
   <section class="inventory-hero">
@@ -851,20 +955,60 @@
     function renderInventoryNav() {
       const session = getCurrentSession();
       const nav = document.querySelector('.inventory-nav');
+      const mobileNav = document.getElementById('mobileMenuLinks');
 
       if (!nav) return;
 
+      let navHtml = '';
+      let mobileNavHtml = '';
+
       if (isLoggedIn()) {
-        nav.innerHTML = `
+        navHtml = `
           <a href="discover.html" class="inventory-nav-link">配信者を探す</a>
           <a href="profile.html" class="inventory-nav-link">プロフィール</a>
           <a href="javascript:void(0)" onclick="logout()" class="inventory-nav-link">ログアウト</a>
         `;
+        mobileNavHtml = `
+          <a href="discover.html" class="mobile-menu-link">配信者を探す</a>
+          <a href="profile.html" class="mobile-menu-link">プロフィール</a>
+          <a href="javascript:void(0)" onclick="logout(); closeMobileMenu();" class="mobile-menu-link">ログアウト</a>
+        `;
       } else {
-        nav.innerHTML = `
+        navHtml = `
           <a href="index.html" class="inventory-nav-link">ログイン</a>
         `;
+        mobileNavHtml = `
+          <a href="index.html" class="mobile-menu-link">ログイン</a>
+        `;
       }
+
+      nav.innerHTML = navHtml;
+      if (mobileNav) {
+        mobileNav.innerHTML = mobileNavHtml;
+      }
+    }
+
+    // モバイルメニュー制御
+    function toggleMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const overlay = document.querySelector('.mobile-menu-overlay');
+      const menu = document.querySelector('.mobile-menu');
+
+      hamburger.classList.toggle('active');
+      overlay.classList.toggle('active');
+      menu.classList.toggle('active');
+      document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
+    }
+
+    function closeMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const overlay = document.querySelector('.mobile-menu-overlay');
+      const menu = document.querySelector('.mobile-menu');
+
+      hamburger.classList.remove('active');
+      overlay.classList.remove('active');
+      menu.classList.remove('active');
+      document.body.style.overflow = '';
     }
 
     // 初期表示
