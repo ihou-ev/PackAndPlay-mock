@@ -145,13 +145,181 @@
       font-weight: 800;
       color: white;
       margin: 0 auto 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .profile-avatar:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-avatar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0);
+      transition: all 0.3s;
+      pointer-events: none;
+    }
+
+    .profile-avatar:hover::after {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-name-wrapper {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      padding: 0.5rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 2px dashed transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-name-wrapper:hover {
+      background: #f3f4f6;
+      border-color: #FF1B8D;
     }
 
     .profile-name {
       font-size: 1.5rem;
       font-weight: 800;
       color: #2d1b3d;
-      margin-bottom: 0.5rem;
+      transition: all 0.3s;
+    }
+
+    .profile-name-wrapper:hover .profile-name {
+      color: #FF1B8D;
+    }
+
+    .profile-name-edit-icon {
+      width: 20px;
+      height: 20px;
+      color: #9ca3af;
+      transition: all 0.3s;
+      flex-shrink: 0;
+    }
+
+    .profile-name-wrapper:hover .profile-name-edit-icon {
+      color: #FF1B8D;
+    }
+
+    .profile-name-input {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      padding: 0.5rem 0.75rem;
+      border: 2px solid #FF1B8D;
+      border-radius: 0.5rem;
+      text-align: center;
+      width: 100%;
+      max-width: 300px;
+      margin: 0 auto 0.5rem;
+      outline: none;
+      background: white;
+    }
+
+    .profile-name-input:focus {
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+    }
+
+    .profile-avatar-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* コイン残高 */
+    .coin-balance-section {
+      margin: 2rem 0;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, #FFFBEB 0%, #FEF3C7 100%);
+      border: 2px solid #FCD34D;
+      border-radius: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .coin-balance-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .coin-icon {
+      flex-shrink: 0;
+      filter: drop-shadow(0 2px 4px rgba(245, 158, 11, 0.3));
+    }
+
+    .coin-balance-info {
+      flex: 1;
+    }
+
+    .coin-balance-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #92400E;
+      margin-bottom: 0.25rem;
+    }
+
+    .coin-balance-amount {
+      font-size: 2rem;
+      font-weight: 900;
+      color: #78350F;
+      font-feature-settings: 'tnum';
+      letter-spacing: -0.02em;
+    }
+
+    .coin-balance-amount::after {
+      content: ' コイン';
+      font-size: 1rem;
+      font-weight: 700;
+      color: #92400E;
+      margin-left: 0.25rem;
+    }
+
+    .coin-charge-btn {
+      width: 100%;
+      padding: 0.875rem 1.5rem;
+      background: linear-gradient(135deg, #F59E0B, #D97706);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+    }
+
+    .coin-charge-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.4);
+      background: linear-gradient(135deg, #D97706, #B45309);
+    }
+
+    .coin-charge-btn:active {
+      transform: translateY(0);
     }
 
     .profile-role {
@@ -362,6 +530,86 @@
       border-color: #ef4444;
     }
 
+    /* モーダル */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 450px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin-bottom: 0.5rem;
+    }
+
+    .modal-message {
+      font-size: 1rem;
+      color: #6b7280;
+      line-height: 1.6;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.5rem;
+    }
+
+    .modal-btn {
+      flex: 1;
+      padding: 0.875rem 1.5rem;
+      border: none;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .modal-btn-danger {
+      background: linear-gradient(135deg, #ef4444, #dc2626);
+      color: white;
+    }
+
+    .modal-btn-danger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .modal-btn-cancel {
+      background: white;
+      color: #6b7280;
+      border: 2px solid #e5e7eb;
+    }
+
+    .modal-btn-cancel:hover {
+      background: #f9fafb;
+      border-color: #d1d5db;
+    }
+
     /* フッター */
     .footer {
       background: #2d1b3d;
@@ -516,19 +764,49 @@
       <!-- プロフィールカード -->
       <div class="profile-card">
         <div class="profile-avatar-section">
-          <div class="profile-avatar" id="profileAvatar">?</div>
-          <div class="profile-name" id="profileName">ユーザー名</div>
-          <span class="profile-role" id="profileRole">視聴者</span>
+          <div class="profile-avatar" id="profileAvatar" onclick="openAvatarUpload()">?</div>
+          <input type="file" id="mainAvatarFileInput" accept="image/*" onchange="handleMainAvatarUpload(event)" style="display: none;">
+          <div class="profile-name-wrapper" onclick="editName()">
+            <div class="profile-name" id="profileName">ユーザー名</div>
+            <svg class="profile-name-edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+            </svg>
+          </div>
+          <input type="text" class="profile-name-input" id="profileNameInput" style="display: none;" onblur="saveName()" onkeydown="handleNameKeydown(event)">
         </div>
 
-        <div class="profile-info">
+        <!-- コイン残高 -->
+        <div class="coin-balance-section">
+          <div class="coin-balance-card">
+            <div class="coin-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="12" r="10" fill="url(#coinGradient)" stroke="#F59E0B" stroke-width="2"/>
+                <text x="12" y="16" text-anchor="middle" font-size="12" font-weight="bold" fill="#78350F">¥</text>
+                <defs>
+                  <linearGradient id="coinGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#FCD34D;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#F59E0B;stop-opacity:1" />
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <div class="coin-balance-info">
+              <div class="coin-balance-label">所有コイン</div>
+              <div class="coin-balance-amount" id="coinBalance">0</div>
+            </div>
+          </div>
+          <button class="coin-charge-btn" onclick="goToCharge()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+            </svg>
+            チャージ
+          </button>
+        </div>
+
+        <div class="profile-info" id="profileInfoDisplay">
           <div class="profile-info-item">
             <div class="profile-info-label">メールアドレス</div>
             <div class="profile-info-value" id="profileEmail">-</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-label">ログイン方法</div>
-            <div class="profile-info-value" id="profileLoginMethod">-</div>
           </div>
           <div class="profile-info-item">
             <div class="profile-info-label">登録日</div>
@@ -542,17 +820,14 @@
         <h2 class="section-title">アクティビティ</h2>
         <div class="stats-grid">
           <div class="stat-card">
-            <div class="stat-icon">🎴</div>
             <div class="stat-label">所持カード数</div>
             <div id="totalCards" class="stat-value primary">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon">✨</div>
             <div class="stat-label">使用済みカード</div>
             <div id="usedCards" class="stat-value success">0</div>
           </div>
           <div class="stat-card">
-            <div class="stat-icon">📦</div>
             <div class="stat-label">購入パック数</div>
             <div id="purchasedPacks" class="stat-value warning">0</div>
           </div>
@@ -572,14 +847,6 @@
 
       <div class="settings-item">
         <div class="settings-info">
-          <div class="settings-title">プロフィール編集</div>
-          <div class="settings-description">表示名やアバターを変更</div>
-        </div>
-        <button class="settings-btn" onclick="showToast('プロフィール編集機能は準備中です', 'info')">編集</button>
-      </div>
-
-      <div class="settings-item">
-        <div class="settings-info">
           <div class="settings-title">通知設定</div>
           <div class="settings-description">カード使用通知やお知らせの受信設定</div>
         </div>
@@ -593,14 +860,11 @@
         </div>
         <button class="settings-btn" onclick="showToast('購入履歴機能は準備中です', 'info')">確認</button>
       </div>
+    </div>
 
-      <div class="settings-item">
-        <div class="settings-info">
-          <div class="settings-title">アカウント削除</div>
-          <div class="settings-description">アカウントを完全に削除します</div>
-        </div>
-        <button class="settings-btn danger" onclick="confirmDeleteAccount()">削除</button>
-      </div>
+    <!-- アカウント削除リンク -->
+    <div id="deletionRequestArea" style="text-align: right; margin-top: 3rem; padding-bottom: 2rem;">
+      <!-- JavaScriptで動的に生成 -->
     </div>
   </main>
 
@@ -630,6 +894,20 @@
     </div>
   </footer>
 
+  <!-- アカウント削除モーダル -->
+  <div id="deleteAccountModal" class="modal-overlay" style="display: none;" onclick="closeDeleteModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h3 class="modal-title">アカウント削除を申請しますか？</h3>
+        <p class="modal-message">削除申請後、30日間の猶予期間が設けられます。この期間中はアカウントの復旧が可能です。コイン残高は削除時に失われますので、先に使い切ることをお勧めします。</p>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" onclick="closeDeleteModal()">キャンセル</button>
+        <button class="modal-btn modal-btn-danger" onclick="executeDeleteAccount()">申請する</button>
+      </div>
+    </div>
+  </div>
+
   <script src="js/mock-data.js"></script>
   <script src="js/main.js"></script>
   <script>
@@ -641,28 +919,48 @@
     // セッション情報を取得
     const session = getCurrentSession();
 
+    // コイン残高を初期化（デモ用：1000コイン）
+    if (!session.coins && session.coins !== 0) {
+      session.coins = 1000;
+      saveToStorage('session', session);
+    }
+
+    // 選択されたアバター画像
+    let selectedAvatarImage = session.avatarImage || null;
+
     // プロフィール情報を表示
     function renderProfile() {
       if (!session) return;
 
-      // アバター（名前の頭文字）
-      const initial = session.name ? session.name.charAt(0) : '?';
-      document.getElementById('profileAvatar').textContent = initial;
+      // アバター表示
+      const avatarElement = document.getElementById('profileAvatar');
+      avatarElement.innerHTML = ''; // クリア
+
+      if (selectedAvatarImage) {
+        // 画像がある場合は画像を表示
+        const img = document.createElement('img');
+        img.src = selectedAvatarImage;
+        img.style.width = '100%';
+        img.style.height = '100%';
+        img.style.objectFit = 'cover';
+        avatarElement.appendChild(img);
+      } else {
+        // 画像がない場合は頭文字を表示
+        const initial = session.name ? session.name.charAt(0) : '?';
+        avatarElement.textContent = initial;
+      }
 
       // 名前
       document.getElementById('profileName').textContent = session.name || 'ユーザー名';
 
-      // ロール
-      const roleText = session.role === 'creator' ? '配信者' : '視聴者';
-      document.getElementById('profileRole').textContent = roleText;
+      // コイン残高
+      const coinBalance = session.coins || 0;
+      document.getElementById('coinBalance').textContent = coinBalance.toLocaleString();
 
       // メールアドレス
       document.getElementById('profileEmail').textContent = session.email || '-';
 
-      // ログイン方法
-      document.getElementById('profileLoginMethod').textContent = session.loginPlatform || '-';
-
-      // 登録日（ログイン日時を使用）
+      // 登録日
       if (session.loginTime) {
         const date = new Date(session.loginTime);
         const formattedDate = date.toLocaleDateString('ja-JP', {
@@ -672,6 +970,113 @@
         });
         document.getElementById('profileJoinDate').textContent = formattedDate;
       }
+    }
+
+    // 名前をインライン編集
+    function editName() {
+      const nameWrapper = document.querySelector('.profile-name-wrapper');
+      const nameInput = document.getElementById('profileNameInput');
+
+      // 現在の名前を入力フィールドにセット
+      nameInput.value = session.name || '';
+
+      // 表示を切り替え
+      nameWrapper.style.display = 'none';
+      nameInput.style.display = 'block';
+      nameInput.focus();
+      nameInput.select();
+    }
+
+    // 名前を保存
+    function saveName() {
+      const nameWrapper = document.querySelector('.profile-name-wrapper');
+      const nameInput = document.getElementById('profileNameInput');
+      const newName = nameInput.value.trim();
+
+      if (!newName) {
+        // 空の場合は元の名前に戻す
+        nameInput.value = session.name || 'ユーザー名';
+        nameWrapper.style.display = 'inline-flex';
+        nameInput.style.display = 'none';
+        return;
+      }
+
+      if (newName !== session.name) {
+        // 名前が変更された場合
+        session.name = newName;
+        saveToStorage('session', session);
+        showToast('表示名を更新しました', 'success');
+        renderProfile();
+      }
+
+      // 表示を切り替え
+      nameWrapper.style.display = 'inline-flex';
+      nameInput.style.display = 'none';
+    }
+
+    // キーボードイベントハンドリング
+    function handleNameKeydown(event) {
+      if (event.key === 'Enter') {
+        event.preventDefault();
+        saveName();
+      } else if (event.key === 'Escape') {
+        event.preventDefault();
+        const nameWrapper = document.querySelector('.profile-name-wrapper');
+        const nameInput = document.getElementById('profileNameInput');
+
+        // キャンセル：元の表示に戻す
+        nameInput.value = session.name || '';
+        nameWrapper.style.display = 'inline-flex';
+        nameInput.style.display = 'none';
+      }
+    }
+
+    // メインアバターをクリックしてアップロード
+    function openAvatarUpload() {
+      document.getElementById('mainAvatarFileInput').click();
+    }
+
+    // メインアバター画像をアップロード（即座に保存）
+    function handleMainAvatarUpload(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      // ファイルサイズチェック（5MB制限）
+      if (file.size > 5 * 1024 * 1024) {
+        showToast('画像サイズは5MB以下にしてください', 'error');
+        return;
+      }
+
+      // 画像タイプチェック
+      if (!file.type.startsWith('image/')) {
+        showToast('画像ファイルを選択してください', 'error');
+        return;
+      }
+
+      showLoading();
+
+      // FileReaderで画像を読み込み
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        selectedAvatarImage = e.target.result;
+
+        // 即座にセッションに保存
+        session.avatarImage = selectedAvatarImage;
+        saveToStorage('session', session);
+
+        hideLoading();
+        showToast('アバター画像を更新しました', 'success');
+
+        // 表示を更新
+        renderProfile();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // コインチャージページへ移動
+    function goToCharge() {
+      showToast('コインチャージ機能は近日公開予定です', 'info');
+      // 将来的には: window.location.href = 'charge.html';
     }
 
     // 統計情報を表示
@@ -703,20 +1108,99 @@
       document.getElementById('purchasedPacks').textContent = uniqueDates.length;
     }
 
-    // アカウント削除確認
+    // アカウント削除モーダルを表示
     function confirmDeleteAccount() {
-      if (confirm('本当にアカウントを削除しますか？\nこの操作は取り消せません。')) {
+      document.getElementById('deleteAccountModal').style.display = 'flex';
+      // ボディのスクロールを無効化
+      document.body.style.overflow = 'hidden';
+    }
+
+    // モーダルを閉じる
+    function closeDeleteModal(event) {
+      // オーバーレイをクリックした場合のみ閉じる
+      if (event && event.target.classList.contains('modal-overlay')) {
+        document.getElementById('deleteAccountModal').style.display = 'none';
+        document.body.style.overflow = '';
+      } else if (!event) {
+        // ボタンから呼び出された場合
+        document.getElementById('deleteAccountModal').style.display = 'none';
+        document.body.style.overflow = '';
+      }
+    }
+
+    // アカウント削除申請を実行
+    function executeDeleteAccount() {
+      // モーダルを閉じる
+      document.getElementById('deleteAccountModal').style.display = 'none';
+      document.body.style.overflow = '';
+
+      showLoading();
+      setTimeout(() => {
+        hideLoading();
+        // 削除申請日時を保存（実際のシステムでは、バックエンドでコイン残高チェックなどを行う）
+        const deletionRequest = {
+          requestedAt: new Date().toISOString(),
+          scheduledDeletionDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(), // 30日後
+          status: 'pending'
+        };
+
+        // セッションに削除申請情報を保存
+        session.deletionRequest = deletionRequest;
+        saveToStorage('session', session);
+
+        showToast('アカウント削除を申請しました。30日後に削除されます。', 'success');
+
+        // 表示を更新
+        renderDeletionRequest();
+      }, 1000);
+    }
+
+    // 削除申請をキャンセル
+    function cancelDeletionRequest() {
+      if (confirm('アカウント削除申請をキャンセルしますか？')) {
         showLoading();
         setTimeout(() => {
           hideLoading();
-          // セッションとデータを削除
-          localStorage.removeItem('session');
-          localStorage.removeItem('inventory');
-          showToast('アカウントを削除しました', 'success');
-          setTimeout(() => {
-            window.location.href = 'index.html';
-          }, 1500);
-        }, 1500);
+          // 削除申請情報を削除
+          delete session.deletionRequest;
+          saveToStorage('session', session);
+
+          showToast('アカウント削除申請をキャンセルしました', 'success');
+
+          // 表示を更新
+          renderDeletionRequest();
+        }, 800);
+      }
+    }
+
+    // 削除申請状態を表示
+    function renderDeletionRequest() {
+      const area = document.getElementById('deletionRequestArea');
+      if (!area) return;
+
+      if (session.deletionRequest && session.deletionRequest.status === 'pending') {
+        // 削除申請中の場合
+        const scheduledDate = new Date(session.deletionRequest.scheduledDeletionDate);
+        const formattedDate = scheduledDate.toLocaleDateString('ja-JP', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+
+        area.innerHTML = `
+          <div style="display: inline-block; padding: 0.75rem 1rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.5rem; margin-bottom: 0.5rem;">
+            <div style="color: #991b1b; font-size: 0.875rem; font-weight: 600; margin-bottom: 0.25rem;">アカウント削除申請中</div>
+            <div style="color: #7f1d1d; font-size: 0.75rem;">削除予定日: ${formattedDate}</div>
+          </div>
+          <div>
+            <a href="javascript:void(0)" onclick="cancelDeletionRequest()" style="display: inline-block; color: #6b7280; font-size: 0.875rem; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; transition: all 0.2s;">申請をキャンセル</a>
+          </div>
+        `;
+      } else {
+        // 通常の表示
+        area.innerHTML = `
+          <a href="javascript:void(0)" onclick="confirmDeleteAccount()" style="display: inline-block; color: #ef4444; font-size: 0.875rem; text-decoration: none; padding: 0.5rem 1rem; border: 1px solid #ef4444; border-radius: 0.5rem; transition: all 0.2s;">アカウント削除を申請</a>
+        `;
       }
     }
 
@@ -753,6 +1237,7 @@
     renderProfileNav();
     renderProfile();
     renderStats();
+    renderDeletionRequest();
   </script>
 </body>
 </html>

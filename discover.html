@@ -502,99 +502,118 @@
   <script src="js/mock-data.js"></script>
   <script src="js/main.js"></script>
   <script>
-    // 配信者を表示
-    let currentFilter = 'all';
+    // DOMが読み込まれてから実行
+    document.addEventListener('DOMContentLoaded', function() {
+      // 配信者を表示
+      let currentFilter = 'all';
 
-    function renderCreators(creatorsToRender) {
-      const grid = document.getElementById('creatorGrid');
-      const emptyState = document.getElementById('emptyState');
+      function renderCreators(creatorsToRender) {
+        const grid = document.getElementById('creatorGrid');
+        const emptyState = document.getElementById('emptyState');
 
-      if (creatorsToRender.length === 0) {
-        grid.innerHTML = '';
-        emptyState.classList.remove('hidden');
-        return;
+        if (creatorsToRender.length === 0) {
+          grid.innerHTML = '';
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        emptyState.classList.add('hidden');
+
+        grid.innerHTML = creatorsToRender.map(creator => `
+          <div class="creator-card" onclick="window.location.href='creator/${creator.slug}.html'">
+            <div class="creator-avatar">
+              ${creator.name.charAt(0)}
+              ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+            </div>
+            <div class="creator-name" title="${creator.name}">${creator.name}</div>
+            <div class="creator-followers">
+              <img src="image/follower.png" alt="フォロワー" class="follower-icon">
+              <span>${(creator.followerCount || 0).toLocaleString()}人</span>
+            </div>
+          </div>
+        `).join('');
       }
 
-      emptyState.classList.add('hidden');
-
-      grid.innerHTML = creatorsToRender.map(creator => `
-        <div class="creator-card" onclick="window.location.href='creator/${creator.slug}.html'">
-          <div class="creator-avatar">
-            ${creator.name.charAt(0)}
-            ${creator.isLive ? '<span class="live-signal"></span>' : ''}
-          </div>
-          <div class="creator-name" title="${creator.name}">${creator.name}</div>
-          <div class="creator-followers">
-            <img src="image/follower.png" alt="フォロワー" class="follower-icon">
-            <span>${(creator.followerCount || 0).toLocaleString()}人</span>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function filterLive() {
-      currentFilter = 'live';
-      document.getElementById('liveBtn').classList.add('active');
-      document.getElementById('allBtn').classList.remove('active');
-      const liveCreators = mockCreators.filter(c => c.isLive);
-      renderCreators(liveCreators);
-    }
-
-    function showAll() {
-      currentFilter = 'all';
-      document.getElementById('allBtn').classList.add('active');
-      document.getElementById('liveBtn').classList.remove('active');
-      renderCreators(mockCreators);
-    }
-
-    // 検索機能
-    document.getElementById('searchInput').addEventListener('input', (e) => {
-      const searchTerm = e.target.value.toLowerCase();
-      const filtered = mockCreators.filter(creator =>
-        creator.name.toLowerCase().includes(searchTerm)
-      );
-
-      if (currentFilter === 'live') {
-        renderCreators(filtered.filter(c => c.isLive));
-      } else {
-        renderCreators(filtered);
+      window.filterLive = function() {
+        currentFilter = 'live';
+        document.getElementById('liveBtn').classList.add('active');
+        document.getElementById('allBtn').classList.remove('active');
+        const creatorsData = window.mockCreators || window.creators || [];
+        const liveCreators = creatorsData.filter(c => c.isLive);
+        renderCreators(liveCreators);
       }
-    });
 
-    // 初期表示
-    renderCreators(mockCreators);
+      window.showAll = function() {
+        currentFilter = 'all';
+        document.getElementById('allBtn').classList.add('active');
+        document.getElementById('liveBtn').classList.remove('active');
+        const creatorsData = window.mockCreators || window.creators || [];
+        renderCreators(creatorsData);
+      }
 
-    // ナビゲーション生成（discover.html専用）
-    function renderDiscoverNav() {
-      const session = getCurrentSession();
-      const nav = document.querySelector('.discover-nav');
+      // 検索機能
+      document.getElementById('searchInput').addEventListener('input', (e) => {
+        const searchTerm = e.target.value.toLowerCase();
+        const creatorsData = window.mockCreators || window.creators || [];
+        const filtered = creatorsData.filter(creator =>
+          creator.name.toLowerCase().includes(searchTerm)
+        );
 
-      if (!nav) return;
-
-      if (isLoggedIn()) {
-        const role = session.role;
-
-        if (role === 'creator') {
-          nav.innerHTML = `
-            <a href="dashboard/index.html" class="discover-nav-link">ダッシュボード</a>
-            <a href="profile.html" class="discover-nav-link">プロフィール</a>
-            <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
-          `;
+        if (currentFilter === 'live') {
+          renderCreators(filtered.filter(c => c.isLive));
         } else {
-          nav.innerHTML = `
-            <a href="inventory.html" class="discover-nav-link">マイカード</a>
-            <a href="profile.html" class="discover-nav-link">プロフィール</a>
-            <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
-          `;
+          renderCreators(filtered);
+        }
+      });
+
+      // 初期表示
+      // mockCreatorsが定義されているか確認
+      if (typeof mockCreators === 'undefined') {
+        console.error('mockCreators is not defined. Check if mock-data.js is loaded.');
+        // creatorsを直接使用（フォールバック）
+        if (typeof creators !== 'undefined') {
+          window.mockCreators = creators;
+          renderCreators(creators);
+        } else {
+          console.error('creators is also not defined.');
+          document.getElementById('emptyState').classList.remove('hidden');
         }
       } else {
-        nav.innerHTML = `
-          <a href="index.html" class="discover-nav-link">ログイン</a>
-        `;
+        renderCreators(mockCreators);
       }
-    }
 
-    renderDiscoverNav();
+      // ナビゲーション生成（discover.html専用）
+      function renderDiscoverNav() {
+        const session = getCurrentSession();
+        const nav = document.querySelector('.discover-nav');
+
+        if (!nav) return;
+
+        if (isLoggedIn()) {
+          const role = session.role;
+
+          if (role === 'creator') {
+            nav.innerHTML = `
+              <a href="dashboard/index.html" class="discover-nav-link">ダッシュボード</a>
+              <a href="profile.html" class="discover-nav-link">プロフィール</a>
+              <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
+            `;
+          } else {
+            nav.innerHTML = `
+              <a href="inventory.html" class="discover-nav-link">マイカード</a>
+              <a href="profile.html" class="discover-nav-link">プロフィール</a>
+              <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
+            `;
+          }
+        } else {
+          nav.innerHTML = `
+            <a href="index.html" class="discover-nav-link">ログイン</a>
+          `;
+        }
+      }
+
+      renderDiscoverNav();
+    }); // DOMContentLoaded終了
   </script>
 </body>
 </html>
