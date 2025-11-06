@@ -235,10 +235,11 @@
     .badge-live {
       background: #ef4444;
       color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.5rem;
-      font-size: 0.75rem;
+      padding: 0.125rem 0.5rem;
+      border-radius: 0.375rem;
+      font-size: 0.625rem;
       font-weight: 700;
+      letter-spacing: 0.025em;
     }
 
     .creator-stats {
@@ -511,12 +512,8 @@
           </div>
           <div class="creator-stats">
             <div class="stat-item">
-              <span class="stat-label">パック数</span>
-              <span class="stat-value">${creator.packCount}</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">総売上</span>
-              <span class="stat-value">${formatPrice(creator.totalSales)}</span>
+              <span class="stat-label">フォロワー</span>
+              <span class="stat-value">${(creator.followerCount || 0).toLocaleString()}人</span>
             </div>
           </div>
         </div>

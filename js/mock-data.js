@@ -10,7 +10,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@tanaka',
     isLive: true,
     packCount: 3,
-    totalSales: 250000
+    totalSales: 250000,
+    followerCount: 15200
   },
   {
     id: 2,
@@ -20,7 +21,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@alice',
     isLive: false,
     packCount: 5,
-    totalSales: 500000
+    totalSales: 500000,
+    followerCount: 32800
   },
   {
     id: 3,
@@ -30,7 +32,8 @@ const creators = [
     channelUrl: 'https://twitch.tv/gamingmaster',
     isLive: true,
     packCount: 2,
-    totalSales: 180000
+    totalSales: 180000,
+    followerCount: 12500
   },
   {
     id: 4,
@@ -40,7 +43,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@yamadacooking',
     isLive: false,
     packCount: 4,
-    totalSales: 320000
+    totalSales: 320000,
+    followerCount: 28400
   },
   {
     id: 5,
@@ -50,7 +54,8 @@ const creators = [
     channelUrl: 'https://twitch.tv/satosports',
     isLive: true,
     packCount: 3,
-    totalSales: 280000
+    totalSales: 280000,
+    followerCount: 19700
   },
   {
     id: 6,
@@ -60,7 +65,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@suzukimusic',
     isLive: false,
     packCount: 6,
-    totalSales: 650000
+    totalSales: 650000,
+    followerCount: 45600
   },
   {
     id: 7,
@@ -70,7 +76,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@takahashiart',
     isLive: true,
     packCount: 4,
-    totalSales: 380000
+    totalSales: 380000,
+    followerCount: 23100
   },
   {
     id: 8,
@@ -80,7 +87,8 @@ const creators = [
     channelUrl: 'https://twitch.tv/itogame',
     isLive: false,
     packCount: 7,
-    totalSales: 720000
+    totalSales: 720000,
+    followerCount: 58900
   },
   {
     id: 9,
@@ -90,7 +98,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@watanabetalk',
     isLive: true,
     packCount: 2,
-    totalSales: 150000
+    totalSales: 150000,
+    followerCount: 8600
   },
   {
     id: 10,
@@ -100,7 +109,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@nakamuraasmr',
     isLive: false,
     packCount: 5,
-    totalSales: 480000
+    totalSales: 480000,
+    followerCount: 37200
   },
   {
     id: 11,
@@ -110,7 +120,8 @@ const creators = [
     channelUrl: 'https://twitch.tv/kobayashicode',
     isLive: true,
     packCount: 3,
-    totalSales: 220000
+    totalSales: 220000,
+    followerCount: 14800
   },
   {
     id: 12,
@@ -120,7 +131,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@katohorror',
     isLive: false,
     packCount: 6,
-    totalSales: 590000
+    totalSales: 590000,
+    followerCount: 42300
   },
   {
     id: 13,
@@ -130,7 +142,8 @@ const creators = [
     channelUrl: 'https://youtube.com/@yoshidaretro',
     isLive: false,
     packCount: 4,
-    totalSales: 340000
+    totalSales: 340000,
+    followerCount: 26700
   }
 ];
 
