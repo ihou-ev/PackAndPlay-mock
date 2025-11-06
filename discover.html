@@ -259,11 +259,20 @@
     }
 
     .creator-followers {
-      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.375rem;
       color: #6b7280;
       font-size: 0.8125rem;
       font-weight: 500;
       width: 100%;
+    }
+
+    .follower-icon {
+      width: 16px;
+      height: 16px;
+      object-fit: contain;
     }
 
     /* 空状態 */
@@ -515,7 +524,10 @@
             ${creator.isLive ? '<span class="live-signal"></span>' : ''}
           </div>
           <div class="creator-name" title="${creator.name}">${creator.name}</div>
-          <div class="creator-followers">${(creator.followerCount || 0).toLocaleString()}人</div>
+          <div class="creator-followers">
+            <img src="image/follower.png" alt="フォロワー" class="follower-icon">
+            <span>${(creator.followerCount || 0).toLocaleString()}人</span>
+          </div>
         </div>
       `).join('');
     }
