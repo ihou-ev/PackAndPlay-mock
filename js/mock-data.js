@@ -382,7 +382,7 @@ function getRarityColor(rarity) {
 }
 
 function formatPrice(price) {
-  return `¥${price.toLocaleString()}`;
+  return `${price.toLocaleString()}スパーク`;
 }
 
 function formatDate(dateString) {

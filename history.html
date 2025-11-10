@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>履歴 - Pack&Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    body {
+      overflow-x: hidden;
+      background: #f9fafb;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* サイドバー */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 260px;
+      background: #2d1b3d;
+      padding: 2rem 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .sidebar-logo {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-logo:hover {
+      color: #FFD600;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .sidebar-nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-nav-link.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFD600;
+    }
+
+    /* サイドバーフッター */
+    .sidebar-footer {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-footer-link {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-footer-link:hover {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: underline;
+    }
+
+    .sidebar-footer-copyright {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    /* メインコンテンツエリア */
+    .main-wrapper {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .history-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      width: 100%;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      background: white;
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 0;
+    }
+
+    .history-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin: 0;
+    }
+
+    /* フィルター */
+    .history-filters {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: white;
+    }
+
+    .filter-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #2d1b3d;
+      white-space: nowrap;
+    }
+
+    .filter-select {
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      background: transparent;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #6b7280;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #9ca3af;
+    }
+
+    /* 履歴リスト */
+    .history-list {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .history-header {
+      display: grid;
+      grid-template-columns: 130px 80px 110px 90px 1fr;
+      gap: 0.75rem;
+      padding: 0.625rem 1rem;
+      background: #f9fafb;
+      border-bottom: 2px solid #e5e7eb;
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #6b7280;
+    }
+
+    .history-header-cell {
+      white-space: nowrap;
+    }
+
+    .history-item {
+      display: grid;
+      grid-template-columns: 130px 80px 110px 90px 1fr;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      transition: background 0.2s;
+      align-items: start;
+    }
+
+    .history-item:hover {
+      background: #f9fafb;
+    }
+
+    .history-item:last-child {
+      border-bottom: none;
+    }
+
+    .history-item-date {
+      font-size: 0.75rem;
+      color: #2d1b3d;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .history-item-type {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #2d1b3d;
+      white-space: nowrap;
+    }
+
+    .history-item-creator {
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .history-item-amount {
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-align: right;
+      white-space: nowrap;
+      color: #2d1b3d;
+    }
+
+    .history-item-details {
+      font-size: 0.75rem;
+      color: #6b7280;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+
+    /* 空状態 */
+    .history-empty {
+      padding: 4rem 2rem;
+      text-align: center;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .history-empty-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.3;
+    }
+
+    .history-empty-text {
+      font-size: 1rem;
+      color: #6b7280;
+      margin-bottom: 0.5rem;
+    }
+
+    .history-empty-subtext {
+      font-size: 0.875rem;
+      color: #9ca3af;
+    }
+
+    /* モバイルフッター */
+    .mobile-footer {
+      display: none;
+      background: white;
+      padding: 2rem 1rem;
+      border-top: 1px solid #e5e7eb;
+      margin-top: auto;
+    }
+
+    .mobile-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+
+    .mobile-footer-link {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: color 0.2s;
+    }
+
+    .mobile-footer-link:hover {
+      color: #2d1b3d;
+      text-decoration: underline;
+    }
+
+    .mobile-footer-copyright {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 0.75rem;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      body {
+        display: block;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main-wrapper {
+        margin-left: 0;
+      }
+
+      .history-content {
+        padding: 0;
+      }
+
+      .mobile-footer {
+        display: block;
+      }
+
+      .history-filters {
+        padding: 0.75rem 1rem;
+      }
+
+      .history-header {
+        display: none;
+      }
+
+      .history-item {
+        grid-template-columns: 1fr;
+        gap: 0.5rem;
+        padding: 0.75rem;
+      }
+
+      .history-item-date {
+        font-size: 0.6875rem;
+      }
+
+      .history-item-type {
+        font-size: 0.6875rem;
+      }
+
+      .history-item-creator {
+        font-size: 0.6875rem;
+      }
+
+      .history-item-amount {
+        text-align: left;
+        font-size: 0.6875rem;
+      }
+
+      .history-item-details {
+        word-break: break-word;
+        font-size: 0.6875rem;
+        line-height: 1.4;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- サイドバー -->
+  <aside class="sidebar">
+    <a href="index.html" class="sidebar-logo">Pack&Play</a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <!-- サイドバーフッター -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツラッパー -->
+  <div class="main-wrapper">
+    <!-- メインコンテンツ -->
+    <main class="history-content">
+      <!-- ヘッダー -->
+      <div class="page-header">
+        <h1 class="history-title">履歴</h1>
+      </div>
+
+      <!-- フィルター -->
+      <div class="history-filters">
+        <span class="filter-label">種別で絞り込む</span>
+        <select id="filterSelect" class="filter-select" onchange="applyFilters()">
+          <option value="all">すべて</option>
+          <option value="charge">チャージ</option>
+          <option value="purchase">購入</option>
+          <option value="usage">使用</option>
+          <option value="splash">スプラッシュ</option>
+        </select>
+      </div>
+
+      <!-- 履歴リスト -->
+      <div class="history-list">
+        <!-- ヘッダー -->
+        <div class="history-header">
+          <div class="history-header-cell">日時</div>
+          <div class="history-header-cell">種別</div>
+          <div class="history-header-cell">配信者</div>
+          <div class="history-header-cell">スパーク金額</div>
+          <div class="history-header-cell">内容</div>
+        </div>
+        <!-- 履歴アイテム -->
+        <div id="historyItems">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+      </div>
+    </main>
+
+    <!-- モバイル用フッター -->
+    <footer class="mobile-footer">
+      <div class="mobile-footer-links">
+        <a href="legal/terms.html" class="mobile-footer-link">利用規約</a>
+        <a href="legal/privacy.html" class="mobile-footer-link">プライバシー</a>
+        <a href="legal/commerce.html" class="mobile-footer-link">特商法表記</a>
+        <a href="legal/scta.html" class="mobile-footer-link">資金決済法</a>
+        <a href="legal/contact.html" class="mobile-footer-link">お問い合わせ</a>
+      </div>
+      <div class="mobile-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // ログインチェック
+    if (!requireLogin()) {
+      // ログインが必要な場合、requireLogin関数内でリダイレクトされる
+    }
+
+    // セッション情報を取得
+    const session = getCurrentSession();
+
+    // モックデータ - 統合した履歴
+    const allHistory = [
+      // チャージ履歴
+      {
+        type: 'charge',
+        date: '2025-11-10T14:30:00Z',
+        amount: 5000,
+        method: 'クレジットカード'
+      },
+      {
+        type: 'charge',
+        date: '2025-11-08T10:15:00Z',
+        amount: 3000,
+        method: 'コンビニ決済'
+      },
+      {
+        type: 'charge',
+        date: '2025-11-05T16:45:00Z',
+        amount: 10000,
+        method: 'クレジットカード'
+      },
+      {
+        type: 'charge',
+        date: '2025-11-01T09:20:00Z',
+        amount: 2000,
+        method: 'PayPay'
+      },
+      // 購入履歴
+      {
+        type: 'purchase',
+        date: '2025-11-10T15:00:00Z',
+        packName: '初心者応援パック',
+        creatorName: '田中太郎',
+        price: 500,
+        cardReceived: 'きらきら (SR)'
+      },
+      {
+        type: 'purchase',
+        date: '2025-11-09T18:30:00Z',
+        packName: 'アリスの魔法パック',
+        creatorName: 'アリスちゃんねる',
+        price: 800,
+        cardReceived: 'ハート (N)'
+      },
+      {
+        type: 'purchase',
+        date: '2025-11-09T12:15:00Z',
+        packName: 'レアカード限定パック',
+        creatorName: '田中太郎',
+        price: 1000,
+        cardReceived: '花火 (SR)'
+      },
+      {
+        type: 'purchase',
+        date: '2025-11-08T20:45:00Z',
+        packName: '初心者応援パック',
+        creatorName: '田中太郎',
+        price: 500,
+        cardReceived: 'いいね！ (R)'
+      },
+      {
+        type: 'purchase',
+        date: '2025-11-07T14:20:00Z',
+        packName: 'アリスの魔法パック',
+        creatorName: 'アリスちゃんねる',
+        price: 800,
+        cardReceived: 'ユニコーン (SR)'
+      },
+      // 使用履歴
+      {
+        type: 'usage',
+        date: '2025-11-10T16:30:00Z',
+        cardName: 'きらきら',
+        rarity: 'SR',
+        creatorName: '田中太郎',
+        status: 'approved'
+      },
+      {
+        type: 'usage',
+        date: '2025-11-09T19:00:00Z',
+        cardName: 'ハート',
+        rarity: 'N',
+        creatorName: 'アリスちゃんねる',
+        status: 'approved'
+      },
+      {
+        type: 'usage',
+        date: '2025-11-09T13:45:00Z',
+        cardName: '花火',
+        rarity: 'SR',
+        creatorName: '田中太郎',
+        status: 'pending'
+      },
+      {
+        type: 'usage',
+        date: '2025-11-08T21:15:00Z',
+        cardName: 'いいね！',
+        rarity: 'R',
+        creatorName: '田中太郎',
+        status: 'approved'
+      },
+      // スプラッシュ履歴
+      {
+        type: 'splash',
+        date: '2025-11-10T17:45:00Z',
+        creatorName: '田中太郎',
+        amount: 1000,
+        message: 'いつも楽しい配信ありがとうございます！'
+      },
+      {
+        type: 'splash',
+        date: '2025-11-09T20:30:00Z',
+        creatorName: 'アリスちゃんねる',
+        amount: 500,
+        message: '応援してます！'
+      },
+      {
+        type: 'splash',
+        date: '2025-11-08T15:20:00Z',
+        creatorName: '田中太郎',
+        amount: 2000,
+        message: '次回の配信も楽しみにしています'
+      },
+      {
+        type: 'splash',
+        date: '2025-11-07T19:15:00Z',
+        creatorName: 'ゲームマスター',
+        amount: 300,
+        message: ''
+      }
+    ];
+
+    // 日付でソート（新しい順）
+    allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+    // フィルター適用
+    function applyFilters() {
+      const filterValue = document.getElementById('filterSelect').value;
+
+      // フィルタリングされた履歴
+      let filteredHistory = allHistory;
+
+      if (filterValue !== 'all') {
+        filteredHistory = allHistory.filter(item => item.type === filterValue);
+      }
+
+      renderHistory(filteredHistory);
+    }
+
+    // 履歴を表示
+    function renderHistory(historyData) {
+      const container = document.getElementById('historyItems');
+
+      if (historyData.length === 0) {
+        container.innerHTML = `
+          <div class="history-empty">
+            <div class="history-empty-icon">📋</div>
+            <div class="history-empty-text">履歴がありません</div>
+            <div class="history-empty-subtext">選択した種別の履歴が表示されます</div>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = historyData.map(item => {
+        const date = new Date(item.date);
+        const formattedDate = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+        let typeLabel = '';
+        let typeClass = '';
+        let creator = '-';
+        let amount = '-';
+        let details = '';
+
+        if (item.type === 'charge') {
+          typeLabel = 'チャージ';
+          typeClass = 'charge';
+          amount = `+${item.amount.toLocaleString()}`;
+          details = item.method;
+        } else if (item.type === 'purchase') {
+          typeLabel = '購入';
+          typeClass = 'purchase';
+          creator = item.creatorName;
+          amount = `-${item.price.toLocaleString()}`;
+          details = `${item.packName} | 獲得: ${item.cardReceived}`;
+        } else if (item.type === 'usage') {
+          typeLabel = '使用';
+          typeClass = 'usage';
+          creator = item.creatorName;
+          amount = '-';
+          details = `${item.cardName} (${item.rarity})`;
+        } else if (item.type === 'splash') {
+          typeLabel = 'スプラッシュ';
+          typeClass = 'splash';
+          creator = item.creatorName;
+          amount = `-${item.amount.toLocaleString()}`;
+          details = item.message || '(メッセージなし)';
+        }
+
+        return `
+          <div class="history-item">
+            <div class="history-item-date">${formattedDate}</div>
+            <div class="history-item-type ${typeClass}">${typeLabel}</div>
+            <div class="history-item-creator">${creator}</div>
+            <div class="history-item-amount">${amount}</div>
+            <div class="history-item-details">${details}</div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // サイドバーナビゲーション生成
+    function renderSidebarNav() {
+      const sidebarNav = document.getElementById('sidebarNav');
+
+      if (!sidebarNav) return;
+
+      let navHTML = '';
+
+      if (isLoggedIn()) {
+        const role = session.role;
+
+        if (role === 'creator') {
+          navHTML = `
+            <a href="profile.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              プロフィール
+            </a>
+            <a href="discover.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              配信者を探す
+            </a>
+            <a href="dashboard/index.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 13a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z"></path>
+              </svg>
+              ダッシュボード
+            </a>
+            <a href="history.html" class="sidebar-nav-link active">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              履歴
+            </a>
+            <a href="settings.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              設定
+            </a>
+            <a href="javascript:void(0)" onclick="logout()" class="sidebar-nav-link" style="margin-top: auto;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              ログアウト
+            </a>
+          `;
+        } else {
+          navHTML = `
+            <a href="profile.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              プロフィール
+            </a>
+            <a href="discover.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              配信者を探す
+            </a>
+            <a href="inventory.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+              マイカード
+            </a>
+            <a href="history.html" class="sidebar-nav-link active">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              履歴
+            </a>
+            <a href="settings.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              設定
+            </a>
+            <a href="javascript:void(0)" onclick="logout()" class="sidebar-nav-link" style="margin-top: auto;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              ログアウト
+            </a>
+          `;
+        }
+      } else {
+        navHTML = `
+          <a href="index.html" class="sidebar-nav-link">
+            <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
+            </svg>
+            ログイン
+          </a>
+        `;
+      }
+
+      sidebarNav.innerHTML = navHTML;
+    }
+
+    // 初期表示
+    renderSidebarNav();
+    applyFilters();
+  </script>
+</body>
+</html>
