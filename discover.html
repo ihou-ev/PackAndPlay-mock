@@ -28,91 +28,96 @@
       left: 0;
       top: 0;
       bottom: 0;
-      width: 240px;
+      width: 260px;
       background: #2d1b3d;
-      padding: 2rem 0;
+      padding: 2rem 1.5rem 1rem;
       display: flex;
       flex-direction: column;
-      z-index: 100;
       overflow-y: auto;
+      z-index: 1000;
     }
 
     .sidebar-logo {
-      font-size: 1.5rem;
-      font-weight: 800;
+      font-size: 1.75rem;
+      font-weight: 900;
       color: white;
       text-decoration: none;
-      padding: 0 1.5rem;
       margin-bottom: 2rem;
-      display: block;
+      transition: color 0.2s;
+    }
+
+    .sidebar-logo:hover {
+      color: #FFD600;
     }
 
     .sidebar-nav {
-      flex: 1;
       display: flex;
       flex-direction: column;
       gap: 0.5rem;
-      padding: 0 1rem;
+      flex: 1;
     }
 
-    .sidebar-nav-item {
-      color: rgba(255, 255, 255, 0.7);
+    .sidebar-nav-link {
+      color: white;
       text-decoration: none;
-      padding: 0.75rem 1rem;
-      border-radius: 0.5rem;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
       transition: all 0.2s;
       display: flex;
       align-items: center;
       gap: 0.75rem;
-      font-weight: 600;
-      font-size: 0.9375rem;
     }
 
-    .sidebar-nav-item:hover {
+    .sidebar-nav-link:hover {
       background: rgba(255, 255, 255, 0.1);
-      color: white;
     }
 
-    .sidebar-nav-item.active {
-      background: rgba(255, 27, 141, 0.2);
-      color: white;
+    .sidebar-nav-link.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFD600;
     }
 
+    /* サイドバーフッター */
     .sidebar-footer {
-      padding: 1rem 1.5rem;
-      border-top: 1px solid rgba(255, 255, 255, 0.1);
       margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
     }
 
     .sidebar-footer-links {
       display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
     }
 
     .sidebar-footer-link {
-      color: rgba(255, 255, 255, 0.5);
+      color: rgba(255, 255, 255, 0.6);
       text-decoration: none;
       font-size: 0.8125rem;
       transition: color 0.2s;
     }
 
     .sidebar-footer-link:hover {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: underline;
     }
 
-    .sidebar-copyright {
-      margin-top: 1rem;
-      color: rgba(255, 255, 255, 0.3);
+    .sidebar-footer-copyright {
+      color: rgba(255, 255, 255, 0.4);
       font-size: 0.75rem;
+      line-height: 1.4;
     }
 
     /* メインラッパー */
     .main-wrapper {
+      margin-left: 260px;
       flex: 1;
-      margin-left: 240px;
+      display: flex;
+      flex-direction: column;
       min-height: 100vh;
-      background: #f9fafb;
     }
 
     /* 配信者を探すコンテンツ */
@@ -534,7 +539,7 @@
         <a href="legal/privacy.html" class="sidebar-footer-link">プライバシーポリシー</a>
         <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
       </div>
-      <div class="sidebar-copyright">© 2025 Pack&Play</div>
+      <div class="sidebar-footer-copyright">© 2025 Pack&Play</div>
     </div>
   </aside>
 
