@@ -536,10 +536,14 @@
     <div class="sidebar-footer">
       <div class="sidebar-footer-links">
         <a href="legal/terms.html" class="sidebar-footer-link">利用規約</a>
-        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシーポリシー</a>
+        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="legal/scta.html" class="sidebar-footer-link">資金決済法</a>
         <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
       </div>
-      <div class="sidebar-footer-copyright">© 2025 Pack&Play</div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
     </div>
   </aside>
 
@@ -598,6 +602,7 @@
         let navHTML = '';
 
         if (isLoggedIn()) {
+          const session = getCurrentSession();
           const role = session.role;
 
           if (role === 'creator') {
