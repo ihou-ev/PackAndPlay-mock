@@ -422,18 +422,53 @@
     .following-section-header {
       padding: 1rem;
       border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
     }
 
     .section-title {
       font-size: 1.25rem;
       font-weight: 800;
       color: #2d1b3d;
-      margin: 0;
+      margin: 0 0 1rem 0;
+    }
+
+    /* タブ */
+    .following-tabs {
+      display: flex;
+      gap: 0.5rem;
+      border-bottom: 2px solid #e5e7eb;
+      margin: 0 -1rem;
+      padding: 0 1rem;
+    }
+
+    .following-tab {
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      color: #6b7280;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .following-tab:hover {
+      color: #2d1b3d;
+    }
+
+    .following-tab.active {
+      color: #2d1b3d;
+      border-bottom-color: #FF1B8D;
+    }
+
+    /* タブコンテンツ */
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
     }
 
     .following-grid {
@@ -526,6 +561,73 @@
       padding: 2rem;
       color: #9ca3af;
       font-size: 0.875rem;
+    }
+
+    /* タイムライン */
+    .timeline-item {
+      background: white;
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .timeline-item:hover {
+      background: #f9fafb;
+    }
+
+    .timeline-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .timeline-content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .timeline-header {
+      display: flex;
+      gap: 0.5rem;
+      align-items: baseline;
+      margin-bottom: 0.25rem;
+    }
+
+    .timeline-creator-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #2d1b3d;
+    }
+
+    .timeline-action {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .timeline-time {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      margin-left: auto;
+    }
+
+    .timeline-detail {
+      font-size: 0.875rem;
+      color: #2d1b3d;
+      margin-top: 0.25rem;
+    }
+
+    .timeline-pack-name {
+      font-weight: 600;
+      color: #FF1B8D;
     }
 
     .sort-select {
@@ -878,6 +980,39 @@
       .following-bio {
         font-size: 0.8125rem;
       }
+
+      /* タイムライン - モバイル */
+      .timeline-item {
+        padding: 0.875rem 1rem;
+      }
+
+      .timeline-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
+      }
+
+      .timeline-creator-name {
+        font-size: 0.8125rem;
+      }
+
+      .timeline-action {
+        font-size: 0.8125rem;
+      }
+
+      .timeline-time {
+        font-size: 0.6875rem;
+      }
+
+      .timeline-detail {
+        font-size: 0.8125rem;
+      }
+
+      /* タブ - モバイル */
+      .following-tab {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.75rem;
+      }
     }
   </style>
 </head>
@@ -982,25 +1117,45 @@
       <div class="following-section">
         <div class="following-section-header">
           <h2 class="section-title">フォロー中</h2>
-          <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
-            <option value="default">デフォルト</option>
-            <option value="name">名前順</option>
-            <option value="live">配信中優先</option>
-          </select>
+          <div class="following-tabs">
+            <button class="following-tab active" onclick="switchTab('timeline')">タイムライン</button>
+            <button class="following-tab" onclick="switchTab('live')">配信中</button>
+          </div>
         </div>
-        <div id="followingGrid" class="following-grid">
-          <!-- JavaScriptで動的に生成 -->
+
+        <!-- タイムラインタブ -->
+        <div id="timelineTab" class="tab-content active">
+          <div id="timelineGrid" class="timeline-grid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <div id="timelineEmpty" class="following-empty" style="display: none;">
+            まだアクティビティがありません
+          </div>
         </div>
-        <div id="followingEmpty" class="following-empty" style="display: none;">
-          フォロー中がいません
-        </div>
-        <div id="showMoreContainer" style="text-align: center; padding: 1rem 0; border-top: 1px solid #e5e7eb; display: none;">
-          <button class="show-more-btn" onclick="toggleShowMore()">
-            <span id="showMoreText">もっと見る</span>
-            <svg id="showMoreIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-            </svg>
-          </button>
+
+        <!-- 配信中タブ -->
+        <div id="liveTab" class="tab-content">
+          <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: flex-end;">
+            <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
+              <option value="default">デフォルト</option>
+              <option value="name">名前順</option>
+              <option value="live">配信中優先</option>
+            </select>
+          </div>
+          <div id="followingGrid" class="following-grid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <div id="followingEmpty" class="following-empty" style="display: none;">
+            フォロー中がいません
+          </div>
+          <div id="showMoreContainer" style="text-align: center; padding: 1rem 0; border-top: 1px solid #e5e7eb; display: none;">
+            <button class="show-more-btn" onclick="toggleShowMore()">
+              <span id="showMoreText">もっと見る</span>
+              <svg id="showMoreIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
     </main>
@@ -1650,11 +1805,113 @@
       document.body.style.overflow = '';
     }
 
+    // タブ切り替え
+    function switchTab(tabName) {
+      // タブボタンの切り替え
+      document.querySelectorAll('.following-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      event.target.classList.add('active');
+
+      // タブコンテンツの切り替え
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      if (tabName === 'timeline') {
+        document.getElementById('timelineTab').classList.add('active');
+      } else if (tabName === 'live') {
+        document.getElementById('liveTab').classList.add('active');
+      }
+    }
+
+    // タイムラインを表示
+    function renderTimeline() {
+      const timelineGrid = document.getElementById('timelineGrid');
+      const timelineEmpty = document.getElementById('timelineEmpty');
+
+      // タイムラインモックデータ
+      const timelineItems = [
+        {
+          creatorId: 2,
+          creatorName: 'アリスちゃんねる',
+          action: '新しいパックを公開しました',
+          detail: '「アリスの魔法パック」',
+          time: '2時間前'
+        },
+        {
+          creatorId: 8,
+          creatorName: 'いとさくらのゲーム実況',
+          action: '配信を開始しました',
+          detail: 'ホラーゲーム実況配信中！',
+          time: '3時間前'
+        },
+        {
+          creatorId: 1,
+          creatorName: '田中太郎',
+          action: '新しいカードを追加しました',
+          detail: '「激レアカード」をパックに追加',
+          time: '5時間前'
+        },
+        {
+          creatorId: 6,
+          creatorName: '鈴木美咲の歌枠',
+          action: '配信を開始しました',
+          detail: '歌ってみた配信中♪',
+          time: '6時間前'
+        },
+        {
+          creatorId: 4,
+          creatorName: '山田花子の料理チャンネル',
+          action: '新しいパックを公開しました',
+          detail: '「料理応援パック」',
+          time: '8時間前'
+        },
+        {
+          creatorId: 7,
+          creatorName: 'たかはしイラスト工房',
+          action: '配信を開始しました',
+          detail: 'お絵描き配信中🎨',
+          time: '1日前'
+        }
+      ];
+
+      if (timelineItems.length === 0) {
+        timelineGrid.innerHTML = '';
+        timelineEmpty.style.display = 'block';
+        return;
+      }
+
+      timelineEmpty.style.display = 'none';
+
+      timelineGrid.innerHTML = timelineItems.map(item => {
+        const creator = creators.find(c => c.id === item.creatorId);
+        const initial = creator ? creator.name.charAt(0) : '?';
+
+        return `
+          <div class="timeline-item">
+            <div class="timeline-avatar">${initial}</div>
+            <div class="timeline-content">
+              <div class="timeline-header">
+                <span class="timeline-creator-name">${item.creatorName}</span>
+                <span class="timeline-action">${item.action}</span>
+                <span class="timeline-time">${item.time}</span>
+              </div>
+              <div class="timeline-detail">
+                <span class="timeline-pack-name">${item.detail}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // 初期表示
     renderSidebarNav();
     renderProfile();
     renderFollowingCreators();
     renderDeletionRequest();
+    renderTimeline();
   </script>
 </body>
 </html>
