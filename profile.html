@@ -166,27 +166,29 @@
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
-    .profile-avatar-section {
-      text-align: center;
-      margin-bottom: 2rem;
+    .profile-header-section {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      margin-bottom: 1.5rem;
     }
 
     .profile-avatar {
-      width: 120px;
-      height: 120px;
+      width: 80px;
+      height: 80px;
       border-radius: 50%;
       background: linear-gradient(135deg, #FF1B8D, #00D4FF);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 3rem;
+      font-size: 2rem;
       font-weight: 800;
       color: white;
-      margin: 0 auto 1rem;
       cursor: pointer;
       transition: all 0.3s;
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .profile-avatar:hover {
@@ -216,13 +218,18 @@
       object-fit: cover;
     }
 
+    .profile-details {
+      flex: 1;
+      min-width: 0;
+    }
+
     .profile-name-wrapper {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
       cursor: pointer;
       transition: all 0.3s;
-      padding: 0.5rem 0.75rem;
+      padding: 0.25rem 0.5rem;
       border-radius: 0.5rem;
       border: 2px dashed transparent;
       margin-bottom: 0.5rem;
@@ -245,8 +252,8 @@
     }
 
     .profile-name-edit-icon {
-      width: 20px;
-      height: 20px;
+      width: 18px;
+      height: 18px;
       color: #9ca3af;
       transition: all 0.3s;
       flex-shrink: 0;
@@ -260,15 +267,14 @@
       font-size: 1.5rem;
       font-weight: 800;
       color: #2d1b3d;
-      padding: 0.5rem 0.75rem;
+      padding: 0.25rem 0.5rem;
       border: 2px solid #FF1B8D;
       border-radius: 0.5rem;
-      text-align: center;
       width: 100%;
       max-width: 300px;
-      margin: 0 auto 0.5rem;
       outline: none;
       background: white;
+      margin-bottom: 0.5rem;
     }
 
     .profile-name-input:focus {
@@ -276,10 +282,30 @@
       box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
     }
 
-    .profile-avatar-section {
+    .profile-stats {
       display: flex;
-      flex-direction: column;
-      align-items: center;
+      gap: 1rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .profile-stat-item {
+      font-size: 0.875rem;
+      color: #6b7280;
+    }
+
+    .profile-stat-label {
+      font-weight: 500;
+    }
+
+    .profile-stat-value {
+      font-weight: 700;
+      color: #2d1b3d;
+    }
+
+    .profile-join-date {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+      line-height: 1.5;
     }
 
     /* コイン残高 */
@@ -373,32 +399,6 @@
       color: #6b21a8;
       border-radius: 0.5rem;
       font-size: 0.875rem;
-      font-weight: 700;
-    }
-
-    .profile-info {
-      margin-top: 2rem;
-    }
-
-    .profile-info-item {
-      padding: 1rem 0;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .profile-info-item:last-child {
-      border-bottom: none;
-    }
-
-    .profile-info-label {
-      font-size: 0.875rem;
-      color: #6b7280;
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-    }
-
-    .profile-info-value {
-      font-size: 1rem;
-      color: #2d1b3d;
       font-weight: 700;
     }
 
@@ -918,6 +918,33 @@
         font-size: 0.8125rem;
       }
 
+      .profile-avatar {
+        width: 64px;
+        height: 64px;
+        font-size: 1.5rem;
+      }
+
+      .profile-name {
+        font-size: 1.25rem;
+      }
+
+      .profile-name-edit-icon {
+        width: 16px;
+        height: 16px;
+      }
+
+      .profile-stats {
+        gap: 0.75rem;
+      }
+
+      .profile-stat-item {
+        font-size: 0.8125rem;
+      }
+
+      .profile-join-date {
+        font-size: 0.75rem;
+      }
+
       .following-card {
         padding: 0.875rem 1rem;
       }
@@ -976,16 +1003,28 @@
     <div class="profile-grid">
       <!-- プロフィールカード -->
       <div class="profile-card">
-        <div class="profile-avatar-section">
+        <div class="profile-header-section">
           <div class="profile-avatar" id="profileAvatar" onclick="openAvatarUpload()">?</div>
           <input type="file" id="mainAvatarFileInput" accept="image/*" onchange="handleMainAvatarUpload(event)" style="display: none;">
-          <div class="profile-name-wrapper" onclick="editName()">
-            <div class="profile-name" id="profileName">ユーザー名</div>
-            <svg class="profile-name-edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
-            </svg>
+
+          <div class="profile-details">
+            <div class="profile-name-wrapper" onclick="editName()">
+              <div class="profile-name" id="profileName">ユーザー名</div>
+              <svg class="profile-name-edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+              </svg>
+            </div>
+            <input type="text" class="profile-name-input" id="profileNameInput" style="display: none;" onblur="saveName()" onkeydown="handleNameKeydown(event)">
+
+            <div class="profile-stats">
+              <span class="profile-stat-item">
+                <span class="profile-stat-label">フォロー中:</span>
+                <span class="profile-stat-value" id="followingCount">0</span>人
+              </span>
+            </div>
+
+            <div class="profile-join-date" id="profileJoinDate">-</div>
           </div>
-          <input type="text" class="profile-name-input" id="profileNameInput" style="display: none;" onblur="saveName()" onkeydown="handleNameKeydown(event)">
         </div>
 
         <!-- コイン残高 -->
@@ -998,17 +1037,6 @@
             </div>
           </div>
           <button class="coin-charge-btn" onclick="goToCharge()">チャージ</button>
-        </div>
-
-        <div class="profile-info" id="profileInfoDisplay">
-          <div class="profile-info-item">
-            <div class="profile-info-label">メールアドレス</div>
-            <div class="profile-info-value" id="profileEmail">-</div>
-          </div>
-          <div class="profile-info-item">
-            <div class="profile-info-label">登録日</div>
-            <div class="profile-info-value" id="profileJoinDate">-</div>
-          </div>
         </div>
       </div>
 
@@ -1155,8 +1183,9 @@
       const coinBalance = session.coins || 0;
       document.getElementById('coinBalance').textContent = coinBalance.toLocaleString();
 
-      // メールアドレス
-      document.getElementById('profileEmail').textContent = session.email || '-';
+      // フォロー中の数
+      const followedCreators = getFollowedCreators();
+      document.getElementById('followingCount').textContent = followedCreators.length;
 
       // 登録日
       if (session.loginTime) {
@@ -1166,7 +1195,7 @@
           month: 'long',
           day: 'numeric'
         });
-        document.getElementById('profileJoinDate').textContent = formattedDate;
+        document.getElementById('profileJoinDate').textContent = `${formattedDate}よりPack&Playを利用しています`;
       }
     }
 
