@@ -673,44 +673,42 @@
     }
 
     .sort-select {
-      padding: 0.5rem 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 0.5rem;
-      background: white;
-      font-weight: 600;
-      font-size: 0.875rem;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      background: transparent;
+      font-weight: 500;
+      font-size: 0.8125rem;
       cursor: pointer;
-      transition: all 0.3s;
-      color: #4b5563;
-      min-width: 140px;
+      transition: all 0.2s;
+      color: #6b7280;
     }
 
     .sort-select:focus {
       outline: none;
-      border-color: #FF1B8D;
-      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+      border-color: #9ca3af;
     }
 
     .show-more-btn {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: white;
-      color: #4b5563;
-      border: 2px solid #e5e7eb;
-      border-radius: 0.75rem;
-      font-weight: 700;
+      gap: 0.375rem;
+      padding: 0.5rem 0;
+      background: transparent;
+      color: #6b7280;
+      border: none;
+      font-weight: 500;
       font-size: 0.875rem;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: color 0.2s;
     }
 
     .show-more-btn:hover {
-      border-color: #FF1B8D;
-      color: #FF1B8D;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 27, 141, 0.2);
+      color: #2d1b3d;
+    }
+
+    .show-more-btn svg {
+      transition: transform 0.3s;
     }
 
     .show-more-btn.expanded svg {
@@ -1024,10 +1022,10 @@
         <div id="followingEmpty" class="following-empty" style="display: none;">
           フォロー中がいません
         </div>
-        <div id="showMoreContainer" style="text-align: center; margin-top: 1rem; display: none;">
+        <div id="showMoreContainer" style="text-align: center; margin-top: 1rem; padding: 0.5rem 0; display: none;">
           <button class="show-more-btn" onclick="toggleShowMore()">
             <span id="showMoreText">もっと見る</span>
-            <svg id="showMoreIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="transition: transform 0.3s;">
+            <svg id="showMoreIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
