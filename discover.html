@@ -15,246 +15,179 @@
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
   <style>
     body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
       overflow-x: hidden;
+      display: flex;
       background: #f9fafb;
     }
 
-    /* ヘッダー */
-    .discover-header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      padding: 1.5rem 2rem;
-      background: rgba(45, 27, 61, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .discover-header-container {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .discover-logo {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: white;
-      text-decoration: none;
-      transition: transform 0.2s;
-    }
-
-    .discover-logo:hover {
-      transform: scale(1.05);
-      color: #FFD600;
-    }
-
-    .discover-nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .discover-nav-link {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9375rem;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      transition: all 0.2s;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .discover-nav-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-      color: #FFD600;
-    }
-
-    /* ハンバーガーメニュー */
-    .hamburger-menu {
-      display: none;
-      cursor: pointer;
-      padding: 0.375rem;
-      z-index: 101;
-      background: rgba(255, 255, 255, 0.1);
-      border-radius: 0.25rem;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .hamburger-menu svg {
-      width: 16px;
-      height: 16px;
-      color: white;
-    }
-
-    /* メニューが開いている時はボタンを非表示 */
-    .hamburger-menu.active {
-      display: none;
-    }
-
-    /* モバイルメニューオーバーレイ */
-    .mobile-menu-overlay {
-      display: none;
+    /* サイドバー */
+    .sidebar {
       position: fixed;
-      top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
-      backdrop-filter: blur(4px);
-      z-index: 99;
-    }
-
-    .mobile-menu-overlay.active {
-      display: block;
-    }
-
-    .mobile-menu {
-      display: none;
-      position: fixed;
       top: 0;
-      right: 0;
       bottom: 0;
-      width: 280px;
+      width: 240px;
       background: #2d1b3d;
-      padding: 5rem 2rem 2rem;
-      transform: translateX(100%);
-      transition: transform 0.3s;
+      padding: 2rem 0;
+      display: flex;
+      flex-direction: column;
       z-index: 100;
       overflow-y: auto;
     }
 
-    .mobile-menu.active {
-      transform: translateX(0);
-    }
-
-    .mobile-menu-links {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    .mobile-menu-link {
+    .sidebar-logo {
+      font-size: 1.5rem;
+      font-weight: 800;
       color: white;
       text-decoration: none;
-      font-weight: 600;
-      font-size: 1.125rem;
-      padding: 1rem;
+      padding: 0 1.5rem;
+      margin-bottom: 2rem;
+      display: block;
+    }
+
+    .sidebar-nav {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 0 1rem;
+    }
+
+    .sidebar-nav-item {
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      padding: 0.75rem 1rem;
       border-radius: 0.5rem;
       transition: all 0.2s;
-      background: rgba(255, 255, 255, 0.1);
-      text-align: center;
-    }
-
-    .mobile-menu-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-    }
-
-    /* ヒーローセクション */
-    .discover-hero {
-      background-color: white;
-      background-image: url('image/discover1.png');
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-attachment: fixed;
-      padding: 6rem 2rem 4rem;
-      text-align: center;
-      color: #2d1b3d;
-    }
-
-    .discover-hero-content {
-      max-width: 800px;
-      margin: 0 auto;
-    }
-
-    .discover-hero-title {
-      font-size: 3rem;
-      font-weight: 900;
-      margin-bottom: 1rem;
-      text-shadow: 0 2px 10px rgba(255, 255, 255, 0.8);
-    }
-
-    .discover-hero-description {
-      font-size: 1.25rem;
-      margin-bottom: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
       font-weight: 600;
-      opacity: 0.9;
+      font-size: 0.9375rem;
+    }
+
+    .sidebar-nav-item:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+    }
+
+    .sidebar-nav-item.active {
+      background: rgba(255, 27, 141, 0.2);
+      color: white;
+    }
+
+    .sidebar-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      margin-top: 1rem;
+    }
+
+    .sidebar-footer-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .sidebar-footer-link {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-footer-link:hover {
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .sidebar-copyright {
+      margin-top: 1rem;
+      color: rgba(255, 255, 255, 0.3);
+      font-size: 0.75rem;
+    }
+
+    /* メインラッパー */
+    .main-wrapper {
+      flex: 1;
+      margin-left: 240px;
+      min-height: 100vh;
+      background: #f9fafb;
+    }
+
+    /* 配信者を探すコンテンツ */
+    .discover-content {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    .discover-header {
+      margin-bottom: 2rem;
+    }
+
+    .discover-title {
+      font-size: 1.875rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin-bottom: 0.5rem;
+    }
+
+    .discover-description {
+      color: #6b7280;
+      font-size: 0.9375rem;
+    }
+
+    /* 検索とフィルター */
+    .search-filter-section {
+      background: white;
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .search-box {
-      max-width: 600px;
-      margin: 0 auto;
       position: relative;
+      margin-bottom: 1rem;
     }
 
     .search-input {
       width: 100%;
-      padding: 1.25rem 1.5rem;
-      border: 3px solid #2d1b3d;
-      border-radius: 1rem;
-      font-size: 1.125rem;
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      transition: all 0.3s;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      padding: 0.875rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 0.9375rem;
+      transition: all 0.2s;
     }
 
     .search-input:focus {
       outline: none;
       border-color: #FF1B8D;
-      box-shadow: 0 8px 30px rgba(255, 27, 141, 0.3);
-    }
-
-    /* コンテンツエリア */
-    .discover-content {
-      max-width: 1280px;
-      margin: 0 auto;
-      padding: 3rem 2rem;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-      flex-wrap: wrap;
-      gap: 1rem;
-    }
-
-    .section-title {
-      font-size: 1.75rem;
-      font-weight: 800;
-      color: #2d1b3d;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
     }
 
     .filter-buttons {
       display: flex;
       gap: 0.75rem;
+      flex-wrap: wrap;
     }
 
     .filter-btn {
-      padding: 0.75rem 1.5rem;
+      padding: 0.625rem 1.25rem;
       border: 2px solid #e5e7eb;
       border-radius: 0.75rem;
       background: white;
       font-weight: 600;
-      font-size: 0.9375rem;
+      font-size: 0.875rem;
       cursor: pointer;
-      transition: all 0.3s;
-      color: #4b5563;
+      transition: all 0.2s;
+      color: #6b7280;
     }
 
     .filter-btn:hover {
       border-color: #FF1B8D;
       color: #FF1B8D;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(255, 27, 141, 0.2);
     }
 
     .filter-btn.active {
@@ -263,44 +196,56 @@
       border-color: #FF1B8D;
     }
 
-    /* クリエイターグリッド */
-    .creator-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-      gap: 1.5rem;
+    /* 配信者リスト */
+    .creators-list {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     }
 
     .creator-card {
       background: white;
-      border-radius: 1rem;
-      padding: 1.5rem;
-      cursor: pointer;
-      transition: all 0.3s;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      padding: 1rem;
+      transition: all 0.2s;
+      border-bottom: 1px solid #e5e7eb;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .creator-card:last-child {
+      border-bottom: none;
     }
 
     .creator-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-      border-color: #FF1B8D;
+      background: #f9fafb;
+    }
+
+    .creator-card-link {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      flex: 1;
+      text-decoration: none;
+      cursor: pointer;
+      min-width: 0;
     }
 
     .creator-avatar {
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: linear-gradient(135deg, #FF1B8D, #00D4FF);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       font-weight: 800;
       color: white;
-      margin-bottom: 1rem;
       flex-shrink: 0;
       position: relative;
     }
@@ -309,8 +254,8 @@
       position: absolute;
       top: -2px;
       right: -2px;
-      width: 14px;
-      height: 14px;
+      width: 10px;
+      height: 10px;
       background: #10b981;
       border: 2px solid white;
       border-radius: 50%;
@@ -327,489 +272,463 @@
       }
     }
 
+    .creator-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .creator-name-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
     .creator-name {
       font-size: 0.9375rem;
       font-weight: 700;
       color: #2d1b3d;
-      margin-bottom: 0.5rem;
+    }
+
+    .creator-id {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .creator-bio {
+      font-size: 0.875rem;
+      color: #6b7280;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
-      text-align: center;
-      width: 100%;
     }
 
-    .creator-followers {
+    .creator-stats {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 0.375rem;
-      color: #6b7280;
+      color: #9ca3af;
       font-size: 0.8125rem;
-      font-weight: 500;
-      width: 100%;
+      margin-top: 0.25rem;
     }
 
     .follower-icon {
-      width: 20px;
-      height: 20px;
-      object-fit: contain;
+      width: 14px;
+      height: 14px;
     }
 
-    /* 空状態 */
+    /* フォローボタン */
+    .follow-button {
+      padding: 0.375rem 0.875rem;
+      border-radius: 9999px;
+      border: 1px solid #FF1B8D;
+      background: white;
+      color: #FF1B8D;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      flex-shrink: 0;
+    }
+
+    .follow-button:hover {
+      background: #fff5f9;
+    }
+
+    .follow-button.following {
+      background: white;
+      border-color: #d1d5db;
+      color: #6b7280;
+    }
+
+    .follow-button.following span {
+      visibility: visible;
+      position: relative;
+    }
+
+    .follow-button.following:hover {
+      background: #fef2f2;
+      border-color: #ef4444;
+      color: #ef4444;
+    }
+
+    .follow-button.following:hover span::before {
+      content: 'フォロー解除';
+      position: absolute;
+    }
+
+    .follow-button.following:hover span {
+      visibility: hidden;
+    }
+
+    /* 空の状態 */
     .empty-state {
       text-align: center;
       padding: 4rem 2rem;
       color: #9ca3af;
+      background: white;
+      border-radius: 1rem;
     }
 
     .empty-state-icon {
-      font-size: 4rem;
+      font-size: 3rem;
       margin-bottom: 1rem;
     }
 
     .empty-state-text {
-      font-size: 1.25rem;
-      font-weight: 600;
+      font-size: 0.9375rem;
     }
 
     .hidden {
       display: none;
     }
 
-    /* フッター */
-    .footer {
-      background: #2d1b3d;
+    /* モバイルメニューボタン */
+    .mobile-menu-button {
+      display: none;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1001;
+      width: 28px;
+      height: 28px;
+      background: rgba(45, 27, 61, 0.6);
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu-button svg {
+      width: 16px;
+      height: 16px;
       color: white;
-      padding: 3rem 2rem 2rem;
-      margin-top: 4rem;
     }
 
-    .footer-content {
-      max-width: 1280px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 3rem;
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 99;
     }
 
-    .footer-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
+    .mobile-menu-overlay.active {
+      display: block;
     }
 
-    .footer-title {
-      font-size: 1.25rem;
-      font-weight: 800;
-      margin-bottom: 0.5rem;
+    .sidebar.mobile-active {
+      transform: translateX(0);
     }
 
-    .footer-description {
-      font-size: 0.9375rem;
-      opacity: 0.8;
-      line-height: 1.6;
-    }
-
-    .footer-heading {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .footer-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
-    }
-
-    .footer-links a {
-      color: rgba(255, 255, 255, 0.8);
-      text-decoration: none;
-      transition: color 0.2s;
-      font-size: 0.9375rem;
-    }
-
-    .footer-links a:hover {
-      color: #FFD600;
-    }
-
-    .footer-copyright {
-      margin-top: 0.5rem;
-      font-size: 0.875rem;
-      opacity: 0.6;
-    }
-
-    /* レスポンシブ */
+    /* モバイル対応 */
     @media (max-width: 768px) {
-      .discover-hero {
-        background-attachment: scroll;
-        padding: 4rem 1.5rem 3rem;
-      }
-
-      .discover-hero-title {
-        font-size: 2rem;
-      }
-
-      .discover-hero-description {
-        font-size: 1.125rem;
-      }
-
-      .discover-header {
-        padding: 1rem 1.5rem;
-      }
-
-      .discover-logo {
-        font-size: 1.25rem;
-      }
-
-      .discover-nav {
-        display: none;
-      }
-
-      .hamburger-menu {
-        display: flex;
-      }
-
-      .mobile-menu {
+      body {
         display: block;
       }
 
-      .section-header {
-        flex-direction: column;
-        align-items: flex-start;
+      .mobile-menu-button {
+        display: flex;
       }
 
-      .creator-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 0.75rem;
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.3s;
+      }
+
+      .main-wrapper {
+        margin-left: 0;
+      }
+
+      .discover-content {
+        padding: 1rem;
+        padding-top: 3.5rem;
+      }
+
+      .discover-title {
+        font-size: 1.5rem;
+      }
+
+      .discover-description {
+        font-size: 0.875rem;
+      }
+
+      .search-filter-section {
+        padding: 1rem;
       }
 
       .creator-card {
-        padding: 1rem;
-        width: 100%;
-        min-width: 0;
+        padding: 0.875rem 1rem;
+        gap: 0.625rem;
+      }
+
+      .creator-card-link {
+        gap: 0.625rem;
+        padding-right: 5.5rem;
       }
 
       .creator-avatar {
-        width: 48px;
-        height: 48px;
-        font-size: 1.125rem;
-        margin-bottom: 0.75rem;
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
       }
 
       .creator-name {
         font-size: 0.8125rem;
-        margin-bottom: 0.375rem;
       }
 
-      .creator-followers {
+      .creator-id {
+        font-size: 0.6875rem;
+      }
+
+      .creator-bio {
         font-size: 0.75rem;
-        gap: 0.25rem;
       }
 
-      .follower-icon {
-        width: 16px;
-        height: 16px;
+      .creator-stats {
+        font-size: 0.75rem;
       }
 
-      .footer-content {
-        grid-template-columns: 1fr;
-        gap: 2rem;
+      .follow-button {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.3125rem 0.625rem;
+        font-size: 0.6875rem;
       }
     }
   </style>
 </head>
 <body>
-  <!-- ヘッダー -->
-  <header class="discover-header">
-    <div class="discover-header-container">
-      <a href="index.html" class="discover-logo">Pack&Play</a>
-      <nav class="discover-nav">
-        <!-- JavaScriptで動的に生成 -->
-      </nav>
-      <div class="hamburger-menu" onclick="toggleMobileMenu()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </div>
-    </div>
-  </header>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
 
-  <!-- モバイルメニュー -->
-  <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-  <div class="mobile-menu">
-    <div class="mobile-menu-links" id="mobileMenuLinks">
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">Pack&Play</a>
+    <nav class="sidebar-nav" id="sidebarNav">
       <!-- JavaScriptで動的に生成 -->
-    </div>
-  </div>
+    </nav>
 
-  <!-- ヒーローセクション -->
-  <section class="discover-hero">
-    <div class="discover-hero-content">
-      <h1 class="discover-hero-title">お気に入りの配信者を見つけよう</h1>
-      <p class="discover-hero-description">カードパックを購入して、配信を盛り上げよう</p>
-      <div class="search-box">
-        <input
-          type="search"
-          id="searchInput"
-          placeholder="配信者を検索..."
-          class="search-input"
-        >
+    <!-- サイドバーフッター -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシーポリシー</a>
+        <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
       </div>
+      <div class="sidebar-copyright">© 2025 Pack&Play</div>
     </div>
-  </section>
+  </aside>
 
   <!-- メインコンテンツ -->
-  <main class="discover-content">
-    <div class="section-header">
-      <h2 class="section-title">配信者一覧</h2>
-      <div class="filter-buttons">
-        <button class="filter-btn" id="liveBtn" onclick="filterLive()">
-          配信中のみ
-        </button>
-        <button class="filter-btn active" id="allBtn" onclick="showAll()">
-          すべて表示
-        </button>
+  <div class="main-wrapper">
+    <div class="discover-content">
+      <!-- ヘッダー -->
+      <div class="discover-header">
+        <h1 class="discover-title">配信者を探す</h1>
+        <p class="discover-description">お気に入りの配信者を見つけて、カードパックで応援しよう</p>
       </div>
-    </div>
 
-    <div id="creatorGrid" class="creator-grid">
-      <!-- JavaScriptで動的に生成 -->
-    </div>
+      <!-- 検索とフィルター -->
+      <div class="search-filter-section">
+        <div class="search-box">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="配信者を検索..."
+            class="search-input"
+          >
+        </div>
+        <div class="filter-buttons">
+          <button class="filter-btn active" id="allBtn" onclick="showAll()">
+            すべて表示
+          </button>
+          <button class="filter-btn" id="liveBtn" onclick="filterLive()">
+            配信中のみ
+          </button>
+        </div>
+      </div>
 
-    <div id="emptyState" class="empty-state hidden">
-      <div class="empty-state-icon">🔍</div>
-      <div class="empty-state-text">配信者が見つかりませんでした</div>
-    </div>
-  </main>
+      <!-- 配信者リスト -->
+      <div class="creators-list" id="creatorsList">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
 
-  <!-- フッター -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3 class="footer-title">Pack&Play</h3>
-        <p class="footer-description">応援を"演出"にする。</p>
-        <p class="footer-copyright">© 2025 Pack&Play. All rights reserved.</p>
-      </div>
-      <div class="footer-section">
-        <h4 class="footer-heading">法的情報</h4>
-        <ul class="footer-links">
-          <li><a href="legal/terms.html">利用規約</a></li>
-          <li><a href="legal/commerce.html">特定商取引法に基づく表記</a></li>
-          <li><a href="legal/privacy.html">プライバシーポリシー</a></li>
-          <li><a href="legal/scta.html">資金決済法に基づく表示</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4 class="footer-heading">サポート</h4>
-        <ul class="footer-links">
-          <li><a href="legal/contact.html">お問い合わせ</a></li>
-        </ul>
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-text">配信者が見つかりませんでした</div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <script src="js/mock-data.js"></script>
   <script src="js/main.js"></script>
   <script>
     // DOMが読み込まれてから実行
     document.addEventListener('DOMContentLoaded', function() {
+      // サイドバーのナビゲーションを生成
+      renderSidebarNav('discover');
+
       // 配信者を表示
       let currentFilter = 'all';
+      let searchQuery = '';
 
-      function renderCreators(creatorsToRender) {
-        const grid = document.getElementById('creatorGrid');
+      function renderCreators() {
+        const list = document.getElementById('creatorsList');
         const emptyState = document.getElementById('emptyState');
 
-        if (creatorsToRender.length === 0) {
-          grid.innerHTML = '';
+        // フィルタリング
+        let filtered = creators;
+
+        if (currentFilter === 'live') {
+          filtered = filtered.filter(c => c.isLive);
+        }
+
+        if (searchQuery) {
+          filtered = filtered.filter(c =>
+            c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            c.slug.toLowerCase().includes(searchQuery.toLowerCase())
+          );
+        }
+
+        if (filtered.length === 0) {
+          list.innerHTML = '';
           emptyState.classList.remove('hidden');
           return;
         }
 
         emptyState.classList.add('hidden');
 
-        grid.innerHTML = creatorsToRender.map(creator => `
-          <div class="creator-card" onclick="window.location.href='creator/${creator.slug}.html'">
-            <div class="creator-avatar">
-              ${creator.name.charAt(0)}
-              ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+        // フォロー状態を取得
+        const followedIds = getFollowedCreators();
+
+        list.innerHTML = filtered.map(creator => {
+          const isFollowing = followedIds.includes(creator.id);
+          return `
+            <div class="creator-card" id="creator-${creator.id}">
+              <a href="creator/${creator.slug}.html" class="creator-card-link">
+                <div class="creator-avatar">
+                  ${creator.name.charAt(0)}
+                  ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+                </div>
+                <div class="creator-info">
+                  <div class="creator-name-row">
+                    <span class="creator-name">${creator.name}</span>
+                    <span class="creator-id">@${creator.slug}</span>
+                  </div>
+                  <div class="creator-bio">${creator.bio || ''}</div>
+                  <div class="creator-stats">
+                    <img src="image/follower.png" alt="フォロワー" class="follower-icon">
+                    <span>${(creator.followerCount || 0).toLocaleString()}人</span>
+                  </div>
+                </div>
+              </a>
+              <button class="follow-button${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event)">
+                <span>${isFollowing ? 'フォロー中' : 'フォローする'}</span>
+              </button>
             </div>
-            <div class="creator-name" title="${creator.name}">${creator.name}</div>
-            <div class="creator-followers">
-              <img src="image/follower.png" alt="フォロワー" class="follower-icon">
-              <span>${(creator.followerCount || 0).toLocaleString()}人</span>
-            </div>
-          </div>
-        `).join('');
+          `;
+        }).join('');
       }
+
+      // フォローボタンのトグル
+      window.toggleFollowButton = function(creatorId, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const creator = creators.find(c => c.id === creatorId);
+        const creatorName = creator ? creator.name : '配信者';
+        const followedIds = getFollowedCreators();
+        const isFollowing = followedIds.includes(creatorId);
+
+        if (isFollowing) {
+          if (confirm(`${creatorName}のフォローを解除しますか？`)) {
+            toggleFollow(creatorId);
+            showToast(`${creatorName}のフォローを解除しました`, 'success');
+            updateButtonState(creatorId, false);
+          }
+        } else {
+          toggleFollow(creatorId);
+          showToast(`${creatorName}をフォローしました`, 'success');
+          updateButtonState(creatorId, true);
+        }
+      };
+
+      // ボタンの状態を更新
+      function updateButtonState(creatorId, isFollowing) {
+        const card = document.getElementById(`creator-${creatorId}`);
+        if (card) {
+          const button = card.querySelector('.follow-button');
+          if (button) {
+            if (isFollowing) {
+              button.className = 'follow-button following';
+              button.innerHTML = '<span>フォロー中</span>';
+            } else {
+              button.className = 'follow-button';
+              button.innerHTML = '<span>フォローする</span>';
+            }
+            button.blur();
+          }
+        }
+      }
+
+      // フィルター
+      window.showAll = function() {
+        currentFilter = 'all';
+        document.getElementById('allBtn').classList.add('active');
+        document.getElementById('liveBtn').classList.remove('active');
+        renderCreators();
+      };
 
       window.filterLive = function() {
         currentFilter = 'live';
         document.getElementById('liveBtn').classList.add('active');
         document.getElementById('allBtn').classList.remove('active');
+        renderCreators();
+      };
 
-        // フォロー中の配信者ページかどうかを確認
-        let creatorsData;
-        if (showFollowing) {
-          creatorsData = getFollowedCreators();
-        } else {
-          creatorsData = window.mockCreators || window.creators || [];
-        }
-
-        const liveCreators = creatorsData.filter(c => c.isLive);
-        renderCreators(liveCreators);
-      }
-
-      window.showAll = function() {
-        currentFilter = 'all';
-        document.getElementById('allBtn').classList.add('active');
-        document.getElementById('liveBtn').classList.remove('active');
-
-        // フォロー中の配信者ページかどうかを確認
-        let creatorsData;
-        if (showFollowing) {
-          creatorsData = getFollowedCreators();
-        } else {
-          creatorsData = window.mockCreators || window.creators || [];
-        }
-
-        renderCreators(creatorsData);
-      }
-
-      // 検索機能
-      document.getElementById('searchInput').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-
-        // フォロー中の配信者ページかどうかを確認
-        let creatorsData;
-        if (showFollowing) {
-          creatorsData = getFollowedCreators();
-        } else {
-          creatorsData = window.mockCreators || window.creators || [];
-        }
-
-        const filtered = creatorsData.filter(creator =>
-          creator.name.toLowerCase().includes(searchTerm)
-        );
-
-        if (currentFilter === 'live') {
-          renderCreators(filtered.filter(c => c.isLive));
-        } else {
-          renderCreators(filtered);
-        }
+      // 検索
+      document.getElementById('searchInput').addEventListener('input', function(e) {
+        searchQuery = e.target.value;
+        renderCreators();
       });
 
       // 初期表示
-      // URLパラメータを確認
-      const urlParams = new URLSearchParams(window.location.search);
-      const showFollowing = urlParams.get('following') === 'true';
+      renderCreators();
 
-      // mockCreatorsが定義されているか確認
-      if (typeof mockCreators === 'undefined') {
-        console.error('mockCreators is not defined. Check if mock-data.js is loaded.');
-        // creatorsを直接使用（フォールバック）
-        if (typeof creators !== 'undefined') {
-          window.mockCreators = creators;
-        } else {
-          console.error('creators is also not defined.');
-          document.getElementById('emptyState').classList.remove('hidden');
-          return;
-        }
-      }
-
-      // フォロー中の配信者のみ表示する場合
-      if (showFollowing) {
-        const followedCreators = getFollowedCreators();
-        renderCreators(followedCreators);
-        // ページタイトルを変更
-        document.querySelector('.discover-hero-title').textContent = 'フォロー中の配信者';
-        document.querySelector('.discover-hero-description').textContent = 'あなたがフォローしている配信者の一覧です';
-      } else {
-        renderCreators(mockCreators);
-      }
-
-      // ナビゲーション生成（discover.html専用）
-      function renderDiscoverNav() {
-        const session = getCurrentSession();
-        const nav = document.querySelector('.discover-nav');
-        const mobileNav = document.getElementById('mobileMenuLinks');
-
-        if (!nav) return;
-
-        let navHtml = '';
-        let mobileNavHtml = '';
-
-        if (isLoggedIn()) {
-          const role = session.role;
-
-          if (role === 'creator') {
-            navHtml = `
-              <a href="dashboard/index.html" class="discover-nav-link">ダッシュボード</a>
-              <a href="profile.html" class="discover-nav-link">プロフィール</a>
-              <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
-            `;
-            mobileNavHtml = `
-              <a href="dashboard/index.html" class="mobile-menu-link">ダッシュボード</a>
-              <a href="profile.html" class="mobile-menu-link">プロフィール</a>
-              <a href="javascript:void(0)" onclick="logout(); closeMobileMenu();" class="mobile-menu-link">ログアウト</a>
-            `;
-          } else {
-            navHtml = `
-              <a href="inventory.html" class="discover-nav-link">マイカード</a>
-              <a href="profile.html" class="discover-nav-link">プロフィール</a>
-              <a href="javascript:void(0)" onclick="logout()" class="discover-nav-link">ログアウト</a>
-            `;
-            mobileNavHtml = `
-              <a href="inventory.html" class="mobile-menu-link">マイカード</a>
-              <a href="profile.html" class="mobile-menu-link">プロフィール</a>
-              <a href="javascript:void(0)" onclick="logout(); closeMobileMenu();" class="mobile-menu-link">ログアウト</a>
-            `;
-          }
-        } else {
-          navHtml = `
-            <a href="index.html" class="discover-nav-link">ログイン</a>
-          `;
-          mobileNavHtml = `
-            <a href="index.html" class="mobile-menu-link">ログイン</a>
-          `;
-        }
-
-        nav.innerHTML = navHtml;
-        if (mobileNav) {
-          mobileNav.innerHTML = mobileNavHtml;
-        }
-      }
-
-      // モバイルメニュー制御
+      // モバイルメニュー
       window.toggleMobileMenu = function() {
-        const hamburger = document.querySelector('.hamburger-menu');
-        const overlay = document.querySelector('.mobile-menu-overlay');
-        const menu = document.querySelector('.mobile-menu');
-
-        hamburger.classList.toggle('active');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        sidebar.classList.toggle('mobile-active');
         overlay.classList.toggle('active');
-        menu.classList.toggle('active');
-        document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-      }
+      };
 
       window.closeMobileMenu = function() {
-        const hamburger = document.querySelector('.hamburger-menu');
-        const overlay = document.querySelector('.mobile-menu-overlay');
-        const menu = document.querySelector('.mobile-menu');
-
-        hamburger.classList.remove('active');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('mobileMenuOverlay');
+        sidebar.classList.remove('mobile-active');
         overlay.classList.remove('active');
-        menu.classList.remove('active');
-        document.body.style.overflow = '';
-      }
-
-      renderDiscoverNav();
-    }); // DOMContentLoaded終了
+      };
+    });
   </script>
 </body>
 </html>
