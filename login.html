@@ -219,6 +219,11 @@
 
         saveToStorage('session', session);
 
+        // フォロー中の配信者を初期化（初回ログイン時のみ）
+        if (!loadFromStorage('followedCreators')) {
+          saveToStorage('followedCreators', [1, 2, 5, 8]); // デフォルトで4人フォロー
+        }
+
         hideLoading();
 
         showToast(`${platformName}で${roleText}としてログインしました`, 'success');

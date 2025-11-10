@@ -659,7 +659,15 @@
         currentFilter = 'live';
         document.getElementById('liveBtn').classList.add('active');
         document.getElementById('allBtn').classList.remove('active');
-        const creatorsData = window.mockCreators || window.creators || [];
+
+        // フォロー中の配信者ページかどうかを確認
+        let creatorsData;
+        if (showFollowing) {
+          creatorsData = getFollowedCreators();
+        } else {
+          creatorsData = window.mockCreators || window.creators || [];
+        }
+
         const liveCreators = creatorsData.filter(c => c.isLive);
         renderCreators(liveCreators);
       }
@@ -668,14 +676,30 @@
         currentFilter = 'all';
         document.getElementById('allBtn').classList.add('active');
         document.getElementById('liveBtn').classList.remove('active');
-        const creatorsData = window.mockCreators || window.creators || [];
+
+        // フォロー中の配信者ページかどうかを確認
+        let creatorsData;
+        if (showFollowing) {
+          creatorsData = getFollowedCreators();
+        } else {
+          creatorsData = window.mockCreators || window.creators || [];
+        }
+
         renderCreators(creatorsData);
       }
 
       // 検索機能
       document.getElementById('searchInput').addEventListener('input', (e) => {
         const searchTerm = e.target.value.toLowerCase();
-        const creatorsData = window.mockCreators || window.creators || [];
+
+        // フォロー中の配信者ページかどうかを確認
+        let creatorsData;
+        if (showFollowing) {
+          creatorsData = getFollowedCreators();
+        } else {
+          creatorsData = window.mockCreators || window.creators || [];
+        }
+
         const filtered = creatorsData.filter(creator =>
           creator.name.toLowerCase().includes(searchTerm)
         );
@@ -688,17 +712,30 @@
       });
 
       // 初期表示
+      // URLパラメータを確認
+      const urlParams = new URLSearchParams(window.location.search);
+      const showFollowing = urlParams.get('following') === 'true';
+
       // mockCreatorsが定義されているか確認
       if (typeof mockCreators === 'undefined') {
         console.error('mockCreators is not defined. Check if mock-data.js is loaded.');
         // creatorsを直接使用（フォールバック）
         if (typeof creators !== 'undefined') {
           window.mockCreators = creators;
-          renderCreators(creators);
         } else {
           console.error('creators is also not defined.');
           document.getElementById('emptyState').classList.remove('hidden');
+          return;
         }
+      }
+
+      // フォロー中の配信者のみ表示する場合
+      if (showFollowing) {
+        const followedCreators = getFollowedCreators();
+        renderCreators(followedCreators);
+        // ページタイトルを変更
+        document.querySelector('.discover-hero-title').textContent = 'フォロー中の配信者';
+        document.querySelector('.discover-hero-description').textContent = 'あなたがフォローしている配信者の一覧です';
       } else {
         renderCreators(mockCreators);
       }

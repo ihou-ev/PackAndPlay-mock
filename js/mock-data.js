@@ -150,6 +150,10 @@ const creators = [
 // discover.html用のエイリアス
 const mockCreators = creators;
 
+// フォロー中の配信者（デモ用）
+// 実際のアプリではユーザーごとにlocalStorageに保存
+const defaultFollowedCreatorIds = [1, 2, 5, 8]; // 田中太郎、アリスちゃんねる、サトケンスポーツ、いとさくら
+
 // パックデータ
 const packs = [
   {
@@ -331,6 +335,27 @@ function getOwnedCardsByUser(userId) {
 
 function getPendingRedemptions(creatorId) {
   return redeemQueue.filter(r => r.state === 'pending');
+}
+
+function getFollowedCreators() {
+  const followedIds = loadFromStorage('followedCreators', defaultFollowedCreatorIds);
+  return creators.filter(c => followedIds.includes(c.id));
+}
+
+function isFollowing(creatorId) {
+  const followedIds = loadFromStorage('followedCreators', defaultFollowedCreatorIds);
+  return followedIds.includes(creatorId);
+}
+
+function toggleFollow(creatorId) {
+  let followedIds = loadFromStorage('followedCreators', defaultFollowedCreatorIds);
+  if (followedIds.includes(creatorId)) {
+    followedIds = followedIds.filter(id => id !== creatorId);
+  } else {
+    followedIds.push(creatorId);
+  }
+  saveToStorage('followedCreators', followedIds);
+  return followedIds.includes(creatorId);
 }
 
 function getRarityColor(rarity) {
