@@ -335,20 +335,13 @@
     /* コイン残高 */
     .coin-balance-section {
       margin: 1.5rem 0;
-      padding: 1.25rem 1.5rem;
-      background: white;
-      border: 2px solid #e5e7eb;
-      border-radius: 0.75rem;
+      padding: 0;
+      background: transparent;
+      border: none;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 1rem;
-      transition: all 0.3s;
-    }
-
-    .coin-balance-section:hover {
-      border-color: #F59E0B;
-      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.1);
     }
 
     .coin-balance-card {
@@ -387,6 +380,7 @@
       color: #2d1b3d;
       font-feature-settings: 'tnum';
       letter-spacing: -0.02em;
+      white-space: nowrap;
     }
 
     .coin-balance-amount::after {
@@ -395,6 +389,7 @@
       font-weight: 600;
       color: #6b7280;
       margin-left: 0.25rem;
+      white-space: nowrap;
     }
 
     .coin-charge-btn {
@@ -834,12 +829,18 @@
         width: 100%;
       }
 
-      .coin-balance-section {
-        padding: 1rem 1.25rem;
+      .coin-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 0.75rem;
       }
 
       .coin-balance-amount {
         font-size: 1.25rem;
+      }
+
+      .coin-balance-amount::after {
+        font-size: 0.75rem;
       }
 
       .coin-charge-btn {
