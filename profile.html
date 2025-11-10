@@ -1145,26 +1145,11 @@
 
         <!-- 配信中タブ -->
         <div id="liveTab" class="tab-content">
-          <div style="padding: 1rem; border-bottom: 1px solid #e5e7eb; display: flex; justify-content: flex-end;">
-            <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
-              <option value="default">デフォルト</option>
-              <option value="name">名前順</option>
-              <option value="live">配信中優先</option>
-            </select>
-          </div>
-          <div id="followingGrid" class="following-grid">
+          <div id="liveGrid" class="following-grid">
             <!-- JavaScriptで動的に生成 -->
           </div>
-          <div id="followingEmpty" class="following-empty" style="display: none;">
-            フォロー中がいません
-          </div>
-          <div id="showMoreContainer" style="text-align: center; padding: 1rem 0; border-top: 1px solid #e5e7eb; display: none;">
-            <button class="show-more-btn" onclick="toggleShowMore()">
-              <span id="showMoreText">もっと見る</span>
-              <svg id="showMoreIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-              </svg>
-            </button>
+          <div id="liveEmpty" class="following-empty" style="display: none;">
+            配信中のフォロー中がいません
           </div>
         </div>
       </div>
@@ -1476,53 +1461,32 @@
       // 将来的には: window.location.href = 'charge.html';
     }
 
-    // フォロー中の配信者を表示
-    let allFollowedCreators = [];
-    let isShowingAll = false;
-    const INITIAL_DISPLAY_COUNT = 4;
-
-    function renderFollowingCreators(sortBy = 'default') {
-      const followingGrid = document.getElementById('followingGrid');
-      const followingEmpty = document.getElementById('followingEmpty');
-      const showMoreContainer = document.getElementById('showMoreContainer');
+    // 配信中の配信者のみを表示
+    function renderLiveCreators() {
+      const liveGrid = document.getElementById('liveGrid');
+      const liveEmpty = document.getElementById('liveEmpty');
 
       if (typeof getFollowedCreators === 'undefined') {
         console.error('getFollowedCreators is not defined');
         return;
       }
 
-      allFollowedCreators = getFollowedCreators();
+      const followedCreators = getFollowedCreators();
+      const liveCreators = followedCreators.filter(creator => creator.isLive);
 
-      if (allFollowedCreators.length === 0) {
-        followingGrid.innerHTML = '';
-        followingEmpty.style.display = 'block';
-        showMoreContainer.style.display = 'none';
+      if (liveCreators.length === 0) {
+        liveGrid.innerHTML = '';
+        liveEmpty.style.display = 'block';
         return;
       }
 
-      followingEmpty.style.display = 'none';
+      liveEmpty.style.display = 'none';
 
-      // 並び替え
-      let sortedCreators = [...allFollowedCreators];
-      if (sortBy === 'name') {
-        sortedCreators.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
-      } else if (sortBy === 'live') {
-        sortedCreators.sort((a, b) => {
-          if (a.isLive && !b.isLive) return -1;
-          if (!a.isLive && b.isLive) return 1;
-          return 0;
-        });
-      }
-
-      // 表示する配信者を決定
-      const displayCount = isShowingAll ? sortedCreators.length : INITIAL_DISPLAY_COUNT;
-      const creatorsToDisplay = sortedCreators.slice(0, displayCount);
-
-      followingGrid.innerHTML = creatorsToDisplay.map(creator => `
+      liveGrid.innerHTML = liveCreators.map(creator => `
         <a href="creator/${creator.slug}.html" class="following-card">
           <div class="following-avatar">
             ${creator.name.charAt(0)}
-            ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
+            <span class="following-live-signal"></span>
           </div>
           <div class="following-info">
             <div class="following-name">${creator.name}</div>
@@ -1530,39 +1494,6 @@
           </div>
         </a>
       `).join('');
-
-      // 「もっと見る」ボタンの表示/非表示
-      if (sortedCreators.length > INITIAL_DISPLAY_COUNT) {
-        showMoreContainer.style.display = 'block';
-        updateShowMoreButton();
-      } else {
-        showMoreContainer.style.display = 'none';
-      }
-    }
-
-    function sortFollowingCreators() {
-      const sortBy = document.getElementById('sortSelect').value;
-      renderFollowingCreators(sortBy);
-    }
-
-    function toggleShowMore() {
-      isShowingAll = !isShowingAll;
-      const sortBy = document.getElementById('sortSelect').value;
-      renderFollowingCreators(sortBy);
-    }
-
-    function updateShowMoreButton() {
-      const btn = document.querySelector('.show-more-btn');
-      const text = document.getElementById('showMoreText');
-      const icon = document.getElementById('showMoreIcon');
-
-      if (isShowingAll) {
-        text.textContent = '閉じる';
-        btn.classList.add('expanded');
-      } else {
-        text.textContent = 'もっと見る';
-        btn.classList.remove('expanded');
-      }
     }
 
     // アカウント削除モーダルを表示
@@ -1908,7 +1839,7 @@
     // 初期表示
     renderSidebarNav();
     renderProfile();
-    renderFollowingCreators();
+    renderLiveCreators();
     renderDeletionRequest();
     renderTimeline();
   </script>
