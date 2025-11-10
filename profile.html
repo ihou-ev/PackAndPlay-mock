@@ -1483,7 +1483,7 @@
       liveEmpty.style.display = 'none';
 
       liveGrid.innerHTML = liveCreators.map(creator => `
-        <a href="creator/${creator.slug}.html" class="following-card">
+        <a href="creator/${creator.slug}.html" class="following-card" id="creator-${creator.id}">
           <div class="following-avatar">
             ${creator.name.charAt(0)}
             <span class="following-live-signal"></span>
