@@ -560,6 +560,15 @@
       white-space: nowrap;
     }
 
+    .following-id {
+      font-size: 0.8125rem;
+      color: #9ca3af;
+      font-weight: 400;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .following-bio {
       font-size: 0.875rem;
       color: #6b7280;
@@ -618,6 +627,12 @@
       font-size: 0.875rem;
       font-weight: 700;
       color: #2d1b3d;
+    }
+
+    .timeline-creator-id {
+      font-size: 0.75rem;
+      color: #9ca3af;
+      font-weight: 400;
     }
 
     .timeline-action {
@@ -989,6 +1004,10 @@
         font-size: 0.875rem;
       }
 
+      .following-id {
+        font-size: 0.75rem;
+      }
+
       .following-bio {
         font-size: 0.8125rem;
       }
@@ -1006,6 +1025,10 @@
 
       .timeline-creator-name {
         font-size: 0.8125rem;
+      }
+
+      .timeline-creator-id {
+        font-size: 0.6875rem;
       }
 
       .timeline-action {
@@ -1490,6 +1513,7 @@
           </div>
           <div class="following-info">
             <div class="following-name">${creator.name}</div>
+            <div class="following-id">@${creator.slug}</div>
             <div class="following-bio">${creator.bio || ''}</div>
           </div>
         </a>
@@ -1817,6 +1841,7 @@
       timelineGrid.innerHTML = timelineItems.map(item => {
         const creator = creators.find(c => c.id === item.creatorId);
         const initial = creator ? creator.name.charAt(0) : '?';
+        const creatorSlug = creator ? creator.slug : '';
 
         return `
           <div class="timeline-item">
@@ -1824,6 +1849,7 @@
             <div class="timeline-content">
               <div class="timeline-header">
                 <span class="timeline-creator-name">${item.creatorName}</span>
+                <span class="timeline-creator-id">@${creatorSlug}</span>
                 <span class="timeline-action">${item.action}</span>
                 <span class="timeline-time">${item.time}</span>
               </div>
