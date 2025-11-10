@@ -1672,6 +1672,7 @@
             button.className = 'following-button unfollow-style';
             button.innerHTML = '<span>フォローする</span>';
             button.onclick = (e) => followCreator(creatorId, e);
+            button.blur(); // フォーカスを外してホバー状態を解除
           }
         }
 
@@ -1698,6 +1699,7 @@
           button.className = 'following-button';
           button.innerHTML = '<span>フォロー中</span>';
           button.onclick = (e) => unfollowCreator(creatorId, e);
+          button.blur(); // フォーカスを外してホバー状態を解除
         }
       }
 
