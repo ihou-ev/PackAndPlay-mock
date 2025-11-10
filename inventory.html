@@ -77,20 +77,19 @@
     /* ハンバーガーメニュー */
     .hamburger-menu {
       display: none;
-      flex-direction: column;
-      gap: 0.1875rem;
       cursor: pointer;
       padding: 0.375rem;
       z-index: 101;
       background: rgba(255, 255, 255, 0.1);
       border-radius: 0.25rem;
+      align-items: center;
+      justify-content: center;
     }
 
-    .hamburger-line {
-      width: 14px;
-      height: 1.5px;
-      background: white;
-      border-radius: 1px;
+    .hamburger-menu svg {
+      width: 16px;
+      height: 16px;
+      color: white;
     }
 
     /* メニューが開いている時はボタンを非表示 */
@@ -643,9 +642,9 @@
         <!-- JavaScriptで動的に生成 -->
       </nav>
       <div class="hamburger-menu" onclick="toggleMobileMenu()">
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
-        <div class="hamburger-line"></div>
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+        </svg>
       </div>
     </div>
   </header>
