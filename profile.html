@@ -334,6 +334,9 @@
       border-radius: 0.375rem;
       border: 2px dashed transparent;
       margin-bottom: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
     }
 
     .profile-bio-wrapper:hover {
@@ -353,17 +356,17 @@
     }
 
     .profile-bio-edit-icon {
-      display: inline-block;
       width: 14px;
       height: 14px;
       color: #9ca3af;
       transition: all 0.2s;
-      margin-left: 0.25rem;
-      vertical-align: middle;
+      flex-shrink: 0;
+      opacity: 0;
     }
 
     .profile-bio-wrapper:hover .profile-bio-edit-icon {
       color: #FF1B8D;
+      opacity: 1;
     }
 
     .profile-bio-textarea {
