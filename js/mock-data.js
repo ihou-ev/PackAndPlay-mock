@@ -152,7 +152,7 @@ const mockCreators = creators;
 
 // フォロー中の配信者（デモ用）
 // 実際のアプリではユーザーごとにlocalStorageに保存
-const defaultFollowedCreatorIds = [1, 2, 5, 8]; // 田中太郎、アリスちゃんねる、サトケンスポーツ、いとさくら
+const defaultFollowedCreatorIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // 10人のサンプル（配信中5人、配信中でない5人）
 
 // パックデータ
 const packs = [
