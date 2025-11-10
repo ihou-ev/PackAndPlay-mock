@@ -327,11 +327,63 @@
     }
 
     /* Bio */
+    .profile-bio-wrapper {
+      cursor: pointer;
+      transition: all 0.2s;
+      padding: 0.375rem 0.5rem;
+      border-radius: 0.375rem;
+      border: 2px dashed transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .profile-bio-wrapper:hover {
+      background: #f3f4f6;
+      border-color: #FF1B8D;
+    }
+
     .profile-bio {
       font-size: 0.9375rem;
       color: #2d1b3d;
       line-height: 1.5;
-      margin-bottom: 0.75rem;
+      transition: all 0.2s;
+    }
+
+    .profile-bio-wrapper:hover .profile-bio {
+      color: #FF1B8D;
+    }
+
+    .profile-bio-edit-icon {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      color: #9ca3af;
+      transition: all 0.2s;
+      margin-left: 0.25rem;
+      vertical-align: middle;
+    }
+
+    .profile-bio-wrapper:hover .profile-bio-edit-icon {
+      color: #FF1B8D;
+    }
+
+    .profile-bio-textarea {
+      font-size: 0.9375rem;
+      color: #2d1b3d;
+      line-height: 1.5;
+      padding: 0.375rem 0.5rem;
+      border: 2px solid #FF1B8D;
+      border-radius: 0.375rem;
+      width: 100%;
+      outline: none;
+      background: white;
+      font-family: inherit;
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .profile-bio-textarea:focus {
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
     }
 
     /* フォロー中情報 */
@@ -768,9 +820,24 @@
       }
 
       /* Bio - モバイル */
+      .profile-bio-wrapper {
+        padding: 0.25rem 0.375rem;
+        margin-bottom: 0.5rem;
+      }
+
       .profile-bio {
         font-size: 0.875rem;
-        margin-bottom: 0.5rem;
+      }
+
+      .profile-bio-edit-icon {
+        width: 12px;
+        height: 12px;
+      }
+
+      .profile-bio-textarea {
+        font-size: 0.875rem;
+        padding: 0.25rem 0.375rem;
+        min-height: 50px;
       }
 
       /* フォロー中情報 - モバイル */
@@ -890,7 +957,13 @@
           <div class="profile-user-id" id="profileUserId">@username</div>
 
           <!-- Bio -->
-          <div class="profile-bio" id="profileBio">-</div>
+          <div class="profile-bio-wrapper" onclick="editBio()">
+            <div class="profile-bio" id="profileBio">-</div>
+            <svg class="profile-bio-edit-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path>
+            </svg>
+          </div>
+          <textarea class="profile-bio-textarea" id="profileBioTextarea" style="display: none;" onblur="saveBio()" onkeydown="handleBioKeydown(event)"></textarea>
 
           <!-- フォロー中 -->
           <div class="profile-following-info">
@@ -1100,6 +1173,59 @@
         nameInput.value = session.name || '';
         nameWrapper.style.display = 'inline-flex';
         nameInput.style.display = 'none';
+      }
+    }
+
+    // Bioをインライン編集
+    function editBio() {
+      const bioWrapper = document.querySelector('.profile-bio-wrapper');
+      const bioTextarea = document.getElementById('profileBioTextarea');
+
+      // 現在のbioをテキストエリアにセット
+      bioTextarea.value = session.bio || '';
+
+      // 表示を切り替え
+      bioWrapper.style.display = 'none';
+      bioTextarea.style.display = 'block';
+      bioTextarea.focus();
+    }
+
+    // Bioを保存
+    function saveBio() {
+      const bioWrapper = document.querySelector('.profile-bio-wrapper');
+      const bioTextarea = document.getElementById('profileBioTextarea');
+      const newBio = bioTextarea.value.trim();
+
+      // 最大文字数チェック（160文字）
+      if (newBio.length > 160) {
+        showToast('自己紹介は160文字以内で入力してください', 'error');
+        return;
+      }
+
+      if (newBio !== (session.bio || '')) {
+        // Bioが変更された場合
+        session.bio = newBio;
+        saveToStorage('session', session);
+        showToast('自己紹介を更新しました', 'success');
+        renderProfile();
+      }
+
+      // 表示を切り替え
+      bioWrapper.style.display = 'block';
+      bioTextarea.style.display = 'none';
+    }
+
+    // キーボードイベントハンドリング（Bio）
+    function handleBioKeydown(event) {
+      if (event.key === 'Escape') {
+        event.preventDefault();
+        const bioWrapper = document.querySelector('.profile-bio-wrapper');
+        const bioTextarea = document.getElementById('profileBioTextarea');
+
+        // キャンセル：元の表示に戻す
+        bioTextarea.value = session.bio || '';
+        bioWrapper.style.display = 'block';
+        bioTextarea.style.display = 'none';
       }
     }
 
