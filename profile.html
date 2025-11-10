@@ -52,31 +52,12 @@
     }
 
     .profile-nav {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-    }
-
-    .profile-nav-link {
-      color: white;
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9375rem;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      transition: all 0.2s;
-      background: rgba(255, 255, 255, 0.1);
-    }
-
-    .profile-nav-link:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: translateY(-1px);
-      color: #FFD600;
+      display: none;
     }
 
     /* ハンバーガーメニュー */
     .hamburger-menu {
-      display: none;
+      display: flex;
       flex-direction: column;
       gap: 4px;
       cursor: pointer;
@@ -877,18 +858,6 @@
         font-size: 1.25rem;
       }
 
-      .profile-nav {
-        display: none;
-      }
-
-      .hamburger-menu {
-        display: flex;
-      }
-
-      .mobile-menu {
-        display: block;
-      }
-
       .profile-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
@@ -950,16 +919,6 @@
 
       .following-name {
         font-size: 0.75rem;
-      }
-
-      .following-section > div:first-child {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1rem;
-      }
-
-      .following-section .action-btn {
-        width: 100%;
       }
 
       .footer-content {
@@ -1062,10 +1021,7 @@
 
         <!-- フォロー中の配信者 -->
         <div class="following-section">
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-            <h2 class="section-title" style="margin: 0;">フォロー中の配信者</h2>
-            <a href="inventory.html" class="action-btn action-btn-outline" style="margin: 0;">マイカード</a>
-          </div>
+          <h2 class="section-title">フォロー中の配信者</h2>
           <div id="followingGrid" class="following-grid">
             <!-- JavaScriptで動的に生成 -->
           </div>
