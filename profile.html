@@ -543,6 +543,26 @@
       visibility: hidden;
     }
 
+    .following-button.unfollow-style {
+      background: white;
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+    }
+
+    .following-button.unfollow-style:hover {
+      background: #fff5f9;
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+    }
+
+    .following-button.unfollow-style:hover span::before {
+      content: none;
+    }
+
+    .following-button.unfollow-style:hover span {
+      visibility: visible;
+    }
+
     .following-avatar {
       width: 48px;
       height: 48px;
@@ -1104,6 +1124,50 @@
         font-size: 0.875rem;
         padding: 0.625rem 0.75rem;
       }
+
+      /* フォロー中カード - モバイル */
+      .following-card {
+        padding: 0.875rem 1rem;
+        gap: 0.625rem;
+      }
+
+      .following-card-link {
+        min-width: 0;
+        gap: 0.625rem;
+        padding-right: 5.5rem;
+      }
+
+      .following-avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 0.875rem;
+      }
+
+      .following-info {
+        min-width: 0;
+        flex: 1;
+      }
+
+      .following-name {
+        font-size: 0.8125rem;
+      }
+
+      .following-id {
+        font-size: 0.6875rem;
+      }
+
+      .following-bio {
+        font-size: 0.75rem;
+      }
+
+      .following-button {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        padding: 0.3125rem 0.625rem;
+        font-size: 0.6875rem;
+      }
     }
   </style>
 </head>
@@ -1595,10 +1659,44 @@
         toggleFollow(creatorId);
         showToast(`${creatorName}のフォローを解除しました`, 'success');
 
-        // 表示を更新
-        renderLiveCreators();
+        // ボタンを「フォローする」に変更
+        const card = document.getElementById(`creator-${creatorId}`);
+        if (card) {
+          const button = card.querySelector('.following-button');
+          if (button) {
+            button.className = 'following-button unfollow-style';
+            button.innerHTML = '<span>フォローする</span>';
+            button.onclick = (e) => followCreator(creatorId, e);
+          }
+        }
+
         renderProfile(); // フォロー中の数を更新
       }
+    }
+
+    // フォローする
+    function followCreator(creatorId, event) {
+      event.preventDefault();
+      event.stopPropagation();
+
+      const creator = creators.find(c => c.id === creatorId);
+      const creatorName = creator ? creator.name : '配信者';
+
+      toggleFollow(creatorId);
+      showToast(`${creatorName}をフォローしました`, 'success');
+
+      // ボタンを「フォロー中」に変更
+      const card = document.getElementById(`creator-${creatorId}`);
+      if (card) {
+        const button = card.querySelector('.following-button');
+        if (button) {
+          button.className = 'following-button';
+          button.innerHTML = '<span>フォロー中</span>';
+          button.onclick = (e) => unfollowCreator(creatorId, e);
+        }
+      }
+
+      renderProfile(); // フォロー中の数を更新
     }
 
     // アカウント削除モーダルを表示
