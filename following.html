@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play">
+  <title>フォロー中 - Pack&Play</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+  <style>
+    body {
+      overflow-x: hidden;
+      background: #f9fafb;
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* サイドバー */
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 260px;
+      background: #2d1b3d;
+      padding: 2rem 1.5rem 1rem;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 1000;
+    }
+
+    .sidebar-logo {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: white;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-logo:hover {
+      color: #FFD600;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .sidebar-nav-link {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .sidebar-nav-link:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-nav-link.active {
+      background: rgba(255, 255, 255, 0.15);
+      color: #FFD600;
+    }
+
+    .sidebar-footer {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .sidebar-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-footer-link {
+      color: rgba(255, 255, 255, 0.6);
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-footer-link:hover {
+      color: rgba(255, 255, 255, 0.9);
+      text-decoration: underline;
+    }
+
+    .sidebar-footer-copyright {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    /* メインコンテンツエリア */
+    .main-wrapper {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .following-content {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+      width: 100%;
+    }
+
+    /* ヘッダー */
+    .page-header {
+      background: white;
+      padding: 1.5rem 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      margin-bottom: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .page-title {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin: 0;
+    }
+
+    .back-link {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      transition: all 0.2s;
+      background: #f3f4f6;
+    }
+
+    .back-link:hover {
+      background: #e5e7eb;
+      color: #2d1b3d;
+    }
+
+    /* ソートコントロール */
+    .sort-control {
+      padding: 1rem;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .following-count-text {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      font-weight: 600;
+    }
+
+    .sort-select {
+      padding: 0.375rem 0.75rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.375rem;
+      background: transparent;
+      font-weight: 500;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: #6b7280;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: #9ca3af;
+    }
+
+    /* フォロー中リスト */
+    .following-list {
+      background: white;
+    }
+
+    .following-card {
+      background: white;
+      padding: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 1rem;
+      text-decoration: none;
+    }
+
+    .following-card:hover {
+      background: #f9fafb;
+    }
+
+    .following-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: white;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .following-live-signal {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+      }
+    }
+
+    .following-info {
+      flex: 1;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .following-name {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .following-bio {
+      font-size: 0.875rem;
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .following-empty {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: #9ca3af;
+      font-size: 0.875rem;
+      background: white;
+    }
+
+    /* モバイルメニューボタン */
+    .mobile-menu-button {
+      display: none;
+      position: fixed;
+      top: 0.75rem;
+      left: 0.75rem;
+      z-index: 1001;
+      width: 28px;
+      height: 28px;
+      background: rgba(45, 27, 61, 0.6);
+      border: none;
+      border-radius: 0.25rem;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-menu-button svg {
+      width: 16px;
+      height: 16px;
+      color: white;
+    }
+
+    .mobile-menu-button.active {
+      display: none;
+    }
+
+    .mobile-menu-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .sidebar.mobile-open {
+      display: flex;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 768px) {
+      body {
+        display: block;
+      }
+
+      .mobile-menu-button {
+        display: flex;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main-wrapper {
+        margin-left: 0;
+      }
+
+      .following-content {
+        padding: 0;
+      }
+
+      .page-header {
+        padding: 1rem;
+      }
+
+      .page-title {
+        font-size: 1.25rem;
+      }
+
+      .following-card {
+        padding: 0.875rem 1rem;
+      }
+
+      .following-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+
+      .following-name {
+        font-size: 0.875rem;
+      }
+
+      .following-bio {
+        font-size: 0.8125rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">Pack&Play</a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツラッパー -->
+  <div class="main-wrapper">
+    <main class="following-content">
+      <!-- ヘッダー -->
+      <div class="page-header">
+        <h1 class="page-title">フォロー中</h1>
+        <a href="profile.html" class="back-link">← プロフィールに戻る</a>
+      </div>
+
+      <!-- ソートコントロール -->
+      <div class="sort-control">
+        <span class="following-count-text"><strong id="followingCount">0</strong>人をフォロー中</span>
+        <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
+          <option value="default">デフォルト</option>
+          <option value="name">名前順</option>
+          <option value="live">配信中優先</option>
+        </select>
+      </div>
+
+      <!-- フォロー中リスト -->
+      <div class="following-list">
+        <div id="followingGrid">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+        <div id="followingEmpty" class="following-empty" style="display: none;">
+          フォロー中がいません
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="js/mock-data.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // ログインチェック
+    if (!requireLogin()) {
+      // ログインが必要な場合、requireLogin関数内でリダイレクトされる
+    }
+
+    // セッション情報を取得
+    const session = getCurrentSession();
+
+    // サイドバーナビゲーション生成
+    function renderSidebarNav() {
+      const sidebarNav = document.getElementById('sidebarNav');
+
+      if (!sidebarNav) return;
+
+      let navHTML = '';
+
+      if (isLoggedIn()) {
+        const role = session.role;
+
+        if (role === 'creator') {
+          navHTML = `
+            <a href="profile.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              プロフィール
+            </a>
+            <a href="discover.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              配信者を探す
+            </a>
+            <a href="dashboard/index.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 13a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z"></path>
+              </svg>
+              ダッシュボード
+            </a>
+            <a href="history.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              履歴
+            </a>
+            <a href="settings.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              設定
+            </a>
+            <a href="javascript:void(0)" onclick="logout()" class="sidebar-nav-link" style="margin-top: auto;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              ログアウト
+            </a>
+          `;
+        } else {
+          navHTML = `
+            <a href="profile.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+              </svg>
+              プロフィール
+            </a>
+            <a href="discover.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+              配信者を探す
+            </a>
+            <a href="inventory.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
+              </svg>
+              マイカード
+            </a>
+            <a href="history.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              履歴
+            </a>
+            <a href="settings.html" class="sidebar-nav-link">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              設定
+            </a>
+            <a href="javascript:void(0)" onclick="logout()" class="sidebar-nav-link" style="margin-top: auto;">
+              <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+              </svg>
+              ログアウト
+            </a>
+          `;
+        }
+      }
+
+      sidebarNav.innerHTML = navHTML;
+    }
+
+    // フォロー中の配信者を表示
+    function renderFollowingCreators(sortBy = 'default') {
+      const followingGrid = document.getElementById('followingGrid');
+      const followingEmpty = document.getElementById('followingEmpty');
+      const followingCount = document.getElementById('followingCount');
+
+      const allFollowedCreators = getFollowedCreators();
+
+      if (allFollowedCreators.length === 0) {
+        followingGrid.innerHTML = '';
+        followingEmpty.style.display = 'block';
+        followingCount.textContent = '0';
+        return;
+      }
+
+      followingEmpty.style.display = 'none';
+      followingCount.textContent = allFollowedCreators.length;
+
+      // 並び替え
+      let sortedCreators = [...allFollowedCreators];
+      if (sortBy === 'name') {
+        sortedCreators.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+      } else if (sortBy === 'live') {
+        sortedCreators.sort((a, b) => {
+          if (a.isLive && !b.isLive) return -1;
+          if (!a.isLive && b.isLive) return 1;
+          return 0;
+        });
+      }
+
+      followingGrid.innerHTML = sortedCreators.map(creator => `
+        <a href="creator/${creator.slug}.html" class="following-card">
+          <div class="following-avatar">
+            ${creator.name.charAt(0)}
+            ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
+          </div>
+          <div class="following-info">
+            <div class="following-name">${creator.name}</div>
+            <div class="following-bio">${creator.bio || ''}</div>
+          </div>
+        </a>
+      `).join('');
+    }
+
+    function sortFollowingCreators() {
+      const sortBy = document.getElementById('sortSelect').value;
+      renderFollowingCreators(sortBy);
+    }
+
+    // モバイルメニューの開閉
+    function toggleMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      const isOpen = sidebar.classList.contains('mobile-open');
+
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function openMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      sidebar.classList.add('mobile-open');
+      button.classList.add('active');
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      sidebar.classList.remove('mobile-open');
+      button.classList.remove('active');
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // 初期表示
+    renderSidebarNav();
+    renderFollowingCreators();
+  </script>
+</body>
+</html>
