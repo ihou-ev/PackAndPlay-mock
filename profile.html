@@ -145,25 +145,22 @@
 
     /* コンテンツエリア */
     .profile-content {
-      max-width: 1280px;
+      max-width: 680px;
       margin: 0 auto;
-      padding: 3rem 2rem;
+      padding: 2rem 1rem;
     }
 
     .profile-grid {
-      display: grid;
-      grid-template-columns: 1fr 2fr;
-      gap: 2rem;
-      margin-bottom: 3rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
 
     /* プロフィールカード */
     .profile-card {
       background: white;
-      border-radius: 1rem;
-      padding: 2rem;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid #e5e7eb;
+      padding: 1.5rem 1rem;
     }
 
     .profile-header-section {
@@ -513,14 +510,16 @@
     /* 設定セクション */
     .settings-section {
       background: white;
-      border-radius: 1rem;
-      padding: 2rem;
-      border: 2px solid #e5e7eb;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .settings-section-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .settings-item {
-      padding: 1.5rem 0;
+      padding: 1rem;
       border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
@@ -576,14 +575,31 @@
 
     /* フォロー中の配信者セクション */
     .following-section {
-      margin-top: 2rem;
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .following-section-header {
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin: 0;
     }
 
     .following-grid {
       display: flex;
       flex-direction: column;
       gap: 0;
-      margin-top: 1rem;
     }
 
     .following-card {
@@ -871,9 +887,8 @@
         font-size: 1.25rem;
       }
 
-      .profile-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
+      .profile-content {
+        padding: 0;
       }
 
       .stats-grid {
@@ -1042,8 +1057,8 @@
 
       <!-- フォロー中 -->
       <div class="following-section">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
-          <h2 class="section-title" style="margin: 0;">フォロー中</h2>
+        <div class="following-section-header">
+          <h2 class="section-title">フォロー中</h2>
           <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
             <option value="default">デフォルト</option>
             <option value="name">名前順</option>
@@ -1056,7 +1071,7 @@
         <div id="followingEmpty" class="following-empty" style="display: none;">
           フォロー中がいません
         </div>
-        <div id="showMoreContainer" style="text-align: center; margin-top: 1rem; padding: 0.5rem 0; display: none;">
+        <div id="showMoreContainer" style="text-align: center; padding: 1rem 0; border-top: 1px solid #e5e7eb; display: none;">
           <button class="show-more-btn" onclick="toggleShowMore()">
             <span id="showMoreText">もっと見る</span>
             <svg id="showMoreIcon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor">
@@ -1069,7 +1084,9 @@
 
     <!-- 設定セクション -->
     <div class="settings-section">
-      <h2 class="section-title">設定</h2>
+      <div class="settings-section-header">
+        <h2 class="section-title">設定</h2>
+      </div>
 
       <div class="settings-item">
         <div class="settings-info">
@@ -1089,7 +1106,7 @@
     </div>
 
     <!-- アカウント削除リンク -->
-    <div id="deletionRequestArea" style="text-align: right; margin-top: 3rem; padding-bottom: 2rem;">
+    <div id="deletionRequestArea" style="background: white; padding: 1rem; border-bottom: 1px solid #e5e7eb;">
       <!-- JavaScriptで動的に生成 -->
     </div>
   </main>
