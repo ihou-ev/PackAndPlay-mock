@@ -624,6 +624,94 @@
       border-color: #ef4444;
     }
 
+    /* フォロー中の配信者セクション */
+    .following-section {
+      margin-top: 2rem;
+    }
+
+    .following-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .following-card {
+      background: white;
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      border: 2px solid #e5e7eb;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .following-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      border-color: #FF1B8D;
+    }
+
+    .following-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 0.75rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .following-live-signal {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 12px;
+      height: 12px;
+      background: #10b981;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.3);
+      }
+      50% {
+        box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+      }
+    }
+
+    .following-name {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      text-align: center;
+      width: 100%;
+    }
+
+    .following-empty {
+      text-align: center;
+      padding: 2rem;
+      color: #9ca3af;
+      font-size: 0.875rem;
+    }
+
     /* モーダル */
     .modal-overlay {
       position: fixed;
@@ -848,6 +936,32 @@
         font-size: 0.8125rem;
       }
 
+      .following-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+      }
+
+      .following-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .following-name {
+        font-size: 0.75rem;
+      }
+
+      .following-section > div:first-child {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+
+      .following-section .action-btn {
+        width: 100%;
+      }
+
       .footer-content {
         grid-template-columns: 1fr;
         gap: 2rem;
@@ -946,9 +1060,18 @@
           </div>
         </div>
 
-        <div class="action-buttons" style="margin-top: 2rem;">
-          <a href="discover.html?following=true" class="action-btn action-btn-primary">フォロー中の配信者</a>
-          <a href="inventory.html" class="action-btn action-btn-outline">マイカード</a>
+        <!-- フォロー中の配信者 -->
+        <div class="following-section">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h2 class="section-title" style="margin: 0;">フォロー中の配信者</h2>
+            <a href="inventory.html" class="action-btn action-btn-outline" style="margin: 0;">マイカード</a>
+          </div>
+          <div id="followingGrid" class="following-grid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <div id="followingEmpty" class="following-empty" style="display: none;">
+            フォロー中の配信者がいません
+          </div>
         </div>
       </div>
     </div>
@@ -1218,6 +1341,40 @@
       // 購入パック数（カードの取得日でユニークカウント）
       const uniqueDates = [...new Set(cards.map(c => c.acquiredAt))];
       document.getElementById('purchasedPacks').textContent = uniqueDates.length;
+
+      // フォロー中の配信者を表示
+      renderFollowingCreators();
+    }
+
+    // フォロー中の配信者を表示
+    function renderFollowingCreators() {
+      const followingGrid = document.getElementById('followingGrid');
+      const followingEmpty = document.getElementById('followingEmpty');
+
+      if (typeof getFollowedCreators === 'undefined') {
+        console.error('getFollowedCreators is not defined');
+        return;
+      }
+
+      const followedCreators = getFollowedCreators();
+
+      if (followedCreators.length === 0) {
+        followingGrid.innerHTML = '';
+        followingEmpty.style.display = 'block';
+        return;
+      }
+
+      followingEmpty.style.display = 'none';
+
+      followingGrid.innerHTML = followedCreators.map(creator => `
+        <a href="creator/${creator.slug}.html" class="following-card">
+          <div class="following-avatar">
+            ${creator.name.charAt(0)}
+            ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
+          </div>
+          <div class="following-name" title="${creator.name}">${creator.name}</div>
+        </a>
+      `).join('');
     }
 
     // アカウント削除モーダルを表示
