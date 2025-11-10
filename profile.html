@@ -1272,17 +1272,6 @@
       // フォロー中の数
       const followedCreators = getFollowedCreators();
       document.getElementById('followingCount').textContent = followedCreators.length;
-
-      // 登録日
-      if (session.loginTime) {
-        const date = new Date(session.loginTime);
-        const formattedDate = date.toLocaleDateString('ja-JP', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-        document.getElementById('profileJoinDate').textContent = `${formattedDate}よりPack&Playを利用しています`;
-      }
     }
 
     // 名前をインライン編集
