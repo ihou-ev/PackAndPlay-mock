@@ -693,6 +693,51 @@
       font-size: 0.875rem;
     }
 
+    .sort-select {
+      padding: 0.5rem 1rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      background: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #4b5563;
+      min-width: 140px;
+    }
+
+    .sort-select:focus {
+      outline: none;
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+    }
+
+    .show-more-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      background: white;
+      color: #4b5563;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .show-more-btn:hover {
+      border-color: #FF1B8D;
+      color: #FF1B8D;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 27, 141, 0.2);
+    }
+
+    .show-more-btn.expanded svg {
+      transform: rotate(180deg);
+    }
+
     /* モーダル */
     .modal-overlay {
       position: fixed;
@@ -1001,33 +1046,29 @@
         </div>
       </div>
 
-      <!-- 統計セクション -->
-      <div>
-        <h2 class="section-title">アクティビティ</h2>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <div class="stat-label">所持カード数</div>
-            <div id="totalCards" class="stat-value primary">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">使用済みカード</div>
-            <div id="usedCards" class="stat-value success">0</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-label">購入パック数</div>
-            <div id="purchasedPacks" class="stat-value warning">0</div>
-          </div>
+      <!-- フォロー中の配信者 -->
+      <div class="following-section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; gap: 1rem; flex-wrap: wrap;">
+          <h2 class="section-title" style="margin: 0;">フォロー中の配信者</h2>
+          <select id="sortSelect" class="sort-select" onchange="sortFollowingCreators()">
+            <option value="default">デフォルト</option>
+            <option value="name">名前順</option>
+            <option value="live">配信中優先</option>
+          </select>
         </div>
-
-        <!-- フォロー中の配信者 -->
-        <div class="following-section">
-          <h2 class="section-title">フォロー中の配信者</h2>
-          <div id="followingGrid" class="following-grid">
-            <!-- JavaScriptで動的に生成 -->
-          </div>
-          <div id="followingEmpty" class="following-empty" style="display: none;">
-            フォロー中の配信者がいません
-          </div>
+        <div id="followingGrid" class="following-grid">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+        <div id="followingEmpty" class="following-empty" style="display: none;">
+          フォロー中の配信者がいません
+        </div>
+        <div id="showMoreContainer" style="text-align: center; margin-top: 1rem; display: none;">
+          <button class="show-more-btn" onclick="toggleShowMore()">
+            <span id="showMoreText">もっと見る</span>
+            <svg id="showMoreIcon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" style="transition: transform 0.3s;">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
         </div>
       </div>
     </div>
@@ -1270,59 +1311,49 @@
       // 将来的には: window.location.href = 'charge.html';
     }
 
-    // 統計情報を表示
-    function renderStats() {
-      // インベントリデータを取得
-      const inventory = loadFromStorage('inventory', []);
-
-      // モックデータを追加（デモ用）
-      let cards = inventory;
-      if (cards.length === 0) {
-        cards = [
-          { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
-          { id: 2, name: 'いいね！', rarity: 'R', type: 'action', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
-          { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: true, acquiredAt: '2025-11-01' },
-          { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' },
-          { id: 5, name: '花火', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-03' },
-          { id: 6, name: 'ありがとう', rarity: 'R', type: 'message', creatorName: 'ゲームマスター', isUsed: false, acquiredAt: '2025-11-03' },
-          { id: 7, name: 'レインボー', rarity: 'UR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-04' },
-          { id: 8, name: 'キラキラ', rarity: 'R', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-04' }
-        ];
-      }
-
-      // 統計情報を計算
-      document.getElementById('totalCards').textContent = cards.length;
-      document.getElementById('usedCards').textContent = cards.filter(c => c.isUsed).length;
-
-      // 購入パック数（カードの取得日でユニークカウント）
-      const uniqueDates = [...new Set(cards.map(c => c.acquiredAt))];
-      document.getElementById('purchasedPacks').textContent = uniqueDates.length;
-
-      // フォロー中の配信者を表示
-      renderFollowingCreators();
-    }
-
     // フォロー中の配信者を表示
-    function renderFollowingCreators() {
+    let allFollowedCreators = [];
+    let isShowingAll = false;
+    const INITIAL_DISPLAY_COUNT = 4;
+
+    function renderFollowingCreators(sortBy = 'default') {
       const followingGrid = document.getElementById('followingGrid');
       const followingEmpty = document.getElementById('followingEmpty');
+      const showMoreContainer = document.getElementById('showMoreContainer');
 
       if (typeof getFollowedCreators === 'undefined') {
         console.error('getFollowedCreators is not defined');
         return;
       }
 
-      const followedCreators = getFollowedCreators();
+      allFollowedCreators = getFollowedCreators();
 
-      if (followedCreators.length === 0) {
+      if (allFollowedCreators.length === 0) {
         followingGrid.innerHTML = '';
         followingEmpty.style.display = 'block';
+        showMoreContainer.style.display = 'none';
         return;
       }
 
       followingEmpty.style.display = 'none';
 
-      followingGrid.innerHTML = followedCreators.map(creator => `
+      // 並び替え
+      let sortedCreators = [...allFollowedCreators];
+      if (sortBy === 'name') {
+        sortedCreators.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+      } else if (sortBy === 'live') {
+        sortedCreators.sort((a, b) => {
+          if (a.isLive && !b.isLive) return -1;
+          if (!a.isLive && b.isLive) return 1;
+          return 0;
+        });
+      }
+
+      // 表示する配信者を決定
+      const displayCount = isShowingAll ? sortedCreators.length : INITIAL_DISPLAY_COUNT;
+      const creatorsToDisplay = sortedCreators.slice(0, displayCount);
+
+      followingGrid.innerHTML = creatorsToDisplay.map(creator => `
         <a href="creator/${creator.slug}.html" class="following-card">
           <div class="following-avatar">
             ${creator.name.charAt(0)}
@@ -1331,6 +1362,39 @@
           <div class="following-name" title="${creator.name}">${creator.name}</div>
         </a>
       `).join('');
+
+      // 「もっと見る」ボタンの表示/非表示
+      if (sortedCreators.length > INITIAL_DISPLAY_COUNT) {
+        showMoreContainer.style.display = 'block';
+        updateShowMoreButton();
+      } else {
+        showMoreContainer.style.display = 'none';
+      }
+    }
+
+    function sortFollowingCreators() {
+      const sortBy = document.getElementById('sortSelect').value;
+      renderFollowingCreators(sortBy);
+    }
+
+    function toggleShowMore() {
+      isShowingAll = !isShowingAll;
+      const sortBy = document.getElementById('sortSelect').value;
+      renderFollowingCreators(sortBy);
+    }
+
+    function updateShowMoreButton() {
+      const btn = document.querySelector('.show-more-btn');
+      const text = document.getElementById('showMoreText');
+      const icon = document.getElementById('showMoreIcon');
+
+      if (isShowingAll) {
+        text.textContent = '閉じる';
+        btn.classList.add('expanded');
+      } else {
+        text.textContent = 'もっと見る';
+        btn.classList.remove('expanded');
+      }
     }
 
     // アカウント削除モーダルを表示
