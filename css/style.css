@@ -1216,6 +1216,44 @@ header {
   text-align: center;
 }
 
+/* 消費スパーク表示 */
+.sparks-consumed {
+  display: inline-block;
+  font-size: 0.9375rem;
+  color: #2d1b3d;
+}
+
+.sparks-consumed strong {
+  font-weight: 700;
+  color: #6b7280;
+}
+
+/* トップ3のスタイル */
+.ranking-top3 {
+  background: linear-gradient(to right, #fff9e6, white);
+  border-left: 3px solid #FFD600;
+}
+
+.ranking-number-top3 {
+  font-size: 2rem;
+  color: #FFD600;
+  text-shadow: 0 2px 4px rgba(255, 214, 0, 0.3);
+}
+
+.sparks-consumed-top3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #2d1b3d;
+}
+
+.sparks-consumed-top3 strong {
+  font-weight: 800;
+  color: #FF1B8D;
+  font-size: 0.875rem;
+  letter-spacing: 0.025em;
+  margin-right: 0.25rem;
+}
+
 /* ソート選択ドロップダウン */
 .sort-select {
   padding: 0.5rem 1rem;

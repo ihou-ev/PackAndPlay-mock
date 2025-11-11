@@ -493,10 +493,11 @@
           const isFollowing = followedIds.includes(creator.id);
           const rank = index + 1;
           const sparks = creator.sparksConsumed ? creator.sparksConsumed[currentPeriod] : 0;
+          const isTopThree = rank <= 3;
 
           return `
-            <div class="creator-card ranking-card" id="ranking-creator-${creator.id}">
-              <div class="ranking-number">${rank}</div>
+            <div class="creator-card ranking-card${isTopThree ? ' ranking-top3' : ''}" id="ranking-creator-${creator.id}">
+              <div class="ranking-number${isTopThree ? ' ranking-number-top3' : ''}">${rank}</div>
               <a href="creator/${creator.slug}.html" class="creator-card-link">
                 <div class="creator-avatar">
                   ${creator.name.charAt(0)}
@@ -509,7 +510,9 @@
                   </div>
                   <div class="creator-bio">${creator.bio || ''}</div>
                   <div class="creator-stats">
-                    <span>消費スパーク ${sparks.toLocaleString()}</span>
+                    <span class="sparks-consumed${isTopThree ? ' sparks-consumed-top3' : ''}">
+                      <strong>消費スパーク</strong> ${sparks.toLocaleString()}
+                    </span>
                   </div>
                 </div>
               </a>
