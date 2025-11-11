@@ -890,6 +890,12 @@
 
       .creator-header {
         padding: 1rem;
+        flex-wrap: wrap;
+      }
+
+      .creator-header-left {
+        flex: 1;
+        min-width: 200px;
       }
 
       .creator-avatar {
@@ -899,16 +905,23 @@
       }
 
       .creator-name {
-        font-size: 1.125rem;
+        font-size: 1rem;
+        line-height: 1.3;
       }
 
       .creator-bio {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
       }
 
       .follow-button {
         padding: 0.5rem 1rem;
         font-size: 0.875rem;
+        white-space: nowrap;
       }
 
       .stream-info-bar {
