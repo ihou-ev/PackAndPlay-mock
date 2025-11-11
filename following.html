@@ -384,7 +384,6 @@
 
       if (confirm(`${creatorName}のフォローを解除しますか？`)) {
         toggleFollow(creatorId);
-        showToast(`${creatorName}のフォローを解除しました`, 'success');
 
         // ボタンを「フォローする」に変更
         const card = document.getElementById(`creator-${creatorId}`);
@@ -413,7 +412,6 @@
       const creatorName = creator ? creator.name : '配信者';
 
       toggleFollow(creatorId);
-      showToast(`${creatorName}をフォローしました`, 'success');
 
       // ボタンを「フォロー中」に変更
       const card = document.getElementById(`creator-${creatorId}`);

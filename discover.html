@@ -478,12 +478,10 @@
         if (isFollowing) {
           if (confirm(`${creatorName}のフォローを解除しますか？`)) {
             toggleFollow(creatorId);
-            showToast(`${creatorName}のフォローを解除しました`, 'success');
             updateButtonState(creatorId, false);
           }
         } else {
           toggleFollow(creatorId);
-          showToast(`${creatorName}をフォローしました`, 'success');
           updateButtonState(creatorId, true);
         }
       };
