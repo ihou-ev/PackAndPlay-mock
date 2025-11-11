@@ -230,12 +230,6 @@
       margin-top: 0.25rem;
     }
 
-    .follower-icon {
-      width: 14px;
-      height: 14px;
-    }
-
-
     /* 空の状態 */
     .empty-state {
       text-align: center;
@@ -464,8 +458,7 @@
                   </div>
                   <div class="creator-bio">${creator.bio || ''}</div>
                   <div class="creator-stats">
-                    <img src="image/follower.png" alt="フォロワー" class="follower-icon">
-                    <span>${(creator.followerCount || 0).toLocaleString()}人</span>
+                    <span>フォロワー ${(creator.followerCount || 0).toLocaleString()}人</span>
                   </div>
                 </div>
               </a>
