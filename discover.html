@@ -14,10 +14,15 @@
   <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
       overflow-x: hidden;
+      width: 100%;
+    }
+
+    body {
       display: flex;
       background: #f9fafb;
     }
@@ -118,11 +123,14 @@
       display: flex;
       flex-direction: column;
       min-height: 100vh;
+      width: calc(100% - 260px);
+      overflow-x: hidden;
     }
 
     /* 配信者を探すコンテンツ */
     .discover-content {
       max-width: 900px;
+      width: 100%;
       margin: 0 auto;
       padding: 2rem;
     }
@@ -150,11 +158,13 @@
       padding: 1.5rem;
       margin-bottom: 1.5rem;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      width: 100%;
     }
 
     .search-box {
       position: relative;
       margin-bottom: 1rem;
+      width: 100%;
     }
 
     .search-input {
@@ -164,6 +174,7 @@
       border-radius: 0.75rem;
       font-size: 0.9375rem;
       transition: all 0.2s;
+      box-sizing: border-box;
     }
 
     .search-input:focus {
@@ -207,6 +218,7 @@
       border-radius: 1rem;
       overflow: hidden;
       box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      width: 100%;
     }
 
     /* discover.html固有のカスタマイズ */
@@ -306,11 +318,13 @@
 
       .main-wrapper {
         margin-left: 0;
+        width: 100%;
       }
 
       .discover-content {
         padding: 1rem;
         padding-top: 3.5rem;
+        max-width: 100%;
       }
 
       .discover-title {
@@ -323,6 +337,21 @@
 
       .search-filter-section {
         padding: 1rem;
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .search-box {
+        width: 100%;
+      }
+
+      .search-input {
+        width: 100%;
+        box-sizing: border-box;
+      }
+
+      .creators-list {
+        width: 100%;
       }
 
       .creator-card {
