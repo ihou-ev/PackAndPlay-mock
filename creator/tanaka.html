@@ -974,6 +974,12 @@
         min-height: 250px;
       }
 
+      /* スプラッシュタブの左右パディングを増やす */
+      #splashContent {
+        padding-left: 1.5rem;
+        padding-right: 1.5rem;
+      }
+
       .cards-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
@@ -1058,15 +1064,6 @@
       .send-button {
         padding: 0.625rem;
         font-size: 0.875rem;
-      }
-
-      /* スプラッシュタブ内要素の横幅を制限 */
-      #splashContent .splash-preview,
-      #splashContent .splash-slider-container,
-      #splashContent .send-button {
-        max-width: 90%;
-        margin-left: auto;
-        margin-right: auto;
       }
     }
 
