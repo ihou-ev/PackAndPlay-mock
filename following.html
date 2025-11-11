@@ -37,16 +37,21 @@
     }
 
     .sidebar-logo {
-      font-size: 1.75rem;
-      font-weight: 900;
-      color: white;
+      display: block;
       text-decoration: none;
       margin-bottom: 2rem;
-      transition: color 0.2s;
+      transition: opacity 0.2s;
     }
 
     .sidebar-logo:hover {
-      color: #FFD600;
+      opacity: 0.8;
+    }
+
+    .sidebar-logo-img {
+      width: 100%;
+      max-width: 180px;
+      height: auto;
+      display: block;
     }
 
     .sidebar-nav {
@@ -264,7 +269,9 @@
 
   <!-- サイドバー -->
   <aside class="sidebar" id="sidebar">
-    <a href="profile.html" class="sidebar-logo">Pack&Play</a>
+    <a href="profile.html" class="sidebar-logo">
+      <img src="image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+    </a>
     <nav class="sidebar-nav" id="sidebarNav">
       <!-- JavaScriptで動的に生成 -->
     </nav>
