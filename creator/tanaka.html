@@ -1081,7 +1081,7 @@
 </head>
 <body>
   <!-- モバイルメニューボタン -->
-  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+  <button type="button" class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
     </svg>
@@ -1125,7 +1125,7 @@
             <div class="creator-bio" id="creatorBio">毎日配信中！初心者向けゲーム実況やってます 🎮</div>
           </div>
         </div>
-        <button class="follow-button" id="followButton" onclick="toggleFollowCreator()">
+        <button type="button" class="follow-button" id="followButton" onclick="toggleFollowCreator()">
           フォローする
         </button>
       </header>
@@ -1161,10 +1161,10 @@
       <!-- アクションパネル -->
       <div class="action-panel">
         <div class="action-tabs">
-          <button class="action-tab active" id="overviewTab" onclick="switchActionTab('overview')">概要</button>
-          <button class="action-tab" onclick="switchActionTab('cards')">カード</button>
-          <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
-          <button class="action-tab" onclick="switchActionTab('packs')">パック</button>
+          <button type="button" class="action-tab active" id="overviewTab" onclick="switchActionTab('overview')">概要</button>
+          <button type="button" class="action-tab" onclick="switchActionTab('cards')">カード</button>
+          <button type="button" class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
+          <button type="button" class="action-tab" onclick="switchActionTab('packs')">パック</button>
         </div>
 
         <!-- 概要タブ -->
@@ -1175,7 +1175,7 @@
             </div>
             <div class="stream-description-fade" id="streamDescriptionFade"></div>
           </div>
-          <button class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
+          <button type="button" class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
             <span id="toggleText">もっと見る</span>
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
@@ -1246,7 +1246,7 @@
           </div>
 
           <!-- 送信ボタン -->
-          <button class="send-button" id="sendSplashButton" onclick="sendSplash()">
+          <button type="button" class="send-button" id="sendSplashButton" onclick="sendSplash()">
             スプラッシュを送る
           </button>
         </div>
@@ -1617,7 +1617,7 @@
             <p class="pack-description">${pack.description}</p>
             <div class="pack-footer">
               <div class="pack-price">¥${pack.price.toLocaleString()}</div>
-              <button class="buy-button" onclick="event.stopPropagation(); purchasePack(${pack.id})">
+              <button type="button" class="buy-button" onclick="event.stopPropagation(); purchasePack(${pack.id})">
                 購入する
               </button>
             </div>
