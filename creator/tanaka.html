@@ -420,8 +420,26 @@
     .action-content {
       display: none;
       padding: 1.5rem;
-      max-height: 400px;
+      max-height: calc(100vh - 650px);
+      min-height: 300px;
       overflow-y: auto;
+    }
+
+    .action-content::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .action-content::-webkit-scrollbar-track {
+      background: #f3f4f6;
+    }
+
+    .action-content::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 3px;
+    }
+
+    .action-content::-webkit-scrollbar-thumb:hover {
+      background: #9ca3af;
     }
 
     .action-content.active {
@@ -906,6 +924,8 @@
 
       .action-content {
         padding: 1rem;
+        max-height: calc(100vh - 500px);
+        min-height: 250px;
       }
 
       .cards-grid {
