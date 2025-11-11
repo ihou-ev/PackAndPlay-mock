@@ -478,9 +478,8 @@
     /* スプラッシュプレビュー */
     .splash-preview {
       border-radius: 0.75rem;
-      padding: 2rem 1.5rem;
+      padding: 1.25rem;
       margin-bottom: 1.5rem;
-      text-align: center;
       transition: all 0.3s ease;
       box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
       position: relative;
@@ -498,23 +497,80 @@
       transition: all 0.3s ease;
     }
 
-    .splash-preview-amount {
-      font-size: 2.5rem;
-      font-weight: 900;
-      color: white;
-      margin-bottom: 0.5rem;
+    .splash-preview-header {
+      display: flex;
+      align-items: center;
+      gap: 0.875rem;
+      margin-bottom: 1rem;
       position: relative;
       z-index: 1;
+    }
+
+    .splash-preview-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.25);
+      backdrop-filter: blur(10px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 1.25rem;
+      flex-shrink: 0;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .splash-preview-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .splash-preview-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: white;
+      margin-bottom: 0.25rem;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .splash-preview-amount {
+      font-size: 1.75rem;
+      font-weight: 900;
+      color: white;
       text-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
     }
 
-    .splash-preview-label {
-      font-size: 1rem;
-      font-weight: 600;
-      color: rgba(255, 255, 255, 0.95);
+    .splash-preview-message {
       position: relative;
       z-index: 1;
-      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .splash-preview-input {
+      width: 100%;
+      padding: 0.875rem;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 0.5rem;
+      font-size: 0.9375rem;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(10px);
+      color: white;
+      transition: all 0.2s;
+    }
+
+    .splash-preview-input::placeholder {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .splash-preview-input:focus {
+      outline: none;
+      border-color: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.2);
     }
 
     /* 金額ごとのプレビュー色 */
@@ -611,25 +667,6 @@
 
     .splash-slider::-moz-range-thumb:active {
       transform: scale(1.1);
-    }
-
-    .message-input {
-      width: 100%;
-      padding: 1rem;
-      border: 2px solid #e5e7eb;
-      border-radius: 0.75rem;
-      font-size: 0.9375rem;
-      resize: vertical;
-      min-height: 90px;
-      font-family: inherit;
-      margin-bottom: 1rem;
-      transition: all 0.2s;
-    }
-
-    .message-input:focus {
-      outline: none;
-      border-color: #FF1B8D;
-      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
     }
 
     .send-button {
@@ -855,15 +892,27 @@
       }
 
       .splash-preview {
-        padding: 1.5rem 1rem;
+        padding: 1rem;
+      }
+
+      .splash-preview-avatar {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+      }
+
+      .splash-preview-name {
+        font-size: 0.875rem;
       }
 
       .splash-preview-amount {
-        font-size: 2rem;
+        font-size: 1.5rem;
       }
 
-      .splash-preview-label {
+      .splash-preview-input {
+        min-height: 70px;
         font-size: 0.875rem;
+        padding: 0.75rem;
       }
     }
 
@@ -993,8 +1042,20 @@
         <div class="action-content" id="splashContent">
           <!-- プレビュー -->
           <div class="splash-preview" id="splashPreview" data-tier="1">
-            <div class="splash-preview-amount" id="splashPreviewAmount">¥100</div>
-            <div class="splash-preview-label">スプラッシュ</div>
+            <div class="splash-preview-header">
+              <div class="splash-preview-avatar" id="splashPreviewAvatar">田</div>
+              <div class="splash-preview-info">
+                <div class="splash-preview-name" id="splashPreviewName">田中太郎</div>
+                <div class="splash-preview-amount" id="splashPreviewAmount">¥100</div>
+              </div>
+            </div>
+            <div class="splash-preview-message">
+              <textarea
+                class="splash-preview-input"
+                id="splashMessage"
+                placeholder="メッセージを入力...（任意）"
+                maxlength="200"></textarea>
+            </div>
           </div>
 
           <!-- スライドバー -->
@@ -1013,13 +1074,6 @@
               step="1"
               oninput="updateSplashPreview(this.value)">
           </div>
-
-          <!-- メッセージ入力 -->
-          <textarea
-            class="message-input"
-            id="splashMessage"
-            placeholder="メッセージを入力...（任意）"
-            maxlength="200"></textarea>
 
           <!-- 送信ボタン -->
           <button class="send-button" id="sendSplashButton" onclick="sendSplash()">
@@ -1355,6 +1409,10 @@
       setupStreamPlayer();
       renderCards();
       renderPacks();
+
+      // スプラッシュプレビューに配信者情報を設定
+      document.getElementById('splashPreviewAvatar').textContent = creator.name.charAt(0);
+      document.getElementById('splashPreviewName').textContent = creator.name;
     }
 
     // ページ読み込み時に初期化
