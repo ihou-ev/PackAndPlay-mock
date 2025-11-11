@@ -1273,6 +1273,10 @@
       const offline = document.getElementById('streamOffline');
       const liveSignal = document.getElementById('liveSignal');
 
+      console.log('Creator:', creator);
+      console.log('isLive:', creator.isLive);
+      console.log('liveSignal element:', liveSignal);
+
       if (creator.isLive && creator.streamUrl) {
         // 配信中の場合
         player.src = creator.streamUrl;
@@ -1280,7 +1284,12 @@
         offline.style.display = 'none';
 
         // LIVE信号を表示
-        liveSignal.style.display = 'block';
+        if (liveSignal) {
+          liveSignal.style.display = 'block';
+          console.log('LIVE signal shown');
+        } else {
+          console.error('liveSignal element not found');
+        }
 
         // 配信概要を設定
         if (creator.streamDescription) {
@@ -1294,7 +1303,9 @@
         offline.style.display = 'flex';
 
         // LIVE信号を非表示
-        liveSignal.style.display = 'none';
+        if (liveSignal) {
+          liveSignal.style.display = 'none';
+        }
 
         showEmptyDescription();
       }
