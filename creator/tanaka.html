@@ -1187,7 +1187,7 @@
     renderSidebarNav(''); // main.jsの共通関数を使用
 
     // クリエイター情報を設定
-    document.getElementById('creatorAvatar').textContent = creator.name.charAt(0);
+    // Note: creatorAvatar text is hardcoded in HTML, don't use textContent as it removes child elements (live-signal)
     document.getElementById('creatorName').textContent = creator.name;
 
     // フォロー解除
