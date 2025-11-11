@@ -1229,15 +1229,8 @@ header {
 }
 
 /* トップ3のスタイル */
-.ranking-top3 {
-  background: linear-gradient(to right, #fff9e6, white);
-  border-left: 3px solid #FFD600;
-}
-
 .ranking-number-top3 {
   font-size: 2rem;
-  color: #FFD600;
-  text-shadow: 0 2px 4px rgba(255, 214, 0, 0.3);
 }
 
 .sparks-consumed-top3 {
