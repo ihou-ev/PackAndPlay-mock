@@ -445,6 +445,16 @@
       let currentSort = 'followers';
       let searchQuery = '';
 
+      // スパーク数をフォーマット（万単位）
+      function formatSparks(num) {
+        if (num >= 10000) {
+          const man = num / 10000;
+          // 小数点1桁まで表示（.0の場合は整数表示）
+          return man % 1 === 0 ? `${man}万` : `${man.toFixed(1)}万`;
+        }
+        return num.toLocaleString();
+      }
+
       // タブ切り替え
       window.switchTab = function(tab) {
         currentTab = tab;
@@ -518,7 +528,7 @@
                   <div class="creator-bio">${creator.bio || ''}</div>
                   <div class="creator-stats">
                     <span class="sparks-consumed${isTopThree ? ' sparks-consumed-top3' : ''}">
-                      <strong>消費スパーク</strong> ${sparks.toLocaleString()}
+                      <strong>消費スパーク</strong> ${formatSparks(sparks)}
                     </span>
                   </div>
                 </div>
