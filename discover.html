@@ -372,11 +372,13 @@
       <!-- ランキングタブコンテンツ -->
       <div class="tab-content active" id="rankingContent">
         <!-- 期間フィルター -->
-        <div class="sub-filter-container">
-          <button class="sub-filter-btn active" id="todayBtn" onclick="filterByPeriod('today')">本日</button>
-          <button class="sub-filter-btn" id="weekBtn" onclick="filterByPeriod('week')">今週</button>
-          <button class="sub-filter-btn" id="monthBtn" onclick="filterByPeriod('month')">今月</button>
-          <button class="sub-filter-btn" id="yearBtn" onclick="filterByPeriod('year')">今年</button>
+        <div class="filter-select-container">
+          <select id="periodSelect" class="filter-select" onchange="filterByPeriod()">
+            <option value="today">本日</option>
+            <option value="week">今週</option>
+            <option value="month">今月</option>
+            <option value="year">今年</option>
+          </select>
         </div>
 
         <!-- ランキングリスト -->
@@ -397,11 +399,13 @@
           >
         </div>
 
-        <!-- ソートボタン -->
-        <div class="sub-filter-container">
-          <button class="sub-filter-btn active" id="followersBtn" onclick="changeSortBy('followers')">フォロワー数順</button>
-          <button class="sub-filter-btn" id="nameBtn" onclick="changeSortBy('name')">名前順</button>
-          <button class="sub-filter-btn" id="liveBtn" onclick="changeSortBy('live')">配信中</button>
+        <!-- ソートフィルター -->
+        <div class="filter-select-container">
+          <select id="sortSelect" class="filter-select" onchange="sortCreators()">
+            <option value="followers">フォロワー数順</option>
+            <option value="name">名前順</option>
+            <option value="live">配信中</option>
+          </select>
         </div>
 
         <!-- 配信者リスト -->
@@ -474,14 +478,8 @@
       };
 
       // 期間フィルター切り替え（ランキング用）
-      window.filterByPeriod = function(period) {
-        currentPeriod = period;
-
-        // ボタンのアクティブ状態を更新
-        ['today', 'week', 'month', 'year'].forEach(p => {
-          document.getElementById(p + 'Btn').classList.toggle('active', p === period);
-        });
-
+      window.filterByPeriod = function() {
+        currentPeriod = document.getElementById('periodSelect').value;
         renderRanking();
       };
 
@@ -540,14 +538,8 @@
       }
 
       // ソート変更（全体の一覧用）
-      window.changeSortBy = function(sortType) {
-        currentSort = sortType;
-
-        // ボタンのアクティブ状態を更新
-        ['followers', 'name', 'live'].forEach(type => {
-          document.getElementById(type + 'Btn').classList.toggle('active', type === sortType);
-        });
-
+      window.sortCreators = function() {
+        currentSort = document.getElementById('sortSelect').value;
         renderCreators();
       };
 
