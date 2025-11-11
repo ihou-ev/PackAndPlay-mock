@@ -389,6 +389,15 @@
 
       <!-- 全体の一覧タブコンテンツ -->
       <div class="tab-content" id="allListContent">
+        <!-- ソートフィルター -->
+        <div class="filter-select-container">
+          <select id="sortSelect" class="filter-select" onchange="sortCreators()">
+            <option value="followers">フォロワー数順</option>
+            <option value="name">名前順</option>
+            <option value="live">配信中</option>
+          </select>
+        </div>
+
         <!-- 検索ボックス -->
         <div class="search-box-container">
           <input
@@ -397,15 +406,6 @@
             placeholder="配信者を検索..."
             class="search-input"
           >
-        </div>
-
-        <!-- ソートフィルター -->
-        <div class="filter-select-container">
-          <select id="sortSelect" class="filter-select" onchange="sortCreators()">
-            <option value="followers">フォロワー数順</option>
-            <option value="name">名前順</option>
-            <option value="live">配信中</option>
-          </select>
         </div>
 
         <!-- 配信者リスト -->
