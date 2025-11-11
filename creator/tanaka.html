@@ -1298,8 +1298,24 @@
       event.preventDefault();
       event.stopPropagation();
 
-      toggleFollow(creator.id);
-      checkFollowStatus();
+      const followedIds = getFollowedCreators();
+      const isFollowing = followedIds.includes(creator.id);
+
+      if (isFollowing) {
+        // フォロー解除確認
+        if (confirm(`${creator.name}のフォローを解除しますか？`)) {
+          toggleFollow(creator.id);
+          checkFollowStatus();
+        }
+      } else {
+        // フォローする
+        toggleFollow(creator.id);
+        checkFollowStatus();
+        showToast('フォローしました', 'success');
+      }
+
+      // ボタンのフォーカスを外す
+      document.getElementById('followButton').blur();
     }
 
     // 配信プレイヤーの設定
