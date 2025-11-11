@@ -1027,9 +1027,68 @@ header {
   display: block;
 }
 
-/* モバイル対応で表示 */
+/* モバイル対応 */
 @media (max-width: 768px) {
   .mobile-menu-button {
     display: flex;
+  }
+
+  /* カードコンポーネント - モバイル対応 */
+  .creator-card,
+  .following-card {
+    padding: 0.875rem 1rem;
+    gap: 0.625rem;
+  }
+
+  .creator-card-link,
+  .following-card-link {
+    gap: 0.625rem;
+    padding-right: 5.5rem;
+    min-width: 0;
+  }
+
+  /* アバター - モバイル対応 */
+  .creator-avatar,
+  .following-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 0.875rem;
+  }
+
+  /* 配信者情報 - モバイル対応 */
+  .creator-info,
+  .following-info {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .creator-name,
+  .following-name {
+    font-size: 0.8125rem;
+  }
+
+  .creator-id {
+    font-size: 0.6875rem;
+  }
+
+  .creator-bio,
+  .following-bio {
+    font-size: 0.75rem;
+  }
+
+  .creator-stats {
+    font-size: 0.75rem;
+  }
+
+  /* フォローボタン - モバイル対応 */
+  .follow-button,
+  .following-button {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 0.3125rem 0.625rem;
+    font-size: 0.6875rem;
+    min-width: 80px;
   }
 }
