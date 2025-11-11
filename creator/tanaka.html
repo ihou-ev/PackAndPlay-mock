@@ -309,6 +309,82 @@
       font-weight: 600;
     }
 
+    /* 配信概要セクション */
+    .stream-description-section {
+      background: white;
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .stream-description-title {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      margin-bottom: 0.75rem;
+    }
+
+    .stream-description-content {
+      color: #2d1b3d;
+      font-size: 0.9375rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      position: relative;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .stream-description-content.collapsed {
+      max-height: 4.8rem; /* 約3行分 */
+    }
+
+    .stream-description-content.expanded {
+      max-height: none;
+    }
+
+    .stream-description-fade {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 2rem;
+      background: linear-gradient(to bottom, transparent, white);
+      pointer-events: none;
+    }
+
+    .stream-description-content.expanded + .stream-description-fade {
+      display: none;
+    }
+
+    .stream-description-toggle {
+      margin-top: 0.75rem;
+      background: transparent;
+      border: none;
+      color: #FF1B8D;
+      font-weight: 600;
+      font-size: 0.875rem;
+      cursor: pointer;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      transition: opacity 0.2s;
+    }
+
+    .stream-description-toggle:hover {
+      opacity: 0.8;
+    }
+
+    .stream-description-toggle svg {
+      width: 16px;
+      height: 16px;
+      transition: transform 0.3s ease;
+    }
+
+    .stream-description-toggle.expanded svg {
+      transform: rotate(180deg);
+    }
+
     /* アクションパネル */
     .action-panel {
       background: white;
@@ -749,6 +825,23 @@
         <div class="stream-duration" id="streamDuration">2:34:15</div>
       </div>
 
+      <!-- 配信概要 -->
+      <div class="stream-description-section" id="streamDescriptionSection" style="display: none;">
+        <h3 class="stream-description-title">配信概要</h3>
+        <div class="stream-description-wrapper" style="position: relative;">
+          <div class="stream-description-content collapsed" id="streamDescription">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <div class="stream-description-fade" id="streamDescriptionFade"></div>
+        </div>
+        <button class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
+          <span id="toggleText">もっと見る</span>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+      </div>
+
       <!-- アクションパネル -->
       <div class="action-panel">
         <div class="action-tabs">
@@ -831,6 +924,7 @@
       const player = document.getElementById('streamPlayer');
       const offline = document.getElementById('streamOffline');
       const infoBar = document.getElementById('streamInfoBar');
+      const descriptionSection = document.getElementById('streamDescriptionSection');
 
       if (creator.isLive && creator.streamUrl) {
         // 配信中の場合
@@ -839,6 +933,12 @@
         offline.style.display = 'none';
         infoBar.style.display = 'flex';
 
+        // 配信概要を表示
+        if (creator.streamDescription) {
+          setupStreamDescription(creator.streamDescription);
+          descriptionSection.style.display = 'block';
+        }
+
         // 視聴者数と配信時間を更新（モックデータ）
         updateStreamInfo();
       } else {
@@ -846,6 +946,58 @@
         player.style.display = 'none';
         offline.style.display = 'flex';
         infoBar.style.display = 'none';
+        descriptionSection.style.display = 'none';
+      }
+    }
+
+    // 配信概要のセットアップ
+    function setupStreamDescription(description) {
+      const descriptionElement = document.getElementById('streamDescription');
+      const toggleButton = document.getElementById('streamDescriptionToggle');
+      const fade = document.getElementById('streamDescriptionFade');
+
+      descriptionElement.textContent = description;
+
+      // 高さをチェックして、3行を超える場合はトグルボタンを表示
+      setTimeout(() => {
+        const lineHeight = parseFloat(getComputedStyle(descriptionElement).lineHeight);
+        const maxHeight = lineHeight * 3;
+
+        if (descriptionElement.scrollHeight > maxHeight) {
+          toggleButton.style.display = 'flex';
+          fade.style.display = 'block';
+        } else {
+          toggleButton.style.display = 'none';
+          fade.style.display = 'none';
+          descriptionElement.classList.remove('collapsed');
+          descriptionElement.classList.add('expanded');
+        }
+      }, 0);
+    }
+
+    // 配信概要の展開/折りたたみ
+    function toggleDescription() {
+      const descriptionElement = document.getElementById('streamDescription');
+      const toggleButton = document.getElementById('streamDescriptionToggle');
+      const toggleText = document.getElementById('toggleText');
+      const fade = document.getElementById('streamDescriptionFade');
+
+      const isExpanded = descriptionElement.classList.contains('expanded');
+
+      if (isExpanded) {
+        // 折りたたむ
+        descriptionElement.classList.remove('expanded');
+        descriptionElement.classList.add('collapsed');
+        toggleButton.classList.remove('expanded');
+        toggleText.textContent = 'もっと見る';
+        fade.style.display = 'block';
+      } else {
+        // 展開する
+        descriptionElement.classList.remove('collapsed');
+        descriptionElement.classList.add('expanded');
+        toggleButton.classList.add('expanded');
+        toggleText.textContent = '閉じる';
+        fade.style.display = 'none';
       }
     }
 
