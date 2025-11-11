@@ -13,121 +13,821 @@
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+  <style>
+    :root {
+      --stream-header-height: 56px;
+      --action-panel-height: 280px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: #f9fafb;
+      overflow-x: hidden;
+    }
+
+    /* ストリームヘッダー */
+    .stream-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--stream-header-height);
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 1rem;
+      z-index: 1000;
+    }
+
+    .stream-header-left {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .back-button {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+      padding: 0;
+    }
+
+    .back-button:hover {
+      background: #f3f4f6;
+    }
+
+    .back-button svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    .creator-mini-info {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .creator-mini-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    .creator-mini-name {
+      font-weight: 700;
+      font-size: 0.9375rem;
+      color: #2d1b3d;
+    }
+
+    .follow-button {
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      border: none;
+      background: #FF1B8D;
+      color: white;
+      font-weight: 700;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .follow-button:hover {
+      background: #e01677;
+      transform: translateY(-1px);
+    }
+
+    .follow-button.following {
+      background: white;
+      color: #6b7280;
+      border: 1px solid #d1d5db;
+    }
+
+    .follow-button.following:hover {
+      background: #fef2f2;
+      color: #ef4444;
+      border-color: #fecaca;
+    }
+
+    /* 配信プレイヤー */
+    .stream-container {
+      margin-top: var(--stream-header-height);
+      background: #000;
+      position: relative;
+    }
+
+    .stream-player-wrapper {
+      position: relative;
+      width: 100%;
+      padding-bottom: 56.25%; /* 16:9 aspect ratio */
+      background: #000;
+    }
+
+    .stream-player {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .stream-offline {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      gap: 1rem;
+    }
+
+    .stream-offline-icon {
+      font-size: 4rem;
+    }
+
+    .stream-offline-text {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    /* 配信情報バー */
+    .stream-info-bar {
+      background: white;
+      padding: 1rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .stream-info-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .live-badge {
+      background: #ef4444;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.375rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.375rem;
+    }
+
+    .live-badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: white;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.5;
+      }
+    }
+
+    .viewer-count {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    .stream-duration {
+      color: #6b7280;
+      font-size: 0.875rem;
+      font-weight: 600;
+    }
+
+    /* アクションパネル */
+    .action-panel {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .action-tabs {
+      display: flex;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .action-tab {
+      flex: 1;
+      padding: 1rem;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .action-tab:hover {
+      background: #f9fafb;
+    }
+
+    .action-tab.active {
+      color: #FF1B8D;
+      border-bottom-color: #FF1B8D;
+    }
+
+    .action-content {
+      display: none;
+      padding: 1rem;
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .action-content.active {
+      display: block;
+    }
+
+    /* カードグリッド */
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      gap: 0.75rem;
+    }
+
+    .card-item {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .card-item:hover {
+      border-color: #FF1B8D;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(255, 27, 141, 0.15);
+    }
+
+    .card-item.selected {
+      border-color: #FF1B8D;
+      background: #fef2f8;
+    }
+
+    .card-icon {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-name {
+      font-weight: 600;
+      font-size: 0.8125rem;
+      color: #2d1b3d;
+      margin-bottom: 0.25rem;
+    }
+
+    .card-price {
+      color: #FF1B8D;
+      font-weight: 700;
+      font-size: 0.875rem;
+    }
+
+    /* スプラッシュオプション */
+    .splash-options {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .splash-option {
+      background: white;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      padding: 1rem 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+    }
+
+    .splash-option:hover {
+      border-color: #FF1B8D;
+      transform: translateY(-2px);
+    }
+
+    .splash-option.selected {
+      border-color: #FF1B8D;
+      background: #fef2f8;
+    }
+
+    .splash-amount {
+      font-weight: 700;
+      font-size: 1.25rem;
+      color: #2d1b3d;
+      margin-bottom: 0.25rem;
+    }
+
+    .splash-label {
+      color: #6b7280;
+      font-size: 0.75rem;
+    }
+
+    .message-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.75rem;
+      font-size: 0.9375rem;
+      resize: vertical;
+      min-height: 80px;
+      font-family: inherit;
+      margin-bottom: 1rem;
+    }
+
+    .message-input:focus {
+      outline: none;
+      border-color: #FF1B8D;
+    }
+
+    .send-button {
+      width: 100%;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      border: none;
+      background: #FF1B8D;
+      color: white;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .send-button:hover {
+      background: #e01677;
+      transform: translateY(-1px);
+    }
+
+    .send-button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* パックセクション */
+    .packs-section {
+      padding: 2rem 1rem;
+      background: #f9fafb;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: #2d1b3d;
+      margin: 0;
+    }
+
+    .packs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+
+    .pack-card {
+      background: white;
+      border-radius: 1rem;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .pack-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    }
+
+    .pack-image {
+      aspect-ratio: 16 / 9;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+    }
+
+    .pack-content {
+      padding: 1.25rem;
+    }
+
+    .pack-name {
+      font-size: 1.125rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      margin-bottom: 0.5rem;
+    }
+
+    .pack-description {
+      color: #6b7280;
+      font-size: 0.875rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .pack-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pack-price {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #2d1b3d;
+    }
+
+    .buy-button {
+      padding: 0.625rem 1.5rem;
+      border-radius: 0.75rem;
+      border: none;
+      background: #FF1B8D;
+      color: white;
+      font-weight: 700;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .buy-button:hover {
+      background: #e01677;
+      transform: translateY(-1px);
+    }
+
+    /* モバイル最適化 */
+    @media (max-width: 768px) {
+      .packs-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .stream-info-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+      }
+
+      .stream-info-left {
+        width: 100%;
+        justify-content: space-between;
+      }
+    }
+
+    /* スムーススクロール */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* タッチフレンドリー */
+    button, .card-item, .splash-option, .pack-card {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
 </head>
 <body>
-  <!-- ヘッダー -->
-  <header>
-    <nav class="navbar container">
-      <a href="../index.html" class="logo">
-        🎴 Pack&Play
-      </a>
-      <ul class="nav-links">
-        <!-- JavaScriptで動的に生成 -->
-      </ul>
-    </nav>
-  </header>
-
-  <!-- メインコンテンツ -->
-  <main>
-    <!-- 配信者情報 -->
-    <section class="page-header">
-      <div class="container">
-        <div class="flex gap-3" style="align-items: flex-start;">
-          <div class="creator-avatar" style="width: 120px; height: 120px; font-size: 3rem;">
-            田
-          </div>
-          <div style="flex: 1;">
-            <div class="flex gap-2 mb-2" style="align-items: center;">
-              <h1 class="page-title" style="margin-bottom: 0;">田中太郎</h1>
-              <span class="badge badge-live">🔴 配信中</span>
-            </div>
-            <p class="page-description">いつも応援ありがとうございます！カードを使って配信を盛り上げてね！</p>
-            <div class="flex gap-3 mt-3">
-              <div>
-                <div style="color: var(--text-light); font-size: 0.875rem;">パック数</div>
-                <div style="font-size: 1.5rem; font-weight: 700;">3</div>
-              </div>
-              <div>
-                <div style="color: var(--text-light); font-size: 0.875rem;">総売上</div>
-                <div style="font-size: 1.5rem; font-weight: 700;">¥250,000</div>
-              </div>
-              <div>
-                <div style="color: var(--text-light); font-size: 0.875rem;">チャンネル</div>
-                <a href="https://youtube.com/@tanaka" target="_blank" class="btn btn-sm btn-secondary mt-1">
-                  YouTube で見る
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- パックリスト -->
-    <section style="padding: 3rem 0;">
-      <div class="container">
-        <h2 style="font-size: 1.5rem; font-weight: 700; margin-bottom: 2rem;">パック一覧</h2>
-
-        <div id="packGrid" class="grid grid-3">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- フッター -->
-  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
-    <div class="container">
-      <div class="flex-between">
-        <div>
-          <div class="logo mb-2">🎴 Pack&Play</div>
-          <p style="color: var(--text-light); font-size: 0.875rem;">
-            © 2025 Pack&Play. All rights reserved.
-          </p>
-        </div>
-        <div class="flex gap-3">
-          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
-        </div>
+  <!-- ストリームヘッダー -->
+  <header class="stream-header">
+    <div class="stream-header-left">
+      <button class="back-button" onclick="history.back()">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      <div class="creator-mini-info">
+        <div class="creator-mini-avatar" id="miniAvatar">田</div>
+        <div class="creator-mini-name" id="miniName">田中太郎</div>
       </div>
     </div>
-  </footer>
+    <button class="follow-button" id="followButton" onclick="toggleFollowCreator()">
+      フォローする
+    </button>
+  </header>
+
+  <!-- 配信プレイヤー -->
+  <div class="stream-container">
+    <div class="stream-player-wrapper">
+      <!-- 配信中の場合はiframeを表示 -->
+      <iframe
+        id="streamPlayer"
+        class="stream-player"
+        src=""
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+        style="display: none;">
+      </iframe>
+
+      <!-- 配信していない場合 -->
+      <div class="stream-offline" id="streamOffline">
+        <div class="stream-offline-icon">📺</div>
+        <div class="stream-offline-text">現在配信していません</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 配信情報バー -->
+  <div class="stream-info-bar" id="streamInfoBar" style="display: none;">
+    <div class="stream-info-left">
+      <div class="live-badge">LIVE</div>
+      <div class="viewer-count" id="viewerCount">1,234 人が視聴中</div>
+    </div>
+    <div class="stream-duration" id="streamDuration">2:34:15</div>
+  </div>
+
+  <!-- アクションパネル -->
+  <div class="action-panel">
+    <div class="action-tabs">
+      <button class="action-tab active" onclick="switchActionTab('cards')">カード</button>
+      <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
+    </div>
+
+    <!-- カードタブ -->
+    <div class="action-content active" id="cardsContent">
+      <div class="cards-grid" id="cardsGrid">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
+    </div>
+
+    <!-- スプラッシュタブ -->
+    <div class="action-content" id="splashContent">
+      <div class="splash-options" id="splashOptions">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
+      <textarea
+        class="message-input"
+        id="splashMessage"
+        placeholder="メッセージを入力...（任意）"
+        maxlength="200"></textarea>
+      <button class="send-button" id="sendSplashButton" onclick="sendSplash()" disabled>
+        スプラッシュを送る
+      </button>
+    </div>
+  </div>
+
+  <!-- パックセクション -->
+  <section class="packs-section">
+    <div class="section-header">
+      <h2 class="section-title">カードパック</h2>
+    </div>
+    <div class="packs-grid" id="packsGrid">
+      <!-- JavaScriptで動的に生成 -->
+    </div>
+  </section>
 
   <script src="../js/mock-data.js"></script>
   <script src="../js/main.js"></script>
   <script>
-    // 配信者のslugを取得（実際のアプリではURLから取得）
+    // 配信者情報を取得
     const creatorSlug = 'tanaka';
     const creator = getCreatorBySlug(creatorSlug);
     const creatorPacks = getPacksByCreator(creatorSlug);
 
+    // フォロー状態を確認
+    function checkFollowStatus() {
+      const followedIds = getFollowedCreators();
+      const isFollowing = followedIds.includes(creator.id);
+      const followButton = document.getElementById('followButton');
+
+      if (isFollowing) {
+        followButton.textContent = 'フォロー中';
+        followButton.classList.add('following');
+      } else {
+        followButton.textContent = 'フォローする';
+        followButton.classList.remove('following');
+      }
+    }
+
+    // フォロー切り替え
+    function toggleFollowCreator() {
+      toggleFollow(creator.id);
+      checkFollowStatus();
+    }
+
+    // 配信プレイヤーの設定
+    function setupStreamPlayer() {
+      const player = document.getElementById('streamPlayer');
+      const offline = document.getElementById('streamOffline');
+      const infoBar = document.getElementById('streamInfoBar');
+
+      if (creator.isLive && creator.streamUrl) {
+        // 配信中の場合
+        player.src = creator.streamUrl;
+        player.style.display = 'block';
+        offline.style.display = 'none';
+        infoBar.style.display = 'flex';
+
+        // 視聴者数と配信時間を更新（モックデータ）
+        updateStreamInfo();
+      } else {
+        // 配信していない場合
+        player.style.display = 'none';
+        offline.style.display = 'flex';
+        infoBar.style.display = 'none';
+      }
+    }
+
+    // 配信情報を更新
+    function updateStreamInfo() {
+      const viewerCount = document.getElementById('viewerCount');
+      const streamDuration = document.getElementById('streamDuration');
+
+      // モックデータ
+      viewerCount.textContent = `${Math.floor(Math.random() * 5000) + 500} 人が視聴中`;
+
+      // 配信時間をシミュレート
+      let seconds = Math.floor(Math.random() * 10000);
+      setInterval(() => {
+        seconds++;
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+        streamDuration.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      }, 1000);
+    }
+
+    // カードを表示
+    function renderCards() {
+      const grid = document.getElementById('cardsGrid');
+
+      // モックカードデータ
+      const cards = [
+        { id: 1, name: 'いいね', icon: '👍', price: 100 },
+        { id: 2, name: 'ハート', icon: '❤️', price: 200 },
+        { id: 3, name: '拍手', icon: '👏', price: 150 },
+        { id: 4, name: '応援', icon: '📣', price: 300 },
+        { id: 5, name: '花火', icon: '🎆', price: 500 },
+        { id: 6, name: 'ギフト', icon: '🎁', price: 1000 }
+      ];
+
+      grid.innerHTML = cards.map(card => `
+        <div class="card-item" onclick="selectCard(${card.id})">
+          <div class="card-icon">${card.icon}</div>
+          <div class="card-name">${card.name}</div>
+          <div class="card-price">¥${card.price}</div>
+        </div>
+      `).join('');
+    }
+
+    let selectedCard = null;
+
+    function selectCard(cardId) {
+      selectedCard = cardId;
+
+      // 選択状態を更新
+      document.querySelectorAll('.card-item').forEach(item => {
+        item.classList.remove('selected');
+      });
+      event.currentTarget.classList.add('selected');
+
+      // 実際のアプリでは購入処理を実装
+      alert('カードが選択されました！実際のアプリでは購入処理が実行されます。');
+    }
+
+    // スプラッシュオプションを表示
+    function renderSplashOptions() {
+      const options = document.getElementById('splashOptions');
+
+      const splashAmounts = [
+        { amount: 100, label: 'スパーク' },
+        { amount: 500, label: 'スパーク' },
+        { amount: 1000, label: 'スパーク' },
+        { amount: 2000, label: 'スパーク' },
+        { amount: 5000, label: 'スパーク' },
+        { amount: 10000, label: 'スパーク' }
+      ];
+
+      options.innerHTML = splashAmounts.map((opt, index) => `
+        <div class="splash-option" onclick="selectSplash(${opt.amount}, ${index})">
+          <div class="splash-amount">¥${opt.amount.toLocaleString()}</div>
+          <div class="splash-label">${opt.label}</div>
+        </div>
+      `).join('');
+    }
+
+    let selectedSplashAmount = null;
+
+    function selectSplash(amount, index) {
+      selectedSplashAmount = amount;
+
+      // 選択状態を更新
+      document.querySelectorAll('.splash-option').forEach(item => {
+        item.classList.remove('selected');
+      });
+      document.querySelectorAll('.splash-option')[index].classList.add('selected');
+
+      // ボタンを有効化
+      document.getElementById('sendSplashButton').disabled = false;
+    }
+
+    function sendSplash() {
+      const message = document.getElementById('splashMessage').value;
+
+      if (!selectedSplashAmount) {
+        alert('スプラッシュの金額を選択してください');
+        return;
+      }
+
+      // 実際のアプリでは決済処理を実装
+      alert(`¥${selectedSplashAmount.toLocaleString()} のスプラッシュを送信しました！\nメッセージ: ${message || 'なし'}`);
+
+      // リセット
+      selectedSplashAmount = null;
+      document.getElementById('splashMessage').value = '';
+      document.getElementById('sendSplashButton').disabled = true;
+      document.querySelectorAll('.splash-option').forEach(item => {
+        item.classList.remove('selected');
+      });
+    }
+
+    // タブ切り替え
+    function switchActionTab(tab) {
+      // タブボタンの状態を更新
+      document.querySelectorAll('.action-tab').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      event.currentTarget.classList.add('active');
+
+      // コンテンツの表示を切り替え
+      document.querySelectorAll('.action-content').forEach(content => {
+        content.classList.remove('active');
+      });
+
+      if (tab === 'cards') {
+        document.getElementById('cardsContent').classList.add('active');
+      } else if (tab === 'splash') {
+        document.getElementById('splashContent').classList.add('active');
+      }
+    }
+
+    // パックを表示
     function renderPacks() {
-      const grid = document.getElementById('packGrid');
+      const grid = document.getElementById('packsGrid');
 
       if (creatorPacks.length === 0) {
         grid.innerHTML = `
-          <div class="empty-state" style="grid-column: 1 / -1;">
-            <div class="empty-state-icon">📦</div>
-            <div class="empty-state-text">まだパックがありません</div>
+          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #9ca3af;">
+            📦 パックがありません
           </div>
         `;
         return;
       }
 
       grid.innerHTML = creatorPacks.map(pack => `
-        <div class="card pack-card" onclick="window.location.href='packs/pack-detail.html?id=${pack.id}'">
-          <div class="pack-card-image">
-            📦
-          </div>
-          <div class="card-body">
-            <div class="pack-card-title">${pack.name}</div>
-            <p style="color: var(--text-light); font-size: 0.875rem; margin: 0.5rem 0;">
-              ${pack.description}
-            </p>
-            <div class="flex-between" style="align-items: center; margin-top: 1rem;">
-              <div class="pack-card-price">${formatPrice(pack.price)}</div>
-              <button class="btn btn-primary btn-sm" onclick="event.stopPropagation(); purchasePack(${pack.id})">
+        <div class="pack-card" onclick="viewPack(${pack.id})">
+          <div class="pack-image">📦</div>
+          <div class="pack-content">
+            <div class="pack-name">${pack.name}</div>
+            <p class="pack-description">${pack.description}</p>
+            <div class="pack-footer">
+              <div class="pack-price">¥${pack.price.toLocaleString()}</div>
+              <button class="buy-button" onclick="event.stopPropagation(); purchasePack(${pack.id})">
                 購入する
               </button>
             </div>
@@ -136,20 +836,32 @@
       `).join('');
     }
 
-    function purchasePack(packId) {
-      showLoading();
-      setTimeout(() => {
-        hideLoading();
-        showToast('購入が完了しました！', 'success');
-        // パック開封画面へ遷移
-        setTimeout(() => {
-          window.location.href = `packs/pack-open.html?id=${packId}`;
-        }, 1500);
-      }, 1500);
+    function viewPack(packId) {
+      window.location.href = `../packs/pack-detail.html?id=${packId}`;
     }
 
-    // 初期表示
-    renderPacks();
+    function purchasePack(packId) {
+      // 実際のアプリでは決済処理を実装
+      if (confirm('このパックを購入しますか？')) {
+        alert('購入処理を開始します...');
+        // 購入後はpack-open.htmlへ遷移
+        setTimeout(() => {
+          window.location.href = `../packs/pack-open.html?id=${packId}`;
+        }, 1000);
+      }
+    }
+
+    // 初期化
+    function init() {
+      checkFollowStatus();
+      setupStreamPlayer();
+      renderCards();
+      renderSplashOptions();
+      renderPacks();
+    }
+
+    // ページ読み込み時に初期化
+    init();
   </script>
 </body>
 </html>
