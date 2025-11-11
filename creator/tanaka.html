@@ -1294,8 +1294,19 @@
       event.preventDefault();
       event.stopPropagation();
 
-      // 確認ダイアログ
-      if (confirm(`${creator.name}のフォローを解除しますか？`)) {
+      // カスタムモーダルを表示
+      showUnfollowModal();
+    }
+
+    // フォロー解除モーダルを表示
+    function showUnfollowModal() {
+      const modal = document.getElementById('unfollowModal');
+      const message = document.getElementById('unfollowModalMessage');
+      const confirmButton = document.getElementById('unfollowConfirmButton');
+
+      message.textContent = `${creator.name}のフォローを解除しますか？`;
+
+      confirmButton.onclick = function() {
         toggleFollow(creator.id);
 
         // ボタンを「フォローする」に変更
@@ -1306,7 +1317,17 @@
           button.onclick = (e) => followCreator(e);
           button.blur();
         }
-      }
+
+        closeUnfollowModal();
+      };
+
+      modal.classList.add('active');
+    }
+
+    // フォロー解除モーダルを閉じる
+    function closeUnfollowModal() {
+      const modal = document.getElementById('unfollowModal');
+      modal.classList.remove('active');
     }
 
     // フォローする
@@ -1747,5 +1768,17 @@
     // ページ読み込み時に初期化
     init();
   </script>
+
+  <!-- フォロー解除確認モーダル -->
+  <div class="confirm-modal" id="unfollowModal">
+    <div class="confirm-modal-content">
+      <div class="confirm-modal-title">フォロー解除の確認</div>
+      <div class="confirm-modal-message" id="unfollowModalMessage"></div>
+      <div class="confirm-modal-buttons">
+        <button type="button" class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
+        <button type="button" class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
