@@ -309,20 +309,7 @@
       font-weight: 600;
     }
 
-    /* 配信概要セクション */
-    .stream-description-section {
-      background: white;
-      padding: 1.5rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .stream-description-title {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #2d1b3d;
-      margin-bottom: 0.75rem;
-    }
-
+    /* 配信概要（タブ内） */
     .stream-description-content {
       color: #2d1b3d;
       font-size: 0.9375rem;
@@ -332,6 +319,7 @@
       position: relative;
       overflow: hidden;
       transition: max-height 0.3s ease;
+      padding-bottom: 0.5rem;
     }
 
     .stream-description-content.collapsed {
@@ -340,6 +328,10 @@
 
     .stream-description-content.expanded {
       max-height: none;
+    }
+
+    .stream-description-wrapper {
+      position: relative;
     }
 
     .stream-description-fade {
@@ -357,7 +349,7 @@
     }
 
     .stream-description-toggle {
-      margin-top: 0.75rem;
+      margin-top: 0.5rem;
       background: transparent;
       border: none;
       color: #FF1B8D;
@@ -383,6 +375,13 @@
 
     .stream-description-toggle.expanded svg {
       transform: rotate(180deg);
+    }
+
+    .stream-description-empty {
+      color: #9ca3af;
+      font-size: 0.875rem;
+      text-align: center;
+      padding: 2rem 1rem;
     }
 
     /* アクションパネル */
@@ -1059,33 +1058,36 @@
         <div class="stream-duration" id="streamDuration">2:34:15</div>
       </div>
 
-      <!-- 配信概要 -->
-      <div class="stream-description-section" id="streamDescriptionSection" style="display: none;">
-        <h3 class="stream-description-title">配信概要</h3>
-        <div class="stream-description-wrapper" style="position: relative;">
-          <div class="stream-description-content collapsed" id="streamDescription">
-            <!-- JavaScriptで動的に生成 -->
-          </div>
-          <div class="stream-description-fade" id="streamDescriptionFade"></div>
-        </div>
-        <button class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
-          <span id="toggleText">もっと見る</span>
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-      </div>
-
       <!-- アクションパネル -->
       <div class="action-panel">
         <div class="action-tabs">
-          <button class="action-tab active" onclick="switchActionTab('cards')">カード</button>
+          <button class="action-tab active" id="overviewTab" onclick="switchActionTab('overview')">概要</button>
+          <button class="action-tab" onclick="switchActionTab('cards')">カード</button>
           <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
           <button class="action-tab" onclick="switchActionTab('packs')">パック</button>
         </div>
 
+        <!-- 概要タブ -->
+        <div class="action-content active" id="overviewContent">
+          <div class="stream-description-wrapper">
+            <div class="stream-description-content collapsed" id="streamDescription">
+              <!-- JavaScriptで動的に生成 -->
+            </div>
+            <div class="stream-description-fade" id="streamDescriptionFade"></div>
+          </div>
+          <button class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
+            <span id="toggleText">もっと見る</span>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          <div class="stream-description-empty" id="streamDescriptionEmpty" style="display: none;">
+            配信概要はありません
+          </div>
+        </div>
+
         <!-- カードタブ -->
-        <div class="action-content active" id="cardsContent">
+        <div class="action-content" id="cardsContent">
           <div class="cards-grid" id="cardsGrid">
             <!-- JavaScriptで動的に生成 -->
           </div>
@@ -1205,7 +1207,6 @@
       const player = document.getElementById('streamPlayer');
       const offline = document.getElementById('streamOffline');
       const infoBar = document.getElementById('streamInfoBar');
-      const descriptionSection = document.getElementById('streamDescriptionSection');
 
       if (creator.isLive && creator.streamUrl) {
         // 配信中の場合
@@ -1214,10 +1215,11 @@
         offline.style.display = 'none';
         infoBar.style.display = 'flex';
 
-        // 配信概要を表示
+        // 配信概要を設定
         if (creator.streamDescription) {
           setupStreamDescription(creator.streamDescription);
-          descriptionSection.style.display = 'block';
+        } else {
+          showEmptyDescription();
         }
 
         // 視聴者数と配信時間を更新（モックデータ）
@@ -1227,8 +1229,16 @@
         player.style.display = 'none';
         offline.style.display = 'flex';
         infoBar.style.display = 'none';
-        descriptionSection.style.display = 'none';
+        showEmptyDescription();
       }
+    }
+
+    // 空の概要表示
+    function showEmptyDescription() {
+      document.getElementById('streamDescription').style.display = 'none';
+      document.getElementById('streamDescriptionToggle').style.display = 'none';
+      document.getElementById('streamDescriptionFade').style.display = 'none';
+      document.getElementById('streamDescriptionEmpty').style.display = 'block';
     }
 
     // 配信概要のセットアップ
@@ -1236,8 +1246,11 @@
       const descriptionElement = document.getElementById('streamDescription');
       const toggleButton = document.getElementById('streamDescriptionToggle');
       const fade = document.getElementById('streamDescriptionFade');
+      const emptyElement = document.getElementById('streamDescriptionEmpty');
 
       descriptionElement.textContent = description;
+      descriptionElement.style.display = 'block';
+      emptyElement.style.display = 'none';
 
       // 高さをチェックして、3行を超える場合はトグルボタンを表示
       setTimeout(() => {
@@ -1428,7 +1441,9 @@
         content.classList.remove('active');
       });
 
-      if (tab === 'cards') {
+      if (tab === 'overview') {
+        document.getElementById('overviewContent').classList.add('active');
+      } else if (tab === 'cards') {
         document.getElementById('cardsContent').classList.add('active');
       } else if (tab === 'splash') {
         document.getElementById('splashContent').classList.add('active');
