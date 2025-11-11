@@ -495,9 +495,16 @@
           const sparks = creator.sparksConsumed ? creator.sparksConsumed[currentPeriod] : 0;
           const isTopThree = rank <= 3;
 
+          // ランキング番号のクラスを決定
+          let rankClass = '';
+          if (rank === 1) rankClass = ' ranking-number-gold';
+          else if (rank === 2) rankClass = ' ranking-number-silver';
+          else if (rank === 3) rankClass = ' ranking-number-bronze';
+          else if (isTopThree) rankClass = ' ranking-number-top3';
+
           return `
             <div class="creator-card ranking-card${isTopThree ? ' ranking-top3' : ''}" id="ranking-creator-${creator.id}">
-              <div class="ranking-number${isTopThree ? ' ranking-number-top3' : ''}">${rank}</div>
+              <div class="ranking-number${rankClass}">${rank}</div>
               <a href="creator/${creator.slug}.html" class="creator-card-link">
                 <div class="creator-avatar">
                   ${creator.name.charAt(0)}

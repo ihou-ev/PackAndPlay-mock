@@ -1233,6 +1233,25 @@ header {
   font-size: 2rem;
 }
 
+/* 1位・2位・3位の色 */
+.ranking-number-gold {
+  font-size: 2rem;
+  color: #FFD700;
+  font-weight: 900;
+}
+
+.ranking-number-silver {
+  font-size: 2rem;
+  color: #C0C0C0;
+  font-weight: 900;
+}
+
+.ranking-number-bronze {
+  font-size: 2rem;
+  color: #CD7F32;
+  font-weight: 900;
+}
+
 .sparks-consumed-top3 {
   font-size: 1.125rem;
   font-weight: 600;
