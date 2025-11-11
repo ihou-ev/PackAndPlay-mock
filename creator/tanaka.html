@@ -560,72 +560,86 @@
     .packs-grid {
       display: grid;
       grid-template-columns: 1fr;
-      gap: 1rem;
+      gap: 0.75rem;
     }
 
     .pack-card {
       background: white;
       border: 1px solid #e5e7eb;
-      border-radius: 1rem;
+      border-radius: 0.75rem;
       overflow: hidden;
       transition: all 0.2s;
       cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .pack-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
     }
 
     .pack-image {
-      aspect-ratio: 16 / 9;
+      width: 80px;
+      height: 80px;
+      flex-shrink: 0;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 4rem;
+      font-size: 2rem;
     }
 
     .pack-content {
-      padding: 1.25rem;
+      padding: 0.75rem 0.75rem 0.75rem 0;
+      flex: 1;
+      min-width: 0;
     }
 
     .pack-name {
-      font-size: 1.125rem;
+      font-size: 1rem;
       font-weight: 700;
       color: #2d1b3d;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
     .pack-description {
       color: #6b7280;
-      font-size: 0.875rem;
-      margin-bottom: 1rem;
-      line-height: 1.5;
+      font-size: 0.8125rem;
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .pack-footer {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 0.75rem;
     }
 
     .pack-price {
-      font-size: 1.5rem;
+      font-size: 1.125rem;
       font-weight: 800;
       color: #2d1b3d;
+      white-space: nowrap;
     }
 
     .buy-button {
-      padding: 0.75rem 1.5rem;
-      border-radius: 0.75rem;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
       border: none;
       background: #FF1B8D;
       color: white;
       font-weight: 700;
-      font-size: 0.9375rem;
+      font-size: 0.8125rem;
       cursor: pointer;
       transition: all 0.2s;
+      white-space: nowrap;
     }
 
     .buy-button:hover {
