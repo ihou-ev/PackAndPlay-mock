@@ -1277,24 +1277,30 @@
     document.getElementById('creatorName').textContent = creator.name;
     document.getElementById('creatorBio').textContent = creator.bio;
 
+    // ボタンの状態を更新
+    function updateFollowButtonState(isFollowing) {
+      const button = document.getElementById('followButton');
+      if (button) {
+        if (isFollowing) {
+          button.className = 'follow-button following';
+          button.innerHTML = '<span>フォロー中</span>';
+        } else {
+          button.className = 'follow-button';
+          button.innerHTML = '<span>フォローする</span>';
+        }
+        button.blur();
+      }
+    }
+
     // フォロー状態を確認
     function checkFollowStatus() {
       const followedIds = getFollowedCreators();
       const isFollowing = followedIds.includes(creator.id);
-      const followButton = document.getElementById('followButton');
-      const buttonSpan = followButton.querySelector('span');
-
-      if (isFollowing) {
-        buttonSpan.textContent = 'フォロー中';
-        followButton.classList.add('following');
-      } else {
-        buttonSpan.textContent = 'フォローする';
-        followButton.classList.remove('following');
-      }
+      updateFollowButtonState(isFollowing);
     }
 
     // フォロー切り替え
-    function toggleFollowCreator(event) {
+    window.toggleFollowCreator = function(event) {
       event.preventDefault();
       event.stopPropagation();
 
@@ -1305,18 +1311,14 @@
         // フォロー解除確認
         if (confirm(`${creator.name}のフォローを解除しますか？`)) {
           toggleFollow(creator.id);
-          checkFollowStatus();
+          updateFollowButtonState(false);
         }
       } else {
         // フォローする
         toggleFollow(creator.id);
-        checkFollowStatus();
-        showToast('フォローしました', 'success');
+        updateFollowButtonState(true);
       }
-
-      // ボタンのフォーカスを外す
-      document.getElementById('followButton').blur();
-    }
+    };
 
     // 配信プレイヤーの設定
     function setupStreamPlayer() {
