@@ -556,19 +556,7 @@
       transform: none;
     }
 
-    /* パックセクション */
-    .packs-section {
-      padding: 2rem 1.5rem;
-      background: white;
-    }
-
-    .section-title {
-      font-size: 1.375rem;
-      font-weight: 800;
-      color: #2d1b3d;
-      margin: 0 0 1.5rem 0;
-    }
-
+    /* パックグリッド */
     .packs-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -729,10 +717,6 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 0.75rem;
       }
-
-      .packs-section {
-        padding: 1.5rem 1rem;
-      }
     }
 
     /* スムーススクロール */
@@ -847,6 +831,7 @@
         <div class="action-tabs">
           <button class="action-tab active" onclick="switchActionTab('cards')">カード</button>
           <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
+          <button class="action-tab" onclick="switchActionTab('packs')">パック</button>
         </div>
 
         <!-- カードタブ -->
@@ -870,15 +855,14 @@
             スプラッシュを送る
           </button>
         </div>
-      </div>
 
-      <!-- パックセクション -->
-      <section class="packs-section">
-        <h2 class="section-title">カードパック</h2>
-        <div class="packs-grid" id="packsGrid">
-          <!-- JavaScriptで動的に生成 -->
+        <!-- パックタブ -->
+        <div class="action-content" id="packsContent">
+          <div class="packs-grid" id="packsGrid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
         </div>
-      </section>
+      </div>
     </main>
   </div>
 
@@ -1131,6 +1115,8 @@
         document.getElementById('cardsContent').classList.add('active');
       } else if (tab === 'splash') {
         document.getElementById('splashContent').classList.add('active');
+      } else if (tab === 'packs') {
+        document.getElementById('packsContent').classList.add('active');
       }
     }
 
