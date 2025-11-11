@@ -590,6 +590,12 @@
       background: rgba(255, 255, 255, 0.2);
     }
 
+    .splash-preview-input:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
     /* 金額ごとのプレビュー色 */
     .splash-preview[data-tier="1"]::before {
       background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
@@ -1191,8 +1197,9 @@
               <textarea
                 class="splash-preview-input"
                 id="splashMessage"
-                placeholder="メッセージを入力...（任意）"
-                maxlength="200"></textarea>
+                placeholder="メッセージを送るには200スパーク以上必要です"
+                maxlength="0"
+                disabled></textarea>
             </div>
           </div>
 
@@ -1454,16 +1461,44 @@
       return 0;
     }
 
+    // 金額に応じたメッセージ文字数制限を取得
+    function getMessageMaxLength(amount) {
+      if (amount <= 100) return 0; // メッセージ不可
+      if (amount < 1000) return 50;
+      if (amount < 5000) return 100;
+      if (amount < 20000) return 150;
+      return 200;
+    }
+
     // プレビュー更新
     function updatePreview(amount) {
       selectedSplashAmount = amount;
       const tier = getAmountTier(amount);
+      const maxLength = getMessageMaxLength(amount);
 
       const preview = document.getElementById('splashPreview');
       const amountDisplay = document.getElementById('splashPreviewAmount');
+      const messageInput = document.getElementById('splashMessage');
 
       preview.setAttribute('data-tier', tier);
       amountDisplay.textContent = `${amount.toLocaleString()}スパーク`;
+
+      // メッセージ入力の制御
+      if (amount <= 100) {
+        messageInput.disabled = true;
+        messageInput.value = '';
+        messageInput.placeholder = 'メッセージを送るには200スパーク以上必要です';
+        messageInput.maxLength = 0;
+      } else {
+        messageInput.disabled = false;
+        messageInput.placeholder = `メッセージを入力...（最大${maxLength}文字）`;
+        messageInput.maxLength = maxLength;
+
+        // 既存のメッセージが新しい制限を超えている場合は切り詰める
+        if (messageInput.value.length > maxLength) {
+          messageInput.value = messageInput.value.substring(0, maxLength);
+        }
+      }
     }
 
     // スライダーから更新
