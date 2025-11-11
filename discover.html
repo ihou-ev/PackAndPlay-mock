@@ -387,23 +387,21 @@
 
       <!-- 全体の一覧タブコンテンツ -->
       <div class="tab-content" id="allListContent">
-        <!-- 検索とソート -->
-        <div class="search-filter-section">
-          <div class="search-box">
-            <input
-              type="search"
-              id="searchInput"
-              placeholder="配信者を検索..."
-              class="search-input"
-            >
-          </div>
-          <div class="filter-buttons">
-            <select id="sortSelect" class="sort-select" onchange="sortCreators()">
-              <option value="followers">フォロワー数順</option>
-              <option value="name">名前順</option>
-              <option value="live">配信中</option>
-            </select>
-          </div>
+        <!-- 検索ボックス -->
+        <div class="search-box-container">
+          <input
+            type="search"
+            id="searchInput"
+            placeholder="配信者を検索..."
+            class="search-input"
+          >
+        </div>
+
+        <!-- ソートボタン -->
+        <div class="sub-filter-container">
+          <button class="sub-filter-btn active" id="followersBtn" onclick="changeSortBy('followers')">フォロワー数順</button>
+          <button class="sub-filter-btn" id="nameBtn" onclick="changeSortBy('name')">名前順</button>
+          <button class="sub-filter-btn" id="liveBtn" onclick="changeSortBy('live')">配信中</button>
         </div>
 
         <!-- 配信者リスト -->
@@ -542,8 +540,14 @@
       }
 
       // ソート変更（全体の一覧用）
-      window.sortCreators = function() {
-        currentSort = document.getElementById('sortSelect').value;
+      window.changeSortBy = function(sortType) {
+        currentSort = sortType;
+
+        // ボタンのアクティブ状態を更新
+        ['followers', 'name', 'live'].forEach(type => {
+          document.getElementById(type + 'Btn').classList.toggle('active', type === sortType);
+        });
+
         renderCreators();
       };
 

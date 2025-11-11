@@ -1142,6 +1142,28 @@ header {
   display: block;
 }
 
+/* 検索ボックスコンテナ */
+.search-box-container {
+  padding: 1rem;
+  background: white;
+}
+
+.search-box-container .search-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.search-box-container .search-input:focus {
+  outline: none;
+  border-color: #FF1B8D;
+  box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+}
+
 /* サブフィルター（ランキング期間など） */
 .sub-filter-container {
   display: flex;
@@ -1149,6 +1171,7 @@ header {
   justify-content: flex-end;
   padding: 1rem;
   background: white;
+  border-top: 1px solid #f3f4f6;
 }
 
 .sub-filter-btn {
