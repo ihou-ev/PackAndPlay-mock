@@ -258,44 +258,7 @@
       display: none;
     }
 
-    /* モバイルメニューボタン */
-    .mobile-menu-button {
-      display: none;
-      position: fixed;
-      top: 0.75rem;
-      left: 0.75rem;
-      z-index: 1001;
-      width: 28px;
-      height: 28px;
-      background: rgba(45, 27, 61, 0.6);
-      border: none;
-      border-radius: 0.25rem;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
-    }
-
-    .mobile-menu-button svg {
-      width: 16px;
-      height: 16px;
-      color: white;
-    }
-
-    .mobile-menu-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 99;
-    }
-
-    .mobile-menu-overlay.active {
-      display: block;
-    }
+    /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
 
     .sidebar.mobile-active {
       transform: translateX(0);
@@ -401,7 +364,7 @@
   <!-- モバイルメニューボタン -->
   <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
     </svg>
   </button>
 
