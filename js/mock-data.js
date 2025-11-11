@@ -12,7 +12,13 @@ const creators = [
     isLive: true,
     packCount: 3,
     totalSales: 250000,
-    followerCount: 15200
+    followerCount: 15200,
+    sparksConsumed: {
+      today: 1200,
+      week: 8500,
+      month: 35000,
+      year: 250000
+    }
   },
   {
     id: 2,
@@ -24,7 +30,13 @@ const creators = [
     isLive: false,
     packCount: 5,
     totalSales: 500000,
-    followerCount: 32800
+    followerCount: 32800,
+    sparksConsumed: {
+      today: 2500,
+      week: 15000,
+      month: 65000,
+      year: 500000
+    }
   },
   {
     id: 3,
@@ -36,7 +48,13 @@ const creators = [
     isLive: true,
     packCount: 2,
     totalSales: 180000,
-    followerCount: 12500
+    followerCount: 12500,
+    sparksConsumed: {
+      today: 800,
+      week: 5500,
+      month: 25000,
+      year: 180000
+    }
   },
   {
     id: 4,
@@ -48,7 +66,13 @@ const creators = [
     isLive: false,
     packCount: 4,
     totalSales: 320000,
-    followerCount: 28400
+    followerCount: 28400,
+    sparksConsumed: {
+      today: 1800,
+      week: 12000,
+      month: 48000,
+      year: 320000
+    }
   },
   {
     id: 5,
@@ -60,7 +84,13 @@ const creators = [
     isLive: true,
     packCount: 3,
     totalSales: 280000,
-    followerCount: 19700
+    followerCount: 19700,
+    sparksConsumed: {
+      today: 1500,
+      week: 9000,
+      month: 38000,
+      year: 280000
+    }
   },
   {
     id: 6,
@@ -72,7 +102,13 @@ const creators = [
     isLive: false,
     packCount: 6,
     totalSales: 650000,
-    followerCount: 45600
+    followerCount: 45600,
+    sparksConsumed: {
+      today: 3000,
+      week: 20000,
+      month: 85000,
+      year: 650000
+    }
   },
   {
     id: 7,
@@ -84,7 +120,13 @@ const creators = [
     isLive: true,
     packCount: 4,
     totalSales: 380000,
-    followerCount: 23100
+    followerCount: 23100,
+    sparksConsumed: {
+      today: 2000,
+      week: 13500,
+      month: 55000,
+      year: 380000
+    }
   },
   {
     id: 8,
@@ -96,7 +138,13 @@ const creators = [
     isLive: false,
     packCount: 7,
     totalSales: 720000,
-    followerCount: 58900
+    followerCount: 58900,
+    sparksConsumed: {
+      today: 3500,
+      week: 25000,
+      month: 98000,
+      year: 720000
+    }
   },
   {
     id: 9,
@@ -108,7 +156,13 @@ const creators = [
     isLive: true,
     packCount: 2,
     totalSales: 150000,
-    followerCount: 8600
+    followerCount: 8600,
+    sparksConsumed: {
+      today: 900,
+      week: 6000,
+      month: 22000,
+      year: 150000
+    }
   },
   {
     id: 10,
@@ -120,7 +174,13 @@ const creators = [
     isLive: false,
     packCount: 5,
     totalSales: 480000,
-    followerCount: 37200
+    followerCount: 37200,
+    sparksConsumed: {
+      today: 2200,
+      week: 14000,
+      month: 60000,
+      year: 480000
+    }
   },
   {
     id: 11,
@@ -132,7 +192,13 @@ const creators = [
     isLive: true,
     packCount: 3,
     totalSales: 220000,
-    followerCount: 14800
+    followerCount: 14800,
+    sparksConsumed: {
+      today: 1100,
+      week: 7500,
+      month: 32000,
+      year: 220000
+    }
   },
   {
     id: 12,
@@ -144,7 +210,13 @@ const creators = [
     isLive: false,
     packCount: 6,
     totalSales: 590000,
-    followerCount: 42300
+    followerCount: 42300,
+    sparksConsumed: {
+      today: 2800,
+      week: 18000,
+      month: 75000,
+      year: 590000
+    }
   },
   {
     id: 13,
@@ -156,7 +228,13 @@ const creators = [
     isLive: false,
     packCount: 4,
     totalSales: 340000,
-    followerCount: 26700
+    followerCount: 26700,
+    sparksConsumed: {
+      today: 1600,
+      week: 11000,
+      month: 45000,
+      year: 340000
+    }
   }
 ];
 

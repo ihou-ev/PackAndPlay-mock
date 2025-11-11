@@ -357,34 +357,64 @@
         <p class="discover-description">お気に入りの配信者を見つけて、カードパックで応援しよう</p>
       </div>
 
-      <!-- 検索とフィルター -->
-      <div class="search-filter-section">
-        <div class="search-box">
-          <input
-            type="search"
-            id="searchInput"
-            placeholder="配信者を検索..."
-            class="search-input"
-          >
-        </div>
-        <div class="filter-buttons">
-          <button class="filter-btn active" id="allBtn" onclick="showAll()">
-            すべて表示
+      <!-- タブUI -->
+      <div class="tabs-container">
+        <div class="tabs-list">
+          <button class="tab-button active" id="rankingTab" onclick="switchTab('ranking')">
+            ランキング
           </button>
-          <button class="filter-btn" id="liveBtn" onclick="filterLive()">
-            配信中のみ
+          <button class="tab-button" id="allListTab" onclick="switchTab('allList')">
+            全体の一覧
           </button>
         </div>
       </div>
 
-      <!-- 配信者リスト -->
-      <div class="creators-list" id="creatorsList">
-        <!-- JavaScriptで動的に生成 -->
+      <!-- ランキングタブコンテンツ -->
+      <div class="tab-content active" id="rankingContent">
+        <!-- 期間フィルター -->
+        <div class="sub-filter-container">
+          <button class="sub-filter-btn active" id="todayBtn" onclick="filterByPeriod('today')">本日</button>
+          <button class="sub-filter-btn" id="weekBtn" onclick="filterByPeriod('week')">今週</button>
+          <button class="sub-filter-btn" id="monthBtn" onclick="filterByPeriod('month')">今月</button>
+          <button class="sub-filter-btn" id="yearBtn" onclick="filterByPeriod('year')">今年</button>
+        </div>
+
+        <!-- ランキングリスト -->
+        <div class="creators-list" id="rankingList">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
       </div>
 
-      <div id="emptyState" class="empty-state hidden">
-        <div class="empty-state-icon">🔍</div>
-        <div class="empty-state-text">配信者が見つかりませんでした</div>
+      <!-- 全体の一覧タブコンテンツ -->
+      <div class="tab-content" id="allListContent">
+        <!-- 検索とソート -->
+        <div class="search-filter-section">
+          <div class="search-box">
+            <input
+              type="search"
+              id="searchInput"
+              placeholder="配信者を検索..."
+              class="search-input"
+            >
+          </div>
+          <div class="filter-buttons">
+            <select id="sortSelect" class="sort-select" onchange="sortCreators()">
+              <option value="followers">フォロワー数順</option>
+              <option value="name">名前順</option>
+              <option value="live">配信中</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 配信者リスト -->
+        <div class="creators-list" id="creatorsList">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+
+        <div id="emptyState" class="empty-state hidden">
+          <div class="empty-state-icon">🔍</div>
+          <div class="empty-state-text">配信者が見つかりませんでした</div>
+        </div>
       </div>
     </div>
   </div>
@@ -409,26 +439,121 @@
       // サイドバーのナビゲーションを生成（main.jsの共通関数を使用）
       renderSidebarNav('discover');
 
-      // 配信者を表示
-      let currentFilter = 'all';
+      // 状態管理
+      let currentTab = 'ranking';
+      let currentPeriod = 'today';
+      let currentSort = 'followers';
       let searchQuery = '';
 
+      // タブ切り替え
+      window.switchTab = function(tab) {
+        currentTab = tab;
+
+        // タブボタンのアクティブ状態を更新
+        document.getElementById('rankingTab').classList.toggle('active', tab === 'ranking');
+        document.getElementById('allListTab').classList.toggle('active', tab === 'allList');
+
+        // コンテンツの表示切り替え
+        document.getElementById('rankingContent').classList.toggle('active', tab === 'ranking');
+        document.getElementById('allListContent').classList.toggle('active', tab === 'allList');
+
+        // 表示を更新
+        if (tab === 'ranking') {
+          renderRanking();
+        } else {
+          renderCreators();
+        }
+      };
+
+      // 期間フィルター切り替え（ランキング用）
+      window.filterByPeriod = function(period) {
+        currentPeriod = period;
+
+        // ボタンのアクティブ状態を更新
+        ['today', 'week', 'month', 'year'].forEach(p => {
+          document.getElementById(p + 'Btn').classList.toggle('active', p === period);
+        });
+
+        renderRanking();
+      };
+
+      // ランキング表示
+      function renderRanking() {
+        const list = document.getElementById('rankingList');
+        const followedIds = getFollowedCreators();
+
+        // スパーク消費量でソート
+        let ranked = [...creators].sort((a, b) => {
+          const aValue = a.sparksConsumed ? a.sparksConsumed[currentPeriod] : 0;
+          const bValue = b.sparksConsumed ? b.sparksConsumed[currentPeriod] : 0;
+          return bValue - aValue;
+        });
+
+        list.innerHTML = ranked.map((creator, index) => {
+          const isFollowing = followedIds.includes(creator.id);
+          const rank = index + 1;
+          const sparks = creator.sparksConsumed ? creator.sparksConsumed[currentPeriod] : 0;
+
+          return `
+            <div class="creator-card ranking-card" id="ranking-creator-${creator.id}">
+              <div class="ranking-number">${rank}</div>
+              <a href="creator/${creator.slug}.html" class="creator-card-link">
+                <div class="creator-avatar">
+                  ${creator.name.charAt(0)}
+                  ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+                </div>
+                <div class="creator-info">
+                  <div class="creator-name-row">
+                    <span class="creator-name">${creator.name}</span>
+                    <span class="creator-id">@${creator.slug}</span>
+                  </div>
+                  <div class="creator-bio">${creator.bio || ''}</div>
+                  <div class="creator-stats">
+                    <span>消費スパーク ${sparks.toLocaleString()}</span>
+                  </div>
+                </div>
+              </a>
+              <button class="follow-button${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'ranking')">
+                <span>${isFollowing ? 'フォロー中' : 'フォローする'}</span>
+              </button>
+            </div>
+          `;
+        }).join('');
+      }
+
+      // ソート変更（全体の一覧用）
+      window.sortCreators = function() {
+        currentSort = document.getElementById('sortSelect').value;
+        renderCreators();
+      };
+
+      // 配信者リスト表示（全体の一覧）
       function renderCreators() {
         const list = document.getElementById('creatorsList');
         const emptyState = document.getElementById('emptyState');
+        const followedIds = getFollowedCreators();
 
         // フィルタリング
-        let filtered = creators;
-
-        if (currentFilter === 'live') {
-          filtered = filtered.filter(c => c.isLive);
-        }
+        let filtered = [...creators];
 
         if (searchQuery) {
           filtered = filtered.filter(c =>
             c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
             c.slug.toLowerCase().includes(searchQuery.toLowerCase())
           );
+        }
+
+        // ソート
+        if (currentSort === 'followers') {
+          filtered.sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0));
+        } else if (currentSort === 'name') {
+          filtered.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+        } else if (currentSort === 'live') {
+          filtered.sort((a, b) => {
+            if (a.isLive && !b.isLive) return -1;
+            if (!a.isLive && b.isLive) return 1;
+            return 0;
+          });
         }
 
         if (filtered.length === 0) {
@@ -438,9 +563,6 @@
         }
 
         emptyState.classList.add('hidden');
-
-        // フォロー状態を取得
-        const followedIds = getFollowedCreators();
 
         list.innerHTML = filtered.map(creator => {
           const isFollowing = followedIds.includes(creator.id);
@@ -462,7 +584,7 @@
                   </div>
                 </div>
               </a>
-              <button class="follow-button${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event)">
+              <button class="follow-button${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'list')">
                 <span>${isFollowing ? 'フォロー中' : 'フォローする'}</span>
               </button>
             </div>
@@ -471,7 +593,7 @@
       }
 
       // フォローボタンのトグル
-      window.toggleFollowButton = function(creatorId, event) {
+      window.toggleFollowButton = function(creatorId, event, source) {
         event.preventDefault();
         event.stopPropagation();
 
@@ -482,15 +604,15 @@
 
         if (isFollowing) {
           // カスタムモーダルを表示
-          showUnfollowModal(creatorId, creatorName);
+          showUnfollowModal(creatorId, creatorName, source);
         } else {
           toggleFollow(creatorId);
-          updateButtonState(creatorId, true);
+          updateButtonState(creatorId, true, source);
         }
       };
 
       // フォロー解除モーダルを表示
-      window.showUnfollowModal = function(creatorId, creatorName) {
+      window.showUnfollowModal = function(creatorId, creatorName, source) {
         const modal = document.getElementById('unfollowModal');
         const message = document.getElementById('unfollowModalMessage');
         const confirmButton = document.getElementById('unfollowConfirmButton');
@@ -499,7 +621,7 @@
 
         confirmButton.onclick = function() {
           toggleFollow(creatorId);
-          updateButtonState(creatorId, false);
+          updateButtonState(creatorId, false, source);
           closeUnfollowModal();
         };
 
@@ -513,8 +635,9 @@
       };
 
       // ボタンの状態を更新
-      function updateButtonState(creatorId, isFollowing) {
-        const card = document.getElementById(`creator-${creatorId}`);
+      function updateButtonState(creatorId, isFollowing, source) {
+        const prefix = source === 'ranking' ? 'ranking-creator-' : 'creator-';
+        const card = document.getElementById(prefix + creatorId);
         if (card) {
           const button = card.querySelector('.follow-button');
           if (button) {
@@ -530,29 +653,14 @@
         }
       }
 
-      // フィルター
-      window.showAll = function() {
-        currentFilter = 'all';
-        document.getElementById('allBtn').classList.add('active');
-        document.getElementById('liveBtn').classList.remove('active');
-        renderCreators();
-      };
-
-      window.filterLive = function() {
-        currentFilter = 'live';
-        document.getElementById('liveBtn').classList.add('active');
-        document.getElementById('allBtn').classList.remove('active');
-        renderCreators();
-      };
-
       // 検索
       document.getElementById('searchInput').addEventListener('input', function(e) {
         searchQuery = e.target.value;
         renderCreators();
       });
 
-      // 初期表示
-      renderCreators();
+      // 初期表示（ランキングタブを表示）
+      renderRanking();
 
       // モバイルメニュー
       window.toggleMobileMenu = function() {

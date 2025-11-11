@@ -1094,6 +1094,145 @@ header {
 }
 
 /* ========================================
+   タブUI - 共通スタイル
+   ======================================== */
+
+.tabs-container {
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabs-list {
+  display: flex;
+  gap: 0;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+.tab-button {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-bottom: 3px solid transparent;
+  position: relative;
+}
+
+.tab-button:hover {
+  color: #2d1b3d;
+  background: #f9fafb;
+}
+
+.tab-button.active {
+  color: #FF1B8D;
+  border-bottom-color: #FF1B8D;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* サブフィルター（ランキング期間など） */
+.sub-filter-buttons {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.sub-filter-btn {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.sub-filter-btn:hover {
+  border-color: #FF1B8D;
+  color: #FF1B8D;
+}
+
+.sub-filter-btn.active {
+  background: #FF1B8D;
+  color: white;
+  border-color: #FF1B8D;
+}
+
+@media (max-width: 768px) {
+  .tabs-list {
+    padding: 0;
+  }
+
+  .tab-button {
+    padding: 0.875rem 1rem;
+    font-size: 0.875rem;
+  }
+
+  .sub-filter-btn {
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
+  }
+}
+
+/* ========================================
+   ランキング表示 - 共通スタイル
+   ======================================== */
+
+.ranking-card {
+  position: relative;
+  padding-left: 3.5rem !important;
+}
+
+.ranking-number {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #FF1B8D;
+  min-width: 2rem;
+  text-align: center;
+}
+
+/* ソート選択ドロップダウン */
+.sort-select {
+  padding: 0.5rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #2d1b3d;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sort-select:hover {
+  border-color: #FF1B8D;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #FF1B8D;
+  box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+}
+
+/* ========================================
    確認モーダル - 共通スタイル
    ======================================== */
 
