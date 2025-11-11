@@ -1125,8 +1125,8 @@
             <div class="creator-bio" id="creatorBio">毎日配信中！初心者向けゲーム実況やってます 🎮</div>
           </div>
         </div>
-        <button type="button" class="follow-button" id="followButton" onclick="toggleFollowCreator()">
-          フォローする
+        <button type="button" class="follow-button" id="followButton" onclick="toggleFollowCreator(event)">
+          <span>フォローする</span>
         </button>
       </header>
 
@@ -1282,18 +1282,22 @@
       const followedIds = getFollowedCreators();
       const isFollowing = followedIds.includes(creator.id);
       const followButton = document.getElementById('followButton');
+      const buttonSpan = followButton.querySelector('span');
 
       if (isFollowing) {
-        followButton.textContent = 'フォロー中';
+        buttonSpan.textContent = 'フォロー中';
         followButton.classList.add('following');
       } else {
-        followButton.textContent = 'フォローする';
+        buttonSpan.textContent = 'フォローする';
         followButton.classList.remove('following');
       }
     }
 
     // フォロー切り替え
-    function toggleFollowCreator() {
+    function toggleFollowCreator(event) {
+      event.preventDefault();
+      event.stopPropagation();
+
       toggleFollow(creator.id);
       checkFollowStatus();
     }
