@@ -445,14 +445,14 @@
       let currentSort = 'followers';
       let searchQuery = '';
 
-      // スパーク数をフォーマット（万単位）
+      // スパーク数をフォーマット（K単位）
       function formatSparks(num) {
-        if (num >= 10000) {
-          const man = num / 10000;
+        if (num >= 1000) {
+          const k = num / 1000;
           // 小数点1桁まで表示（.0の場合は整数表示）
-          return man % 1 === 0 ? `${man}万` : `${man.toFixed(1)}万`;
+          return k % 1 === 0 ? `${k}K` : `${k.toFixed(1)}K`;
         }
-        return num.toLocaleString();
+        return num.toString();
       }
 
       // タブ切り替え
