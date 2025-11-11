@@ -600,7 +600,47 @@
 
     /* スライドバーコンテナ */
     .splash-slider-container {
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .splash-amount-controls {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .splash-amount-input-wrapper {
+      flex: 0 0 140px;
+    }
+
+    .splash-amount-label {
+      font-size: 0.75rem;
+      color: #6b7280;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+    }
+
+    .splash-amount-input {
+      width: 100%;
+      padding: 0.75rem;
+      border: 2px solid #e5e7eb;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      transition: all 0.2s;
+    }
+
+    .splash-amount-input:focus {
+      outline: none;
+      border-color: #FF1B8D;
+      box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+    }
+
+    .splash-slider-wrapper {
+      flex: 1;
     }
 
     .splash-slider-labels {
@@ -914,6 +954,19 @@
         font-size: 0.875rem;
         padding: 0.75rem;
       }
+
+      .splash-amount-controls {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .splash-amount-input-wrapper {
+        flex: 0 0 auto;
+      }
+
+      .splash-slider-wrapper {
+        flex: 1;
+      }
     }
 
     /* スムーススクロール */
@@ -1043,9 +1096,9 @@
           <!-- プレビュー -->
           <div class="splash-preview" id="splashPreview" data-tier="1">
             <div class="splash-preview-header">
-              <div class="splash-preview-avatar" id="splashPreviewAvatar">田</div>
+              <div class="splash-preview-avatar" id="splashPreviewAvatar">視</div>
               <div class="splash-preview-info">
-                <div class="splash-preview-name" id="splashPreviewName">田中太郎</div>
+                <div class="splash-preview-name" id="splashPreviewName">視聴者</div>
                 <div class="splash-preview-amount" id="splashPreviewAmount">¥100</div>
               </div>
             </div>
@@ -1058,21 +1111,40 @@
             </div>
           </div>
 
-          <!-- スライドバー -->
+          <!-- 金額コントロール -->
           <div class="splash-slider-container">
-            <div class="splash-slider-labels">
-              <span class="splash-slider-label">¥100</span>
-              <span class="splash-slider-label">¥10,000</span>
+            <div class="splash-amount-controls">
+              <!-- 金額入力 -->
+              <div class="splash-amount-input-wrapper">
+                <label class="splash-amount-label">金額</label>
+                <input
+                  type="number"
+                  class="splash-amount-input"
+                  id="splashAmountInput"
+                  min="100"
+                  max="100000"
+                  step="100"
+                  value="100"
+                  oninput="updateFromInput()">
+              </div>
+
+              <!-- スライドバー -->
+              <div class="splash-slider-wrapper">
+                <div class="splash-slider-labels">
+                  <span class="splash-slider-label">¥100</span>
+                  <span class="splash-slider-label">¥10,000</span>
+                </div>
+                <input
+                  type="range"
+                  class="splash-slider"
+                  id="splashSlider"
+                  min="0"
+                  max="5"
+                  value="0"
+                  step="1"
+                  oninput="updateFromSlider(this.value)">
+              </div>
             </div>
-            <input
-              type="range"
-              class="splash-slider"
-              id="splashSlider"
-              min="0"
-              max="5"
-              value="0"
-              step="1"
-              oninput="updateSplashPreview(this.value)">
           </div>
 
           <!-- 送信ボタン -->
@@ -1269,22 +1341,65 @@
 
     // スプラッシュ金額設定
     const splashAmounts = [100, 500, 1000, 2000, 5000, 10000];
-    let selectedSplashAmount = splashAmounts[0];
+    let selectedSplashAmount = 100;
 
-    // スプラッシュプレビュー更新
-    function updateSplashPreview(sliderValue) {
-      const index = parseInt(sliderValue);
-      const amount = splashAmounts[index];
-      const tier = index + 1;
+    // 金額から色のティアを計算
+    function getAmountTier(amount) {
+      if (amount < 500) return 1;
+      if (amount < 1000) return 2;
+      if (amount < 2000) return 3;
+      if (amount < 5000) return 4;
+      if (amount < 10000) return 5;
+      return 6;
+    }
 
+    // スライダーからティアインデックスを取得
+    function getSliderIndexForAmount(amount) {
+      for (let i = splashAmounts.length - 1; i >= 0; i--) {
+        if (amount >= splashAmounts[i]) {
+          return i;
+        }
+      }
+      return 0;
+    }
+
+    // プレビュー更新
+    function updatePreview(amount) {
       selectedSplashAmount = amount;
+      const tier = getAmountTier(amount);
 
-      // プレビュー更新
       const preview = document.getElementById('splashPreview');
       const amountDisplay = document.getElementById('splashPreviewAmount');
 
       preview.setAttribute('data-tier', tier);
       amountDisplay.textContent = `¥${amount.toLocaleString()}`;
+    }
+
+    // スライダーから更新
+    function updateFromSlider(sliderValue) {
+      const index = parseInt(sliderValue);
+      const amount = splashAmounts[index];
+
+      document.getElementById('splashAmountInput').value = amount;
+      updatePreview(amount);
+    }
+
+    // 入力欄から更新
+    function updateFromInput() {
+      const input = document.getElementById('splashAmountInput');
+      let amount = parseInt(input.value) || 100;
+
+      // 範囲チェック
+      if (amount < 100) amount = 100;
+      if (amount > 100000) amount = 100000;
+
+      input.value = amount;
+
+      // スライダーの位置を更新
+      const sliderIndex = getSliderIndexForAmount(amount);
+      document.getElementById('splashSlider').value = sliderIndex;
+
+      updatePreview(amount);
     }
 
     function sendSplash() {
@@ -1295,8 +1410,9 @@
 
       // リセット
       document.getElementById('splashMessage').value = '';
+      document.getElementById('splashAmountInput').value = '100';
       document.getElementById('splashSlider').value = '0';
-      updateSplashPreview(0);
+      updatePreview(100);
     }
 
     // タブ切り替え
@@ -1410,9 +1526,16 @@
       renderCards();
       renderPacks();
 
-      // スプラッシュプレビューに配信者情報を設定
-      document.getElementById('splashPreviewAvatar').textContent = creator.name.charAt(0);
-      document.getElementById('splashPreviewName').textContent = creator.name;
+      // スプラッシュプレビューに視聴者（ログインユーザー）情報を設定
+      const session = getCurrentSession();
+      if (session && session.displayName) {
+        document.getElementById('splashPreviewAvatar').textContent = session.displayName.charAt(0);
+        document.getElementById('splashPreviewName').textContent = session.displayName;
+      } else {
+        // ログインしていない場合のデフォルト
+        document.getElementById('splashPreviewAvatar').textContent = 'あ';
+        document.getElementById('splashPreviewName').textContent = 'あなた';
+      }
     }
 
     // ページ読み込み時に初期化
