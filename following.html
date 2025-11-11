@@ -382,7 +382,19 @@
       const creator = creators.find(c => c.id === creatorId);
       const creatorName = creator ? creator.name : '配信者';
 
-      if (confirm(`${creatorName}のフォローを解除しますか？`)) {
+      // カスタムモーダルを表示
+      showUnfollowModal(creatorId, creatorName);
+    }
+
+    // フォロー解除モーダルを表示
+    function showUnfollowModal(creatorId, creatorName) {
+      const modal = document.getElementById('unfollowModal');
+      const message = document.getElementById('unfollowModalMessage');
+      const confirmButton = document.getElementById('unfollowConfirmButton');
+
+      message.textContent = `${creatorName}のフォローを解除しますか？`;
+
+      confirmButton.onclick = function() {
         toggleFollow(creatorId);
 
         // ボタンを「フォローする」に変更
@@ -400,7 +412,17 @@
         // フォロー中の数を更新
         const followedCreators = getFollowedCreators();
         document.getElementById('followingCount').textContent = followedCreators.length;
-      }
+
+        closeUnfollowModal();
+      };
+
+      modal.classList.add('active');
+    }
+
+    // フォロー解除モーダルを閉じる
+    function closeUnfollowModal() {
+      const modal = document.getElementById('unfollowModal');
+      modal.classList.remove('active');
     }
 
     // フォローする
@@ -471,5 +493,17 @@
     renderSidebarNav(''); // main.jsの共通関数を使用
     renderFollowingCreators();
   </script>
+
+  <!-- フォロー解除確認モーダル -->
+  <div class="confirm-modal" id="unfollowModal">
+    <div class="confirm-modal-content">
+      <div class="confirm-modal-title">フォロー解除の確認</div>
+      <div class="confirm-modal-message" id="unfollowModalMessage"></div>
+      <div class="confirm-modal-buttons">
+        <button class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
+        <button class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
