@@ -258,8 +258,7 @@
       }
     }
 
-    .viewer-count,
-    .stream-duration {
+    .follower-count {
       color: #6b7280;
       font-size: 0.8125rem;
       font-weight: 500;
@@ -908,8 +907,7 @@
         height: 5px;
       }
 
-      .viewer-count,
-      .stream-duration {
+      .follower-count {
         font-size: 0.75rem;
       }
 
@@ -1092,8 +1090,7 @@
             <div class="creator-name" id="creatorName">田中太郎</div>
             <div class="creator-meta">
               <span class="live-badge" id="liveBadge" style="display: none;">LIVE</span>
-              <span class="viewer-count" id="viewerCount" style="display: none;">1,234 人が視聴中</span>
-              <span class="stream-duration" id="streamDuration" style="display: none;">2:34:15</span>
+              <span class="follower-count" id="followerCount">0 フォロワー</span>
             </div>
           </div>
         </div>
@@ -1302,8 +1299,6 @@
       const player = document.getElementById('streamPlayer');
       const offline = document.getElementById('streamOffline');
       const liveBadge = document.getElementById('liveBadge');
-      const viewerCount = document.getElementById('viewerCount');
-      const streamDuration = document.getElementById('streamDuration');
 
       if (creator.isLive && creator.streamUrl) {
         // 配信中の場合
@@ -1311,10 +1306,8 @@
         player.style.display = 'block';
         offline.style.display = 'none';
 
-        // LIVE、視聴者数、配信時間を表示
+        // LIVEバッジを表示
         liveBadge.style.display = 'inline-flex';
-        viewerCount.style.display = 'inline';
-        streamDuration.style.display = 'inline';
 
         // 配信概要を設定
         if (creator.streamDescription) {
@@ -1322,21 +1315,23 @@
         } else {
           showEmptyDescription();
         }
-
-        // 視聴者数と配信時間を更新（モックデータ）
-        updateStreamInfo();
       } else {
         // 配信していない場合
         player.style.display = 'none';
         offline.style.display = 'flex';
 
-        // LIVE、視聴者数、配信時間を非表示
+        // LIVEバッジを非表示
         liveBadge.style.display = 'none';
-        viewerCount.style.display = 'none';
-        streamDuration.style.display = 'none';
 
         showEmptyDescription();
       }
+    }
+
+    // フォロワー数を更新
+    function updateFollowerCount() {
+      const followedIds = getFollowedCreators();
+      const followerCount = Math.floor(Math.random() * 50000) + 1000; // モックデータ
+      document.getElementById('followerCount').textContent = `${followerCount.toLocaleString()} フォロワー`;
     }
 
     // 空の概要表示
@@ -1401,24 +1396,6 @@
       }
     }
 
-    // 配信情報を更新
-    function updateStreamInfo() {
-      const viewerCount = document.getElementById('viewerCount');
-      const streamDuration = document.getElementById('streamDuration');
-
-      // モックデータ
-      viewerCount.textContent = `${Math.floor(Math.random() * 5000) + 500} 人が視聴中`;
-
-      // 配信時間をシミュレート
-      let seconds = Math.floor(Math.random() * 10000);
-      setInterval(() => {
-        seconds++;
-        const hours = Math.floor(seconds / 3600);
-        const minutes = Math.floor((seconds % 3600) / 60);
-        const secs = seconds % 60;
-        streamDuration.textContent = `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-      }, 1000);
-    }
 
     // カードを表示
     function renderCards() {
@@ -1691,6 +1668,7 @@
     // 初期化
     function init() {
       initFollowButton();
+      updateFollowerCount();
       setupStreamPlayer();
       renderCards();
       renderPacks();
