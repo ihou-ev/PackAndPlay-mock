@@ -1128,21 +1128,8 @@
       // ログインが必要な場合、requireLogin関数内でリダイレクトされる
     }
 
-    // ログインチェック
-    if (!isLoggedIn()) {
-      window.location.href = 'login.html';
-      return;
-    }
-
     // セッション情報を取得
     const session = getCurrentSession();
-
-    // セッション情報が不正な場合もログインページへ
-    if (!session || !session.name) {
-      localStorage.clear();
-      window.location.href = 'login.html';
-      return;
-    }
 
     // スパーク残高を初期化（デモ用：1000スパーク）
     if (!session.coins && session.coins !== 0) {
