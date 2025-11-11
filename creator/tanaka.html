@@ -621,11 +621,19 @@
       color: #2d1b3d;
       text-align: center;
       transition: all 0.2s;
+      -moz-appearance: textfield;
     }
 
     .splash-amount-input:focus {
       outline: none;
       border-bottom-color: #FF1B8D;
+    }
+
+    /* スピンボタンを非表示 */
+    .splash-amount-input::-webkit-inner-spin-button,
+    .splash-amount-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
     }
 
     .splash-amount-unit {
