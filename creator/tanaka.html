@@ -14,78 +14,148 @@
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
   <style>
-    :root {
-      --stream-header-height: 56px;
-      --action-panel-height: 280px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
     body {
+      overflow-x: hidden;
+      background: #f9fafb;
+      display: flex;
+      min-height: 100vh;
       margin: 0;
       padding: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: #f9fafb;
-      overflow-x: hidden;
     }
 
-    /* ストリームヘッダー */
-    .stream-header {
+    /* サイドバー */
+    .sidebar {
       position: fixed;
-      top: 0;
       left: 0;
-      right: 0;
-      height: var(--stream-header-height);
-      background: rgba(255, 255, 255, 0.95);
-      backdrop-filter: blur(10px);
-      border-bottom: 1px solid #e5e7eb;
+      top: 0;
+      bottom: 0;
+      width: 260px;
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      padding: 2rem 1.5rem 1rem;
       display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 1rem;
+      flex-direction: column;
+      overflow-y: auto;
       z-index: 1000;
     }
 
-    .stream-header-left {
+    .sidebar-logo {
+      display: block;
+      text-decoration: none;
+      margin-bottom: 2rem;
+      transition: opacity 0.2s;
+    }
+
+    .sidebar-logo:hover {
+      opacity: 0.8;
+    }
+
+    .sidebar-logo-img {
+      width: 100%;
+      max-width: 180px;
+      height: auto;
+      display: block;
+    }
+
+    .sidebar-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex: 1;
+    }
+
+    .sidebar-nav-link {
+      color: #2d1b3d;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.125rem;
+      padding: 1rem 1.25rem;
+      border-radius: 0.75rem;
+      transition: all 0.2s;
       display: flex;
       align-items: center;
       gap: 0.75rem;
     }
 
-    .back-button {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: none;
-      background: transparent;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: background 0.2s;
-      padding: 0;
-    }
-
-    .back-button:hover {
+    .sidebar-nav-link:hover {
       background: #f3f4f6;
     }
 
-    .back-button svg {
-      width: 24px;
-      height: 24px;
+    .sidebar-nav-link.active {
+      background: #f3f4f6;
+      color: #FF1B8D;
     }
 
-    .creator-mini-info {
+    .sidebar-footer {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .sidebar-footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .sidebar-footer-link {
+      color: #6b7280;
+      text-decoration: none;
+      font-size: 0.8125rem;
+      transition: color 0.2s;
+    }
+
+    .sidebar-footer-link:hover {
+      color: #2d1b3d;
+      text-decoration: underline;
+    }
+
+    .sidebar-footer-copyright {
+      color: #9ca3af;
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+
+    /* メインコンテンツエリア */
+    .main-wrapper {
+      margin-left: 260px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    .creator-content {
+      width: 100%;
+      max-width: 680px;
+      margin: 0 auto;
+      background: white;
+    }
+
+    /* クリエイターヘッダー */
+    .creator-header {
+      background: white;
+      padding: 1.5rem;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .creator-header-left {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 1rem;
+      flex: 1;
+      min-width: 0;
     }
 
-    .creator-mini-avatar {
-      width: 32px;
-      height: 32px;
+    .creator-avatar {
+      width: 64px;
+      height: 64px;
       border-radius: 50%;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
@@ -93,25 +163,39 @@
       justify-content: center;
       color: white;
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 1.75rem;
+      flex-shrink: 0;
     }
 
-    .creator-mini-name {
-      font-weight: 700;
-      font-size: 0.9375rem;
+    .creator-info {
+      min-width: 0;
+      flex: 1;
+    }
+
+    .creator-name {
+      font-size: 1.375rem;
+      font-weight: 800;
       color: #2d1b3d;
+      margin-bottom: 0.25rem;
+    }
+
+    .creator-bio {
+      color: #6b7280;
+      font-size: 0.9375rem;
+      line-height: 1.5;
     }
 
     .follow-button {
-      padding: 0.5rem 1.25rem;
+      padding: 0.625rem 1.5rem;
       border-radius: 9999px;
       border: none;
       background: #FF1B8D;
       color: white;
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       cursor: pointer;
       transition: all 0.2s;
+      flex-shrink: 0;
     }
 
     .follow-button:hover {
@@ -122,7 +206,7 @@
     .follow-button.following {
       background: white;
       color: #6b7280;
-      border: 1px solid #d1d5db;
+      border: 2px solid #d1d5db;
     }
 
     .follow-button.following:hover {
@@ -132,12 +216,6 @@
     }
 
     /* 配信プレイヤー */
-    .stream-container {
-      margin-top: var(--stream-header-height);
-      background: #000;
-      position: relative;
-    }
-
     .stream-player-wrapper {
       position: relative;
       width: 100%;
@@ -181,7 +259,7 @@
     /* 配信情報バー */
     .stream-info-bar {
       background: white;
-      padding: 1rem;
+      padding: 1rem 1.5rem;
       border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
@@ -197,13 +275,13 @@
     .live-badge {
       background: #ef4444;
       color: white;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.375rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 0.5rem;
       font-weight: 700;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
       display: flex;
       align-items: center;
-      gap: 0.375rem;
+      gap: 0.5rem;
     }
 
     .live-badge::before {
@@ -224,15 +302,10 @@
       }
     }
 
-    .viewer-count {
-      color: #6b7280;
-      font-size: 0.875rem;
-      font-weight: 600;
-    }
-
+    .viewer-count,
     .stream-duration {
       color: #6b7280;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       font-weight: 600;
     }
 
@@ -254,7 +327,7 @@
       border: none;
       border-bottom: 2px solid transparent;
       font-weight: 600;
-      font-size: 0.9375rem;
+      font-size: 1rem;
       color: #6b7280;
       cursor: pointer;
       transition: all 0.2s;
@@ -271,7 +344,7 @@
 
     .action-content {
       display: none;
-      padding: 1rem;
+      padding: 1.5rem;
       max-height: 400px;
       overflow-y: auto;
     }
@@ -284,14 +357,14 @@
     .cards-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-      gap: 0.75rem;
+      gap: 1rem;
     }
 
     .card-item {
       background: white;
       border: 2px solid #e5e7eb;
       border-radius: 0.75rem;
-      padding: 0.75rem;
+      padding: 1rem 0.75rem;
       cursor: pointer;
       transition: all 0.2s;
       text-align: center;
@@ -315,7 +388,7 @@
 
     .card-name {
       font-weight: 600;
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       color: #2d1b3d;
       margin-bottom: 0.25rem;
     }
@@ -323,22 +396,22 @@
     .card-price {
       color: #FF1B8D;
       font-weight: 700;
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
     }
 
     /* スプラッシュオプション */
     .splash-options {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.5rem;
     }
 
     .splash-option {
       background: white;
       border: 2px solid #e5e7eb;
       border-radius: 0.75rem;
-      padding: 1rem 0.5rem;
+      padding: 1rem 0.75rem;
       cursor: pointer;
       transition: all 0.2s;
       text-align: center;
@@ -363,17 +436,17 @@
 
     .splash-label {
       color: #6b7280;
-      font-size: 0.75rem;
+      font-size: 0.8125rem;
     }
 
     .message-input {
       width: 100%;
-      padding: 0.75rem;
+      padding: 0.875rem;
       border: 2px solid #e5e7eb;
       border-radius: 0.75rem;
       font-size: 0.9375rem;
       resize: vertical;
-      min-height: 80px;
+      min-height: 100px;
       font-family: inherit;
       margin-bottom: 1rem;
     }
@@ -409,41 +482,34 @@
 
     /* パックセクション */
     .packs-section {
-      padding: 2rem 1rem;
-      background: #f9fafb;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1.5rem;
+      padding: 2rem 1.5rem;
+      background: white;
     }
 
     .section-title {
-      font-size: 1.25rem;
+      font-size: 1.375rem;
       font-weight: 800;
       color: #2d1b3d;
-      margin: 0;
+      margin: 0 0 1.5rem 0;
     }
 
     .packs-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      grid-template-columns: 1fr;
       gap: 1rem;
     }
 
     .pack-card {
       background: white;
+      border: 1px solid #e5e7eb;
       border-radius: 1rem;
       overflow: hidden;
-      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
       transition: all 0.2s;
       cursor: pointer;
     }
 
     .pack-card:hover {
-      transform: translateY(-4px);
+      transform: translateY(-2px);
       box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
     }
 
@@ -487,7 +553,7 @@
     }
 
     .buy-button {
-      padding: 0.625rem 1.5rem;
+      padding: 0.75rem 1.5rem;
       border-radius: 0.75rem;
       border: none;
       background: #FF1B8D;
@@ -503,21 +569,93 @@
       transform: translateY(-1px);
     }
 
-    /* モバイル最適化 */
+    /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
+
+    .sidebar.mobile-open {
+      display: flex;
+    }
+
+    /* モバイル対応 */
     @media (max-width: 768px) {
-      .packs-grid {
-        grid-template-columns: 1fr;
+      body {
+        display: block;
+      }
+
+      .mobile-menu-button {
+        display: flex;
+      }
+
+      .sidebar {
+        display: none;
+      }
+
+      .main-wrapper {
+        margin-left: 0;
+      }
+
+      .creator-content {
+        max-width: 100%;
+      }
+
+      .creator-header {
+        padding: 1rem;
+      }
+
+      .creator-avatar {
+        width: 48px;
+        height: 48px;
+        font-size: 1.25rem;
+      }
+
+      .creator-name {
+        font-size: 1.125rem;
+      }
+
+      .creator-bio {
+        font-size: 0.875rem;
+      }
+
+      .follow-button {
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
       }
 
       .stream-info-bar {
         flex-direction: column;
         align-items: flex-start;
         gap: 0.75rem;
+        padding: 1rem;
       }
 
       .stream-info-left {
         width: 100%;
         justify-content: space-between;
+      }
+
+      .action-content {
+        padding: 1rem;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+      }
+
+      .card-item {
+        padding: 0.75rem 0.5rem;
+      }
+
+      .card-icon {
+        font-size: 2rem;
+      }
+
+      .splash-options {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.75rem;
+      }
+
+      .packs-section {
+        padding: 1.5rem 1rem;
       }
     }
 
@@ -533,93 +671,123 @@
   </style>
 </head>
 <body>
-  <!-- ストリームヘッダー -->
-  <header class="stream-header">
-    <div class="stream-header-left">
-      <button class="back-button" onclick="history.back()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
-        </svg>
-      </button>
-      <div class="creator-mini-info">
-        <div class="creator-mini-avatar" id="miniAvatar">田</div>
-        <div class="creator-mini-name" id="miniName">田中太郎</div>
-      </div>
-    </div>
-    <button class="follow-button" id="followButton" onclick="toggleFollowCreator()">
-      フォローする
-    </button>
-  </header>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
 
-  <!-- 配信プレイヤー -->
-  <div class="stream-container">
-    <div class="stream-player-wrapper">
-      <!-- 配信中の場合はiframeを表示 -->
-      <iframe
-        id="streamPlayer"
-        class="stream-player"
-        src=""
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-        allowfullscreen
-        style="display: none;">
-      </iframe>
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
 
-      <!-- 配信していない場合 -->
-      <div class="stream-offline" id="streamOffline">
-        <div class="stream-offline-icon">📺</div>
-        <div class="stream-offline-text">現在配信していません</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- 配信情報バー -->
-  <div class="stream-info-bar" id="streamInfoBar" style="display: none;">
-    <div class="stream-info-left">
-      <div class="live-badge">LIVE</div>
-      <div class="viewer-count" id="viewerCount">1,234 人が視聴中</div>
-    </div>
-    <div class="stream-duration" id="streamDuration">2:34:15</div>
-  </div>
-
-  <!-- アクションパネル -->
-  <div class="action-panel">
-    <div class="action-tabs">
-      <button class="action-tab active" onclick="switchActionTab('cards')">カード</button>
-      <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
-    </div>
-
-    <!-- カードタブ -->
-    <div class="action-content active" id="cardsContent">
-      <div class="cards-grid" id="cardsGrid">
-        <!-- JavaScriptで動的に生成 -->
-      </div>
-    </div>
-
-    <!-- スプラッシュタブ -->
-    <div class="action-content" id="splashContent">
-      <div class="splash-options" id="splashOptions">
-        <!-- JavaScriptで動的に生成 -->
-      </div>
-      <textarea
-        class="message-input"
-        id="splashMessage"
-        placeholder="メッセージを入力...（任意）"
-        maxlength="200"></textarea>
-      <button class="send-button" id="sendSplashButton" onclick="sendSplash()" disabled>
-        スプラッシュを送る
-      </button>
-    </div>
-  </div>
-
-  <!-- パックセクション -->
-  <section class="packs-section">
-    <div class="section-header">
-      <h2 class="section-title">カードパック</h2>
-    </div>
-    <div class="packs-grid" id="packsGrid">
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../profile.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
       <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="../legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
     </div>
-  </section>
+  </aside>
+
+  <!-- メインコンテンツラッパー -->
+  <div class="main-wrapper">
+    <main class="creator-content">
+      <!-- クリエイターヘッダー -->
+      <header class="creator-header">
+        <div class="creator-header-left">
+          <div class="creator-avatar" id="creatorAvatar">田</div>
+          <div class="creator-info">
+            <div class="creator-name" id="creatorName">田中太郎</div>
+            <div class="creator-bio" id="creatorBio">毎日配信中！初心者向けゲーム実況やってます 🎮</div>
+          </div>
+        </div>
+        <button class="follow-button" id="followButton" onclick="toggleFollowCreator()">
+          フォローする
+        </button>
+      </header>
+
+      <!-- 配信プレイヤー -->
+      <div class="stream-player-wrapper">
+        <!-- 配信中の場合はiframeを表示 -->
+        <iframe
+          id="streamPlayer"
+          class="stream-player"
+          src=""
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen
+          style="display: none;">
+        </iframe>
+
+        <!-- 配信していない場合 -->
+        <div class="stream-offline" id="streamOffline">
+          <div class="stream-offline-icon">📺</div>
+          <div class="stream-offline-text">現在配信していません</div>
+        </div>
+      </div>
+
+      <!-- 配信情報バー -->
+      <div class="stream-info-bar" id="streamInfoBar" style="display: none;">
+        <div class="stream-info-left">
+          <div class="live-badge">LIVE</div>
+          <div class="viewer-count" id="viewerCount">1,234 人が視聴中</div>
+        </div>
+        <div class="stream-duration" id="streamDuration">2:34:15</div>
+      </div>
+
+      <!-- アクションパネル -->
+      <div class="action-panel">
+        <div class="action-tabs">
+          <button class="action-tab active" onclick="switchActionTab('cards')">カード</button>
+          <button class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
+        </div>
+
+        <!-- カードタブ -->
+        <div class="action-content active" id="cardsContent">
+          <div class="cards-grid" id="cardsGrid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <!-- スプラッシュタブ -->
+        <div class="action-content" id="splashContent">
+          <div class="splash-options" id="splashOptions">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <textarea
+            class="message-input"
+            id="splashMessage"
+            placeholder="メッセージを入力...（任意）"
+            maxlength="200"></textarea>
+          <button class="send-button" id="sendSplashButton" onclick="sendSplash()" disabled>
+            スプラッシュを送る
+          </button>
+        </div>
+      </div>
+
+      <!-- パックセクション -->
+      <section class="packs-section">
+        <h2 class="section-title">カードパック</h2>
+        <div class="packs-grid" id="packsGrid">
+          <!-- JavaScriptで動的に生成 -->
+        </div>
+      </section>
+    </main>
+  </div>
 
   <script src="../js/mock-data.js"></script>
   <script src="../js/main.js"></script>
@@ -628,6 +796,14 @@
     const creatorSlug = 'tanaka';
     const creator = getCreatorBySlug(creatorSlug);
     const creatorPacks = getPacksByCreator(creatorSlug);
+
+    // サイドバーナビゲーションをレンダリング
+    renderSidebarNav(''); // main.jsの共通関数を使用
+
+    // クリエイター情報を設定
+    document.getElementById('creatorAvatar').textContent = creator.name.charAt(0);
+    document.getElementById('creatorName').textContent = creator.name;
+    document.getElementById('creatorBio').textContent = creator.bio;
 
     // フォロー状態を確認
     function checkFollowStatus() {
@@ -812,7 +988,7 @@
 
       if (creatorPacks.length === 0) {
         grid.innerHTML = `
-          <div style="grid-column: 1 / -1; text-align: center; padding: 3rem; color: #9ca3af;">
+          <div style="text-align: center; padding: 3rem; color: #9ca3af;">
             📦 パックがありません
           </div>
         `;
@@ -849,6 +1025,43 @@
           window.location.href = `../packs/pack-open.html?id=${packId}`;
         }, 1000);
       }
+    }
+
+    // モバイルメニューの開閉
+    function toggleMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      const isOpen = sidebar.classList.contains('mobile-open');
+
+      if (isOpen) {
+        closeMobileMenu();
+      } else {
+        openMobileMenu();
+      }
+    }
+
+    function openMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      sidebar.classList.add('mobile-open');
+      button.classList.add('active');
+      overlay.style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeMobileMenu() {
+      const sidebar = document.getElementById('sidebar');
+      const button = document.getElementById('mobileMenuButton');
+      const overlay = document.getElementById('mobileMenuOverlay');
+
+      sidebar.classList.remove('mobile-open');
+      button.classList.remove('active');
+      overlay.style.display = 'none';
+      document.body.style.overflow = '';
     }
 
     // 初期化
