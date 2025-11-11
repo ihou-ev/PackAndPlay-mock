@@ -1112,7 +1112,8 @@
                 max="50000"
                 step="100"
                 value="100"
-                oninput="updateFromInput()">
+                oninput="updateFromInput()"
+                onkeydown="handleSparkKeydown(event)">
               <span class="splash-amount-unit">スパーク</span>
             </div>
 
@@ -1394,6 +1395,26 @@
       document.getElementById('splashSlider').value = sliderIndex;
 
       updatePreview(amount);
+    }
+
+    // キーボードの左右矢印キーで金額変更
+    function handleSparkKeydown(event) {
+      const input = document.getElementById('splashAmountInput');
+      let amount = parseInt(input.value) || 100;
+
+      if (event.key === 'ArrowLeft') {
+        // 左矢印: -100
+        event.preventDefault();
+        amount = Math.max(100, amount - 100);
+        input.value = amount;
+        updateFromInput();
+      } else if (event.key === 'ArrowRight') {
+        // 右矢印: +100
+        event.preventDefault();
+        amount = Math.min(50000, amount + 100);
+        input.value = amount;
+        updateFromInput();
+      }
     }
 
     function sendSplash() {
