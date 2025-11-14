@@ -380,7 +380,7 @@
     /* カードグリッド */
     .cards-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
       gap: 1rem;
     }
 
@@ -389,9 +389,11 @@
       border: 2px solid #e5e7eb;
       border-radius: 0.75rem;
       padding: 1rem 0.75rem;
-      cursor: pointer;
       transition: all 0.2s;
       text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
     }
 
     .card-item:hover {
@@ -400,14 +402,9 @@
       box-shadow: 0 4px 12px rgba(255, 27, 141, 0.15);
     }
 
-    .card-item.selected {
-      border-color: #FF1B8D;
-      background: #fef2f8;
-    }
-
-    .card-icon {
+    .card-icon-large {
       font-size: 2.5rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
 
     .card-name {
@@ -417,10 +414,217 @@
       margin-bottom: 0.25rem;
     }
 
-    .card-price {
-      color: #FF1B8D;
+    .use-btn {
+      padding: 0.375rem 0.75rem;
+      border-radius: 0.375rem;
+      border: none;
+      background: #FF1B8D;
+      color: white;
+      font-weight: 600;
+      font-size: 0.8125rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-top: auto;
+    }
+
+    .use-btn:hover {
+      background: #e01677;
+      transform: translateY(-1px);
+    }
+
+    .cards-empty {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #9ca3af;
+    }
+
+    /* カード使用モーダル */
+    .use-card-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+
+    .use-card-modal.active {
+      display: flex;
+    }
+
+    .use-card-modal-content {
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .use-card-modal-header {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .use-card-modal-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+    }
+
+    .use-card-modal-title {
+      font-size: 1.25rem;
       font-weight: 700;
+      color: #2d1b3d;
+      margin-bottom: 0.75rem;
+    }
+
+    .use-card-modal-header .badge {
+      display: inline-block;
+    }
+
+    .use-card-modal-message {
+      color: #6b7280;
       font-size: 0.9375rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .use-card-modal-buttons {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .use-card-modal-button {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 0.5rem;
+      border: none;
+      font-weight: 600;
+      font-size: 0.9375rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .use-card-modal-button-cancel {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+
+    .use-card-modal-button-cancel:hover {
+      background: #e5e7eb;
+    }
+
+    .use-card-modal-button-confirm {
+      background: #FF1B8D;
+      color: white;
+    }
+
+    .use-card-modal-button-confirm:hover {
+      background: #e01677;
+    }
+
+    /* カード使用トースト */
+    .card-use-toast {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      background: white;
+      border-radius: 1rem;
+      padding: 2rem;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+      z-index: 10000;
+      text-align: center;
+      min-width: 300px;
+      animation: cardUseToastIn 0.3s ease-out forwards;
+    }
+
+    @keyframes cardUseToastIn {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0;
+      }
+      50% {
+        transform: translate(-50%, -50%) scale(1.1);
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+    }
+
+    .card-use-toast.fade-out {
+      animation: cardUseToastOut 0.3s ease-out forwards;
+    }
+
+    @keyframes cardUseToastOut {
+      from {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      to {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0;
+      }
+    }
+
+    .card-use-toast-icon {
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      animation: iconBounce 0.6s ease-out;
+    }
+
+    @keyframes iconBounce {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.2);
+      }
+    }
+
+    .card-use-toast-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #2d1b3d;
+      margin-bottom: 0.5rem;
+    }
+
+    .card-use-toast-message {
+      font-size: 0.9375rem;
+      color: #6b7280;
+      margin-bottom: 0.75rem;
+    }
+
+    .card-use-toast-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.3);
+      z-index: 9999;
+      opacity: 0;
+      animation: overlayFadeIn 0.3s ease-out forwards;
+    }
+
+    .card-use-toast-overlay.fade-out {
+      animation: overlayFadeOut 0.3s ease-out forwards;
+    }
+
+    @keyframes overlayFadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes overlayFadeOut {
+      from { opacity: 1; }
+      to { opacity: 0; }
     }
 
     /* スプラッシュプレビュー */
@@ -921,7 +1125,7 @@
       }
 
       .cards-grid {
-        grid-template-columns: repeat(3, 1fr);
+        grid-template-columns: repeat(2, 1fr);
         gap: 0.75rem;
       }
 
@@ -929,8 +1133,13 @@
         padding: 0.75rem 0.5rem;
       }
 
-      .card-icon {
+      .card-icon-large {
         font-size: 2rem;
+      }
+
+      .use-btn {
+        font-size: 0.75rem;
+        padding: 0.25rem 0.5rem;
       }
 
       /* スプラッシュタブをコンパクトに */
@@ -1003,6 +1212,50 @@
 
       .send-button {
         padding: 0.625rem;
+        font-size: 0.875rem;
+      }
+
+      /* カード使用モーダル - モバイル */
+      .use-card-modal-content {
+        padding: 1.5rem;
+        max-width: 90%;
+      }
+
+      .use-card-modal-icon {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .use-card-modal-title {
+        font-size: 1.125rem;
+      }
+
+      .use-card-modal-message {
+        font-size: 0.875rem;
+        margin-bottom: 1.25rem;
+      }
+
+      .use-card-modal-button {
+        font-size: 0.875rem;
+        padding: 0.625rem 0.75rem;
+      }
+
+      /* カード使用トースト - モバイル */
+      .card-use-toast {
+        min-width: 280px;
+        padding: 1.5rem;
+      }
+
+      .card-use-toast-icon {
+        font-size: 3rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .card-use-toast-title {
+        font-size: 1.125rem;
+      }
+
+      .card-use-toast-message {
         font-size: 0.875rem;
       }
     }
@@ -1406,38 +1659,163 @@
     function renderCards() {
       const grid = document.getElementById('cardsGrid');
 
-      // モックカードデータ
-      const cards = [
-        { id: 1, name: 'いいね', icon: '👍', price: 100 },
-        { id: 2, name: 'ハート', icon: '❤️', price: 200 },
-        { id: 3, name: '拍手', icon: '👏', price: 150 },
-        { id: 4, name: '応援', icon: '📣', price: 300 },
-        { id: 5, name: '花火', icon: '🎆', price: 500 },
-        { id: 6, name: 'ギフト', icon: '🎁', price: 1000 }
-      ];
+      // インベントリからこの配信者の未使用カードのみを取得
+      const inventory = loadFromStorage('inventory', []);
+      const creatorCards = inventory.filter(card => card.creatorSlug === creatorSlug && !card.isUsed);
 
-      grid.innerHTML = cards.map(card => `
-        <div class="card-item" onclick="selectCard(${card.id})">
-          <div class="card-icon">${card.icon}</div>
+      if (creatorCards.length === 0) {
+        grid.innerHTML = `
+          <div class="cards-empty">
+            ${creator.name}のカードを持っていません<br>
+            パックを購入してカードをゲットしよう！
+          </div>
+        `;
+        return;
+      }
+
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
+
+      grid.innerHTML = creatorCards.map((card, index) => `
+        <div class="card-item">
+          <div class="card-icon-large">${cardIcons[card.type] || '🎴'}</div>
           <div class="card-name">${card.name}</div>
-          <div class="card-price">¥${card.price}</div>
+          <div class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</div>
+          <button type="button" class="use-btn" onclick="openUseCardModal(${index})">使う</button>
         </div>
       `).join('');
     }
 
-    let selectedCard = null;
+    let selectedCardForUse = null;
 
-    function selectCard(cardId) {
-      selectedCard = cardId;
+    function openUseCardModal(index) {
+      const inventory = loadFromStorage('inventory', []);
+      const creatorCards = inventory.filter(card => card.creatorSlug === creatorSlug && !card.isUsed);
+      selectedCardForUse = creatorCards[index];
 
-      // 選択状態を更新
-      document.querySelectorAll('.card-item').forEach(item => {
-        item.classList.remove('selected');
-      });
-      event.currentTarget.classList.add('selected');
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
 
-      // 実際のアプリでは購入処理を実装
-      alert('カードが選択されました！実際のアプリでは購入処理が実行されます。');
+      // モーダルの内容を設定
+      document.getElementById('useCardModalIcon').textContent = cardIcons[selectedCardForUse.type] || '🎴';
+      document.getElementById('useCardModalTitle').textContent = selectedCardForUse.name;
+      document.getElementById('useCardModalBadge').textContent = selectedCardForUse.rarity;
+      document.getElementById('useCardModalBadge').className = `badge badge-rarity-${selectedCardForUse.rarity.toLowerCase()}`;
+
+      const cardTypeText = {
+        'message': 'メッセージカード',
+        'action': 'アクションカード',
+        'visual': 'ビジュアルカード'
+      };
+      document.getElementById('useCardModalMessage').textContent = `この${cardTypeText[selectedCardForUse.type]}を使用しますか？`;
+
+      // 確認ボタンのイベントを設定
+      document.getElementById('useCardConfirmButton').onclick = function() {
+        closeUseCardModal();
+        useCard(selectedCardForUse);
+      };
+
+      // モーダルを表示
+      document.getElementById('useCardModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeUseCardModal() {
+      document.getElementById('useCardModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // モーダル外クリックで閉じる
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'useCardModal') {
+        closeUseCardModal();
+      }
+    });
+
+    function useCard(card) {
+      showLoading();
+
+      setTimeout(() => {
+        hideLoading();
+
+        // カードを使用済みにマーク
+        const inventory = loadFromStorage('inventory', []);
+        const cardIndex = inventory.findIndex(c =>
+          c.id === card.id &&
+          c.acquiredAt === card.acquiredAt &&
+          c.creatorSlug === card.creatorSlug
+        );
+
+        if (cardIndex !== -1) {
+          inventory[cardIndex].isUsed = true;
+          saveToStorage('inventory', inventory);
+
+          // 承認待ちキューに追加（messageタイプの場合）
+          if (card.type === 'message') {
+            const redemptions = loadFromStorage('redemptions', []);
+            redemptions.push({
+              id: Date.now(),
+              cardId: card.id,
+              cardName: card.name,
+              cardType: card.type,
+              rarity: card.rarity,
+              viewerName: '視聴者',
+              message: '（カード使用）',
+              timestamp: new Date().toISOString(),
+              status: 'pending'
+            });
+            saveToStorage('redemptions', redemptions);
+          }
+
+          renderCards(); // カード一覧を再描画
+          showCardUseToast(card); // カスタムトースト表示
+        } else {
+          showToast('カードの使用に失敗しました', 'error');
+        }
+      }, 500);
+    }
+
+    // カード使用トーストを表示
+    function showCardUseToast(card) {
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
+
+      // オーバーレイを作成
+      const overlay = document.createElement('div');
+      overlay.className = 'card-use-toast-overlay';
+      document.body.appendChild(overlay);
+
+      // トーストを作成
+      const toast = document.createElement('div');
+      toast.className = 'card-use-toast';
+      toast.innerHTML = `
+        <div class="card-use-toast-icon">${cardIcons[card.type] || '🎴'}</div>
+        <div class="card-use-toast-title">${card.name}</div>
+        <div class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</div>
+        <div class="card-use-toast-message">カードを使用しました</div>
+      `;
+      document.body.appendChild(toast);
+
+      // 1.5秒後にフェードアウト
+      setTimeout(() => {
+        toast.classList.add('fade-out');
+        overlay.classList.add('fade-out');
+
+        // アニメーション完了後に削除
+        setTimeout(() => {
+          document.body.removeChild(toast);
+          document.body.removeChild(overlay);
+        }, 300);
+      }, 1500);
     }
 
     // スプラッシュ金額設定
@@ -1670,8 +2048,77 @@
       document.body.style.overflow = '';
     }
 
+    // サンプルカードを追加
+    function addSampleCards() {
+      const inventory = loadFromStorage('inventory', []);
+
+      // 既にtanakaのカードがある場合はスキップ
+      const hasTanakaCards = inventory.some(card => card.creatorSlug === 'tanaka');
+      if (hasTanakaCards) {
+        return;
+      }
+
+      // サンプルカードを追加
+      const sampleCards = [
+        {
+          id: 1,
+          name: 'こんにちは',
+          rarity: 'N',
+          type: 'message',
+          creatorName: '田中太郎',
+          creatorSlug: 'tanaka',
+          isUsed: false,
+          acquiredAt: new Date().toISOString()
+        },
+        {
+          id: 2,
+          name: 'いいね！',
+          rarity: 'R',
+          type: 'action',
+          creatorName: '田中太郎',
+          creatorSlug: 'tanaka',
+          isUsed: false,
+          acquiredAt: new Date().toISOString()
+        },
+        {
+          id: 3,
+          name: 'きらきら',
+          rarity: 'SR',
+          type: 'visual',
+          creatorName: '田中太郎',
+          creatorSlug: 'tanaka',
+          isUsed: false,
+          acquiredAt: new Date().toISOString()
+        },
+        {
+          id: 5,
+          name: 'ありがとう',
+          rarity: 'R',
+          type: 'message',
+          creatorName: '田中太郎',
+          creatorSlug: 'tanaka',
+          isUsed: false,
+          acquiredAt: new Date().toISOString()
+        },
+        {
+          id: 4,
+          name: '激レアカード',
+          rarity: 'UR',
+          type: 'action',
+          creatorName: '田中太郎',
+          creatorSlug: 'tanaka',
+          isUsed: false,
+          acquiredAt: new Date().toISOString()
+        }
+      ];
+
+      inventory.push(...sampleCards);
+      saveToStorage('inventory', inventory);
+    }
+
     // 初期化
     function init() {
+      addSampleCards(); // サンプルカードを追加
       initFollowButton();
       updateFollowerCount();
       setupStreamPlayer();
@@ -1702,6 +2149,24 @@
       <div class="confirm-modal-buttons">
         <button type="button" class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
         <button type="button" class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- カード使用確認モーダル -->
+  <div class="use-card-modal" id="useCardModal">
+    <div class="use-card-modal-content">
+      <div class="use-card-modal-header">
+        <div class="use-card-modal-icon" id="useCardModalIcon">🎴</div>
+        <div class="use-card-modal-title" id="useCardModalTitle">カードを使用</div>
+        <div class="badge" id="useCardModalBadge"></div>
+      </div>
+      <div class="use-card-modal-message" id="useCardModalMessage">
+        このカードを使用しますか？
+      </div>
+      <div class="use-card-modal-buttons">
+        <button type="button" class="use-card-modal-button use-card-modal-button-cancel" onclick="closeUseCardModal()">キャンセル</button>
+        <button type="button" class="use-card-modal-button use-card-modal-button-confirm" id="useCardConfirmButton">使用する</button>
       </div>
     </div>
   </div>
