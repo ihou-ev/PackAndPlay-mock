@@ -251,11 +251,11 @@
       position: relative;
     }
 
-    .creator-card-info {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      padding: 1rem;
+    .creator-card-avatar-wrapper {
+      position: absolute;
+      bottom: -24px;
+      left: 1rem;
+      z-index: 2;
     }
 
     .creator-card-avatar {
@@ -271,6 +271,16 @@
       font-size: 1.25rem;
       flex-shrink: 0;
       position: relative;
+      border: 3px solid white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .creator-card-info {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 2rem 1rem 0.75rem 5.5rem;
+      min-height: 3rem;
     }
 
     .creator-card-avatar .live-signal {
@@ -496,20 +506,26 @@
         height: 100px;
       }
 
-      .creator-card-info {
-        padding: 0.75rem;
-        gap: 0.5rem;
+      .creator-card-avatar-wrapper {
+        bottom: -20px;
+        left: 0.75rem;
       }
 
       .creator-card-avatar {
         width: 40px;
         height: 40px;
         font-size: 1rem;
+        border-width: 2px;
       }
 
       .creator-card-avatar .live-signal {
         width: 12px;
         height: 12px;
+      }
+
+      .creator-card-info {
+        padding: 1.75rem 0.75rem 0.5rem 4.25rem;
+        min-height: 2.5rem;
       }
 
       .creator-card-name {
@@ -745,12 +761,14 @@
               <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
               <div class="creator-card-banner">
                 <div class="ranking-badge${badgeClass}">${rank}</div>
+                <div class="creator-card-avatar-wrapper">
+                  <div class="creator-card-avatar">
+                    ${creator.name.charAt(0)}
+                    ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+                  </div>
+                </div>
               </div>
               <div class="creator-card-info">
-                <div class="creator-card-avatar">
-                  ${creator.name.charAt(0)}
-                  ${creator.isLive ? '<span class="live-signal"></span>' : ''}
-                </div>
                 <div class="creator-card-text">
                   <div class="creator-card-name">${creator.name}</div>
                   <div class="creator-card-id">@${creator.slug}</div>
@@ -815,12 +833,15 @@
           return `
             <div class="creator-card" id="creator-${creator.id}">
               <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
-              <div class="creator-card-banner"></div>
-              <div class="creator-card-info">
-                <div class="creator-card-avatar">
-                  ${creator.name.charAt(0)}
-                  ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+              <div class="creator-card-banner">
+                <div class="creator-card-avatar-wrapper">
+                  <div class="creator-card-avatar">
+                    ${creator.name.charAt(0)}
+                    ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+                  </div>
                 </div>
+              </div>
+              <div class="creator-card-info">
                 <div class="creator-card-text">
                   <div class="creator-card-name">${creator.name}</div>
                   <div class="creator-card-id">@${creator.slug}</div>
