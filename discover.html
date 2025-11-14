@@ -246,22 +246,21 @@
 
     .creator-card-banner {
       width: 100%;
-      height: 120px;
+      height: 140px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       position: relative;
     }
 
-    .creator-card-avatar-wrapper {
-      position: absolute;
-      bottom: -30px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 2;
+    .creator-card-info {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
     }
 
     .creator-card-avatar {
-      width: 60px;
-      height: 60px;
+      width: 48px;
+      height: 48px;
       border-radius: 50%;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       display: flex;
@@ -269,9 +268,8 @@
       justify-content: center;
       color: white;
       font-weight: 700;
-      font-size: 1.5rem;
-      border: 3px solid white;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      font-size: 1.25rem;
+      flex-shrink: 0;
       position: relative;
     }
 
@@ -279,8 +277,8 @@
       position: absolute;
       top: -2px;
       right: -2px;
-      width: 16px;
-      height: 16px;
+      width: 14px;
+      height: 14px;
       background: #22c55e;
       border-radius: 50%;
       border: 2px solid white;
@@ -298,33 +296,33 @@
       }
     }
 
-    .creator-card-body {
-      padding: 2.5rem 1rem 0.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
+    .creator-card-text {
+      flex: 1;
+      min-width: 0;
     }
 
     .creator-card-name {
-      font-size: 1rem;
+      font-size: 0.9375rem;
       font-weight: 700;
       color: #2d1b3d;
-      margin-bottom: 0.25rem;
-      word-break: break-word;
+      margin-bottom: 0.125rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .creator-card-id {
       font-size: 0.75rem;
       color: #9ca3af;
-      margin-bottom: 0.5rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
 
     .creator-card-stats {
-      font-size: 0.8125rem;
+      font-size: 0.75rem;
       color: #6b7280;
-      margin-bottom: 1rem;
-      min-height: 1.25rem;
+      padding: 0 1rem 0.75rem;
     }
 
     .creator-card-follow-btn {
@@ -495,30 +493,27 @@
       }
 
       .creator-card-banner {
-        height: 80px;
+        height: 100px;
       }
 
-      .creator-card-avatar-wrapper {
-        bottom: -25px;
+      .creator-card-info {
+        padding: 0.75rem;
+        gap: 0.5rem;
       }
 
       .creator-card-avatar {
-        width: 50px;
-        height: 50px;
-        font-size: 1.25rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
       }
 
       .creator-card-avatar .live-signal {
-        width: 14px;
-        height: 14px;
-      }
-
-      .creator-card-body {
-        padding: 2rem 0.75rem 0.75rem;
+        width: 12px;
+        height: 12px;
       }
 
       .creator-card-name {
-        font-size: 0.875rem;
+        font-size: 0.8125rem;
       }
 
       .creator-card-id {
@@ -526,8 +521,8 @@
       }
 
       .creator-card-stats {
-        font-size: 0.75rem;
-        margin-bottom: 0.75rem;
+        font-size: 0.6875rem;
+        padding: 0 0.75rem 0.5rem;
       }
 
       .creator-card-follow-btn {
@@ -537,16 +532,16 @@
         margin: 0 0.75rem 0.75rem;
       }
 
+      .sparks-consumed {
+        font-size: 0.6875rem;
+      }
+
       .ranking-badge {
         width: 30px;
         height: 30px;
         font-size: 0.75rem;
         top: 0.5rem;
         left: 0.5rem;
-      }
-
-      .sparks-consumed {
-        font-size: 0.75rem;
       }
     }
   </style>
@@ -751,18 +746,18 @@
               <div class="creator-card-banner">
                 <div class="ranking-badge${badgeClass}">${rank}</div>
               </div>
-              <div class="creator-card-avatar-wrapper">
+              <div class="creator-card-info">
                 <div class="creator-card-avatar">
                   ${creator.name.charAt(0)}
                   ${creator.isLive ? '<span class="live-signal"></span>' : ''}
                 </div>
-              </div>
-              <div class="creator-card-body">
-                <div class="creator-card-name">${creator.name}</div>
-                <div class="creator-card-id">@${creator.slug}</div>
-                <div class="creator-card-stats">
-                  <span class="sparks-consumed">${formatSparks(sparks)} スパーク</span>
+                <div class="creator-card-text">
+                  <div class="creator-card-name">${creator.name}</div>
+                  <div class="creator-card-id">@${creator.slug}</div>
                 </div>
+              </div>
+              <div class="creator-card-stats">
+                <span class="sparks-consumed">${formatSparks(sparks)} スパーク</span>
               </div>
               <button class="creator-card-follow-btn${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'ranking')">
                 ${isFollowing ? 'フォロー中' : 'フォローする'}
@@ -821,18 +816,18 @@
             <div class="creator-card" id="creator-${creator.id}">
               <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
               <div class="creator-card-banner"></div>
-              <div class="creator-card-avatar-wrapper">
+              <div class="creator-card-info">
                 <div class="creator-card-avatar">
                   ${creator.name.charAt(0)}
                   ${creator.isLive ? '<span class="live-signal"></span>' : ''}
                 </div>
-              </div>
-              <div class="creator-card-body">
-                <div class="creator-card-name">${creator.name}</div>
-                <div class="creator-card-id">@${creator.slug}</div>
-                <div class="creator-card-stats">
-                  ${(creator.followerCount || 0).toLocaleString()} フォロワー
+                <div class="creator-card-text">
+                  <div class="creator-card-name">${creator.name}</div>
+                  <div class="creator-card-id">@${creator.slug}</div>
                 </div>
+              </div>
+              <div class="creator-card-stats">
+                ${(creator.followerCount || 0).toLocaleString()} フォロワー
               </div>
               <button class="creator-card-follow-btn${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'list')">
                 ${isFollowing ? 'フォロー中' : 'フォローする'}
