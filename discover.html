@@ -249,6 +249,7 @@
       height: 140px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       position: relative;
+      border-radius: 1rem 1rem 0 0;
     }
 
     .creator-card-avatar-wrapper {
@@ -277,10 +278,9 @@
 
     .creator-card-info {
       display: flex;
-      align-items: flex-start;
-      gap: 0.75rem;
-      padding: 2rem 1rem 0.75rem 5.5rem;
-      min-height: 3rem;
+      flex-direction: column;
+      gap: 0.25rem;
+      padding: 2rem 1rem 0.75rem 1rem;
     }
 
     .creator-card-avatar .live-signal {
@@ -307,8 +307,7 @@
     }
 
     .creator-card-text {
-      flex: 1;
-      min-width: 0;
+      width: 100%;
     }
 
     .creator-card-name {
@@ -316,17 +315,11 @@
       font-weight: 700;
       color: #2d1b3d;
       margin-bottom: 0.125rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .creator-card-id {
       font-size: 0.75rem;
       color: #9ca3af;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
     }
 
     .creator-card-stats {
@@ -386,7 +379,7 @@
     .ranking-badge {
       position: absolute;
       top: 0.75rem;
-      left: 0.75rem;
+      right: 0.75rem;
       width: 36px;
       height: 36px;
       border-radius: 50%;
@@ -397,7 +390,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      z-index: 2;
+      z-index: 1;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
 
@@ -524,8 +517,7 @@
       }
 
       .creator-card-info {
-        padding: 1.75rem 0.75rem 0.5rem 4.25rem;
-        min-height: 2.5rem;
+        padding: 1.75rem 0.75rem 0.5rem 0.75rem;
       }
 
       .creator-card-name {
@@ -557,7 +549,7 @@
         height: 30px;
         font-size: 0.75rem;
         top: 0.5rem;
-        left: 0.5rem;
+        right: 0.5rem;
       }
     }
   </style>
