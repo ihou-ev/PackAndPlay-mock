@@ -1934,27 +1934,33 @@
       }, 500);
     }
 
-    // カード使用トーストを表示
-    function showCardUseToast(card) {
-      const cardIcons = {
-        'message': '💬',
-        'action': '⚡',
-        'visual': '✨'
-      };
+    // カスタムトーストを表示（カード使用・スプラッシュ送信など共通）
+    function showCustomToast(options) {
+      const {
+        icon,
+        title,
+        badge = null, // { text: 'SR', rarity: 'sr' } or null
+        message
+      } = options;
 
       // オーバーレイを作成
       const overlay = document.createElement('div');
       overlay.className = 'card-use-toast-overlay';
       document.body.appendChild(overlay);
 
+      // バッジHTML（存在する場合のみ）
+      const badgeHTML = badge
+        ? `<div class="badge badge-rarity-${badge.rarity.toLowerCase()}">${badge.text}</div>`
+        : '';
+
       // トーストを作成
       const toast = document.createElement('div');
       toast.className = 'card-use-toast';
       toast.innerHTML = `
-        <div class="card-use-toast-icon">${cardIcons[card.type] || '🎴'}</div>
-        <div class="card-use-toast-title">${card.name}</div>
-        <div class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</div>
-        <div class="card-use-toast-message">カードを使用しました</div>
+        <div class="card-use-toast-icon">${icon}</div>
+        <div class="card-use-toast-title">${title}</div>
+        ${badgeHTML}
+        <div class="card-use-toast-message">${message}</div>
       `;
       document.body.appendChild(toast);
 
@@ -1969,6 +1975,22 @@
           document.body.removeChild(overlay);
         }, 300);
       }, 1500);
+    }
+
+    // カード使用トーストを表示（後方互換性のためのラッパー）
+    function showCardUseToast(card) {
+      const cardIcons = {
+        'message': '💬',
+        'action': '⚡',
+        'visual': '✨'
+      };
+
+      showCustomToast({
+        icon: cardIcons[card.type] || '🎴',
+        title: card.name,
+        badge: { text: card.rarity, rarity: card.rarity },
+        message: 'カードを使用しました'
+      });
     }
 
     // スプラッシュ金額設定
@@ -2115,11 +2137,18 @@
     function confirmSendSplash() {
       showLoading();
 
+      const amount = selectedSplashAmount;
+
       setTimeout(() => {
         hideLoading();
 
-        // 実際のアプリでは決済処理を実装
-        showToast('スプラッシュを送信しました！', 'success');
+        // カスタムトーストで送信完了を表示
+        showCustomToast({
+          icon: '💰',
+          title: `${amount.toLocaleString()} スパーク`,
+          badge: null,
+          message: 'スプラッシュを送信しました！'
+        });
 
         // リセット
         document.getElementById('splashMessage').value = '';
