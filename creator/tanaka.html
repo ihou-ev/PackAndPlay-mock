@@ -1246,6 +1246,7 @@
         font-size: 0.8125rem;
         width: 100%;
         max-width: 100%;
+        margin-bottom: 2rem;
       }
 
       /* カード使用モーダル - モバイル */
@@ -2084,14 +2085,48 @@
     function sendSplash() {
       const message = document.getElementById('splashMessage').value;
 
-      // 実際のアプリでは決済処理を実装
-      alert(`${selectedSplashAmount.toLocaleString()}スパーク のスプラッシュを送信しました！\nメッセージ: ${message || 'なし'}`);
+      // モーダルの内容を設定
+      document.getElementById('splashModalAmount').textContent = selectedSplashAmount.toLocaleString();
+      document.getElementById('splashModalMessage').textContent = message || 'なし';
 
-      // リセット
-      document.getElementById('splashMessage').value = '';
-      document.getElementById('splashAmountInput').value = '100';
-      document.getElementById('splashSlider').value = '0';
-      updatePreview(100);
+      // 確認ボタンのイベントを設定
+      document.getElementById('splashConfirmButton').onclick = function() {
+        closeSplashModal();
+        confirmSendSplash();
+      };
+
+      // モーダルを表示
+      document.getElementById('splashModal').classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeSplashModal() {
+      document.getElementById('splashModal').classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    // モーダル外クリックで閉じる
+    document.addEventListener('click', function(e) {
+      if (e.target.id === 'splashModal') {
+        closeSplashModal();
+      }
+    });
+
+    function confirmSendSplash() {
+      showLoading();
+
+      setTimeout(() => {
+        hideLoading();
+
+        // 実際のアプリでは決済処理を実装
+        showToast('スプラッシュを送信しました！', 'success');
+
+        // リセット
+        document.getElementById('splashMessage').value = '';
+        document.getElementById('splashAmountInput').value = '100';
+        document.getElementById('splashSlider').value = '0';
+        updatePreview(100);
+      }, 500);
     }
 
     // タブ切り替え
@@ -2319,6 +2354,32 @@
       <div class="use-card-modal-buttons">
         <button type="button" class="use-card-modal-button use-card-modal-button-cancel" onclick="closeUseCardModal()">キャンセル</button>
         <button type="button" class="use-card-modal-button use-card-modal-button-confirm" id="useCardConfirmButton">使用する</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- スプラッシュ送信確認モーダル -->
+  <div class="use-card-modal" id="splashModal">
+    <div class="use-card-modal-content">
+      <div class="use-card-modal-header">
+        <div class="use-card-modal-icon">💰</div>
+        <div class="use-card-modal-title">スプラッシュ送信の確認</div>
+      </div>
+      <div class="use-card-modal-message">
+        <div style="margin-bottom: 1rem;">
+          <strong style="color: #FF1B8D; font-size: 1.5rem;" id="splashModalAmount">100</strong>
+          <span style="color: #6b7280; margin-left: 0.25rem;">スパーク</span>
+        </div>
+        <div style="color: #6b7280; font-size: 0.875rem;">
+          メッセージ: <span id="splashModalMessage">なし</span>
+        </div>
+        <div style="margin-top: 1rem; color: #6b7280; font-size: 0.875rem;">
+          このスプラッシュを送信しますか？
+        </div>
+      </div>
+      <div class="use-card-modal-buttons">
+        <button type="button" class="use-card-modal-button use-card-modal-button-cancel" onclick="closeSplashModal()">キャンセル</button>
+        <button type="button" class="use-card-modal-button use-card-modal-button-confirm" id="splashConfirmButton">送信する</button>
       </div>
     </div>
   </div>
