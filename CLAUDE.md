@@ -41,9 +41,15 @@ The application uses **localStorage** as its primary data persistence mechanism 
 
 **Important**: The overlay communication pattern uses localStorage events. When a card is approved:
 1. Write to `localStorage.overlayEvent` with card data
-2. The overlay listens via `window.addEventListener('storage')`
-3. Also polls `localStorage.overlayEvent` every 1000ms as fallback
-4. After display, the overlay removes the event key
+2. The overlay listens via `window.addEventListener('storage')` for cross-tab communication
+3. Also polls `localStorage.overlayEvent` every 1000ms as fallback (critical for same-tab scenarios)
+4. After display, the overlay removes the event key to prevent re-triggering
+
+**Data Helpers** (`js/mock-data.js`):
+- `saveToStorage(key, data)` / `loadFromStorage(key, defaultValue)` - localStorage wrappers with JSON serialization
+- `getCreatorBySlug(slug)` - Find creator by URL slug
+- `getPackById(packId)` - Find pack by ID
+- `simulatePackOpening(packId)` - Weighted random card selection based on `dropRate`
 
 ### Role-Based Access Control
 
@@ -62,10 +68,13 @@ The application has two distinct user roles with different navigation flows:
 - Can manage packs (`dashboard/packs.html`)
 - Can approve redemptions (`dashboard/redemptions.html`)
 
-Role checking is enforced via:
-- `requireLogin()` - Redirects to login if not authenticated
-- `requireCreatorRole()` - Redirects if not creator role
-- `updateNavbar()` - Dynamically renders role-appropriate navigation
+Role checking is enforced via (`js/main.js`):
+- `requireLogin()` - Redirects to login if not authenticated, returns boolean
+- `requireCreatorRole()` - Redirects if not creator role, returns boolean
+- `getCurrentSession()` - Returns session object from localStorage or null
+- `isLoggedIn()` - Returns boolean for authentication status
+- `logout()` - Clears session and redirects to index.html
+- `updateNavbar()` - Dynamically renders role-appropriate navigation based on session role
 
 ### Session Management Pattern
 
@@ -225,6 +234,26 @@ Open/close with: `openModal('myModal')` / `closeModal('myModal')`
 showToast('Message text', 'success' | 'error' | 'info');
 ```
 
+### Common Utility Functions (`js/main.js`)
+
+**UI Components**:
+- `showLoading()` / `hideLoading()` - Display/hide loading spinner overlay
+- `animatePackOpening(cardData, callback)` - Pack opening animation with card reveal
+
+**Form & Data**:
+- `validateForm(formId)` - Validates required fields, returns boolean
+- `confirmAction(message, onConfirm)` - Browser confirm dialog with callback
+- `copyToClipboard(text)` - Copy to clipboard with toast feedback
+
+**Data Operations**:
+- `filterItems(items, query, fields)` - Search/filter array by query across specified fields
+- `sortItems(items, field, order)` - Sort array by field ('asc' or 'desc')
+- `paginate(items, page, perPage)` - Returns paginated results with metadata
+
+**Helpers**:
+- `getUrlParam(param)` - Extract query string parameter
+- `debounce(func, wait)` - Debounce function calls
+
 ## Progressive Web App (PWA) Features
 
 The application is configured as a PWA with the following features:
@@ -236,9 +265,11 @@ The application is configured as a PWA with the following features:
 
 ### Service Worker (`sw.js`)
 - **Cache Strategy**: Network-first with cache fallback
+- **Cache Name**: `packandplay-v1` - increment version to force cache refresh
 - Caches core HTML, CSS, and JS files for offline access
-- Automatically updates cache on new service worker activation
+- Automatically deletes old caches on activation using cache name comparison
 - Falls back to cached version when offline
+- Includes placeholder push notification handlers for future extension
 
 ### Offline Support
 - Core pages and assets are available offline
@@ -276,6 +307,60 @@ Test controls are visible in top-right for development. In production OBS, these
 - Single creator demo (tanaka) is hardcoded in many places
 - No responsive mobile design - optimized for desktop only
 - Browser security may block some features when using `file://` protocol
+- Service Workers require HTTPS in production (or localhost for development)
+
+## Critical Implementation Details
+
+### Path Resolution Strategy
+The app supports both `file://` protocol (drag-and-drop) and HTTP server modes. The `getRelativePath()` function dynamically calculates relative paths based on current directory depth, checking for "PackAndPlay-mock" in the path or falling back to depth estimation. Always use this function for navigation links, never hardcoded `../` paths.
+
+### Overlay Communication Pattern
+The OBS overlay uses a **dual-mechanism** approach:
+1. **localStorage `storage` event** - Fires when localStorage changes in another tab/window (doesn't fire in same tab)
+2. **1000ms polling** - Checks `localStorage.overlayEvent` every second as fallback
+
+This ensures the overlay works whether it's in a separate browser window (OBS Browser Source) or same tab during testing.
+
+### Modal Close Pattern
+Modals close via three methods:
+1. Clicking `[data-close-modal]` button
+2. Clicking outside modal (on `.modal-overlay`)
+3. Calling `closeModal(modalId)` programmatically
+
+All modals must use `modal-overlay` class with `display: flex` and proper ID structure.
+
+### Session Persistence Across File Protocol
+When using `file://` protocol, `getRelativePath()` is critical for logout redirects since absolute paths like `/index.html` don't work. The `logout()` function explicitly checks `window.location.protocol` to handle both cases.
+
+## Debugging Tips
+
+### Inspecting localStorage
+Open browser DevTools > Application > Local Storage to view/edit:
+- Session data
+- Inventory contents
+- Creator cards and packs
+- Redemption queue
+- Overlay events
+
+### Testing Overlay Communication
+1. Open `dashboard/redemptions.html` in one tab
+2. Open `overlay/index.html` in another tab
+3. Approve a card in the redemptions page
+4. Overlay should display the card effect immediately
+5. Check DevTools Console for overlay event logs
+
+### Service Worker Issues
+If changes aren't reflecting:
+1. DevTools > Application > Service Workers
+2. Click "Unregister"
+3. Hard reload (Ctrl+Shift+R / Cmd+Shift+R)
+4. Or increment `CACHE_NAME` in `sw.js` (e.g., `packandplay-v2`)
+
+### File Protocol Limitations
+When using `file://` protocol:
+- Service Worker won't register
+- Some fetch operations may fail due to CORS
+- Use a local HTTP server for full functionality testing
 
 ## Testing User Flows
 
