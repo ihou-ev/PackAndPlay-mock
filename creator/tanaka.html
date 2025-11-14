@@ -356,6 +356,13 @@
       overflow-y: auto;
     }
 
+    /* スプラッシュタブのコンテンツ幅制限 */
+    #splashContent {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 1.5rem 2rem;
+    }
+
     .action-content::-webkit-scrollbar {
       width: 6px;
     }
@@ -861,6 +868,7 @@
 
     .send-button {
       width: 100%;
+      max-width: 100%;
       padding: 0.875rem;
       border-radius: 0.5rem;
       border: none;
@@ -1118,10 +1126,10 @@
         min-height: 250px;
       }
 
-      /* スプラッシュタブの左右パディングを増やす */
+      /* スプラッシュタブ - モバイル調整 */
       #splashContent {
-        padding-left: 1.5rem;
-        padding-right: 1.5rem;
+        padding: 1rem 1.25rem;
+        max-width: 100%;
       }
 
       .cards-grid {
