@@ -50,7 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
   // ランキング表示
   function renderRanking() {
     const list = document.getElementById('rankingList');
-    const followedIds = getFollowedCreators();
+    const followedCreators = getFollowedCreators();
+    const followedIds = followedCreators.map(c => c.id);
 
     // スパーク消費量でソート
     let ranked = [...creators].sort((a, b) => {
@@ -87,12 +88,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="creator-card-text">
               <div class="creator-card-name">${creator.name}</div>
               <div class="creator-card-id">@${creator.slug}</div>
+              ${creator.bio ? `<div class="creator-card-bio">${creator.bio}</div>` : ''}
             </div>
           </div>
           <div class="creator-card-stats">
             <span class="sparks-consumed">${formatSparks(sparks)} スパーク</span>
           </div>
-          <button class="creator-card-follow-btn${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'ranking')">
+          <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorDiscover(${creator.id}, event, 'ranking')` : `followCreatorDiscover(${creator.id}, event, 'ranking')`}">
             ${isFollowing ? 'フォロー中' : 'フォローする'}
           </button>
         </div>
@@ -110,7 +112,8 @@ document.addEventListener('DOMContentLoaded', function() {
   function renderCreators() {
     const list = document.getElementById('creatorsList');
     const emptyState = document.getElementById('emptyState');
-    const followedIds = getFollowedCreators();
+    const followedCreators = getFollowedCreators();
+    const followedIds = followedCreators.map(c => c.id);
 
     // フィルタリング
     let filtered = [...creators];
@@ -160,12 +163,13 @@ document.addEventListener('DOMContentLoaded', function() {
             <div class="creator-card-text">
               <div class="creator-card-name">${creator.name}</div>
               <div class="creator-card-id">@${creator.slug}</div>
+              ${creator.bio ? `<div class="creator-card-bio">${creator.bio}</div>` : ''}
             </div>
           </div>
           <div class="creator-card-stats">
             ${(creator.followerCount || 0).toLocaleString()} フォロワー
           </div>
-          <button class="creator-card-follow-btn${isFollowing ? ' following' : ''}" onclick="toggleFollowButton(${creator.id}, event, 'list')">
+          <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorDiscover(${creator.id}, event, 'list')` : `followCreatorDiscover(${creator.id}, event, 'list')`}">
             ${isFollowing ? 'フォロー中' : 'フォローする'}
           </button>
         </div>
@@ -173,66 +177,46 @@ document.addEventListener('DOMContentLoaded', function() {
     }).join('');
   }
 
-  // フォローボタンのトグル
-  window.toggleFollowButton = function(creatorId, event, source) {
+  // フォロー解除（discover.js専用、main.jsの汎用関数を使用してHTML再描画）
+  window.unfollowCreatorDiscover = function(creatorId, event, source) {
     event.preventDefault();
     event.stopPropagation();
 
     const creator = creators.find(c => c.id === creatorId);
     const creatorName = creator ? creator.name : '配信者';
-    const followedIds = getFollowedCreators();
-    const isFollowing = followedIds.includes(creatorId);
 
-    if (isFollowing) {
-      // カスタムモーダルを表示
-      showUnfollowModal(creatorId, creatorName, source);
-    } else {
-      toggleFollow(creatorId);
-      updateButtonState(creatorId, true, source);
-    }
-  };
-
-  // フォロー解除モーダルを表示
-  window.showUnfollowModal = function(creatorId, creatorName, source) {
-    const modal = document.getElementById('unfollowModal');
-    const message = document.getElementById('unfollowModalMessage');
-    const confirmButton = document.getElementById('unfollowConfirmButton');
-
-    message.textContent = `${creatorName}のフォローを解除しますか？`;
-
-    confirmButton.onclick = function() {
-      toggleFollow(creatorId);
-      updateButtonState(creatorId, false, source);
-      closeUnfollowModal();
-    };
-
-    modal.classList.add('active');
-  };
-
-  // フォロー解除モーダルを閉じる
-  window.closeUnfollowModal = function() {
-    const modal = document.getElementById('unfollowModal');
-    modal.classList.remove('active');
-  };
-
-  // ボタンの状態を更新
-  function updateButtonState(creatorId, isFollowing, source) {
-    const prefix = source === 'ranking' ? 'ranking-creator-' : 'creator-';
-    const card = document.getElementById(prefix + creatorId);
-    if (card) {
-      const button = card.querySelector('.creator-card-follow-btn');
-      if (button) {
-        if (isFollowing) {
-          button.className = 'creator-card-follow-btn following';
-          button.textContent = 'フォロー中';
-        } else {
-          button.className = 'creator-card-follow-btn';
-          button.textContent = 'フォローする';
-        }
-        button.blur();
+    // main.jsのshowUnfollowModalを使用
+    showUnfollowModal(creatorId, creatorName, function() {
+      // フォロー解除後にHTML再描画
+      if (currentTab === 'ranking') {
+        renderRanking();
+      } else {
+        renderCreators();
       }
+    });
+  };
+
+  // フォローする（discover.js専用、HTML再描画）
+  window.followCreatorDiscover = function(creatorId, event, source) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    toggleFollow(creatorId);
+
+    // フォロー中カウント更新
+    const followingCountEl = document.getElementById('followingCount');
+    if (followingCountEl) {
+      const followedCreators = getFollowedCreators();
+      followingCountEl.textContent = followedCreators.length;
     }
-  }
+
+    // フォロー後にHTML再描画
+    if (currentTab === 'ranking') {
+      renderRanking();
+    } else {
+      renderCreators();
+    }
+  };
 
   // 検索
   document.getElementById('searchInput').addEventListener('input', function(e) {

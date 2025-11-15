@@ -588,17 +588,19 @@ function closeMobileMenu() {
 }
 
 // フォロー関連共通関数
-function unfollowCreator(creatorId, event) {
+// フォロー解除（汎用）
+function unfollowCreator(creatorId, event, updateCallback) {
   event.preventDefault();
   event.stopPropagation();
 
   const creator = creators.find(c => c.id === creatorId);
   const creatorName = creator ? creator.name : '配信者';
 
-  showUnfollowModal(creatorId, creatorName);
+  showUnfollowModal(creatorId, creatorName, updateCallback);
 }
 
-function showUnfollowModal(creatorId, creatorName) {
+// フォロー解除モーダル表示（汎用）
+function showUnfollowModal(creatorId, creatorName, updateCallback) {
   const modal = document.getElementById('unfollowModal');
   const message = document.getElementById('unfollowModalMessage');
   const confirmButton = document.getElementById('unfollowConfirmButton');
@@ -608,14 +610,20 @@ function showUnfollowModal(creatorId, creatorName) {
   confirmButton.onclick = function() {
     toggleFollow(creatorId);
 
-    const card = document.getElementById(`creator-${creatorId}`);
-    if (card) {
-      const button = card.querySelector('.following-button');
-      if (button) {
-        button.className = 'following-button unfollow-style';
-        button.innerHTML = '<span>フォローする</span>';
-        button.onclick = (e) => followCreator(creatorId, e);
-        button.blur();
+    // カスタム更新処理があれば実行
+    if (updateCallback) {
+      updateCallback(creatorId, false);
+    } else {
+      // デフォルト：.following-buttonクラスを探す
+      const card = document.getElementById(`creator-${creatorId}`);
+      if (card) {
+        const button = card.querySelector('.following-button');
+        if (button) {
+          button.className = 'following-button unfollow-style';
+          button.innerHTML = '<span>フォローする</span>';
+          button.onclick = (e) => followCreator(creatorId, e);
+          button.blur();
+        }
       }
     }
 
@@ -637,20 +645,27 @@ function closeUnfollowModal() {
   modal.classList.remove('active');
 }
 
-function followCreator(creatorId, event) {
+// フォローする（汎用）
+function followCreator(creatorId, event, updateCallback) {
   event.preventDefault();
   event.stopPropagation();
 
   toggleFollow(creatorId);
 
-  const card = document.getElementById(`creator-${creatorId}`);
-  if (card) {
-    const button = card.querySelector('.following-button');
-    if (button) {
-      button.className = 'following-button';
-      button.innerHTML = '<span>フォロー中</span>';
-      button.onclick = (e) => unfollowCreator(creatorId, e);
-      button.blur();
+  // カスタム更新処理があれば実行
+  if (updateCallback) {
+    updateCallback(creatorId, true);
+  } else {
+    // デフォルト：.following-buttonクラスを探す
+    const card = document.getElementById(`creator-${creatorId}`);
+    if (card) {
+      const button = card.querySelector('.following-button');
+      if (button) {
+        button.className = 'following-button';
+        button.innerHTML = '<span>フォロー中</span>';
+        button.onclick = (e) => unfollowCreator(creatorId, e);
+        button.blur();
+      }
     }
   }
 

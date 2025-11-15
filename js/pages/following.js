@@ -61,6 +61,38 @@ function sortFollowingCreators() {
   renderFollowingCreators(sortBy);
 }
 
+// showUnfollowModalをオーバーライド（following.js用にHTML再描画を追加）
+showUnfollowModal = function(creatorId, creatorName, updateCallback) {
+  const modal = document.getElementById('unfollowModal');
+  const message = document.getElementById('unfollowModalMessage');
+  const confirmButton = document.getElementById('unfollowConfirmButton');
+
+  message.textContent = `${creatorName}のフォローを解除しますか？`;
+
+  confirmButton.onclick = function() {
+    toggleFollow(creatorId);
+
+    // カスタム更新処理があれば実行
+    if (updateCallback) {
+      updateCallback(creatorId, false);
+    }
+
+    // フォロー中リスト更新（following.js固有処理）
+    renderFollowingCreators();
+
+    // フォロー中カウント更新
+    const followingCountEl = document.getElementById('followingCount');
+    if (followingCountEl) {
+      const followedCreators = getFollowedCreators();
+      followingCountEl.textContent = followedCreators.length;
+    }
+
+    closeUnfollowModal();
+  };
+
+  modal.classList.add('active');
+};
+
 // フォロー関連関数、モバイルメニュー関数はjs/main.jsで定義
 
 // 初期表示

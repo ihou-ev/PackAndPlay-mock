@@ -156,6 +156,13 @@ function showUnfollowModal() {
       button.blur();
     }
 
+    // フォロー中カウント更新
+    const followingCountEl = document.getElementById('followingCount');
+    if (followingCountEl) {
+      const followedCreators = getFollowedCreators();
+      followingCountEl.textContent = followedCreators.length;
+    }
+
     closeUnfollowModal();
   };
 
@@ -183,11 +190,19 @@ function followCreator(event) {
     button.onclick = (e) => unfollowCreator(e);
     button.blur();
   }
+
+  // フォロー中カウント更新
+  const followingCountEl = document.getElementById('followingCount');
+  if (followingCountEl) {
+    const followedCreators = getFollowedCreators();
+    followingCountEl.textContent = followedCreators.length;
+  }
 }
 
 // 初期化：フォロー状態を確認してボタンを設定
 function initFollowButton() {
-  const followedIds = getFollowedCreators();
+  const followedCreators = getFollowedCreators();
+  const followedIds = followedCreators.map(c => c.id);
   const isFollowing = followedIds.includes(creator.id);
   const button = document.getElementById('followButton');
 

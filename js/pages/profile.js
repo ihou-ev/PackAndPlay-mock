@@ -314,20 +314,24 @@ function renderLiveCreators() {
   `).join('');
 }
 
-// フォロー解除
-function unfollowCreator(creatorId, event) {
-  event.preventDefault();
-  event.stopPropagation();
+// フォロー・フォロー解除関数はmain.jsで定義されたものを使用
+// profile.jsではrenderProfile()を追加で呼ぶためにmain.jsの関数をオーバーライド
 
-  const creator = creators.find(c => c.id === creatorId);
-  const creatorName = creator ? creator.name : '配信者';
+// main.jsの元の関数を保存
+const mainUnfollowCreator = unfollowCreator;
+const mainFollowCreator = followCreator;
+const mainShowUnfollowModal = showUnfollowModal;
 
-  // カスタムモーダルを表示
-  showUnfollowModal(creatorId, creatorName);
-}
+// profile.js用にオーバーライド（renderProfile()を追加）
+unfollowCreator = function(creatorId, event) {
+  // main.jsの関数を呼び、完了後にrenderProfile()を実行
+  mainUnfollowCreator.call(this, creatorId, event);
+  // showUnfollowModalのconfirmButton.onclickでrenderProfile()を呼ぶ必要があるため、
+  // showUnfollowModalもオーバーライド
+};
 
-// フォロー解除モーダルを表示
-function showUnfollowModal(creatorId, creatorName) {
+// showUnfollowModalをオーバーライド（profile.js用にHTML再描画を追加）
+showUnfollowModal = function(creatorId, creatorName, updateCallback) {
   const modal = document.getElementById('unfollowModal');
   const message = document.getElementById('unfollowModalMessage');
   const confirmButton = document.getElementById('unfollowConfirmButton');
@@ -337,55 +341,49 @@ function showUnfollowModal(creatorId, creatorName) {
   confirmButton.onclick = function() {
     toggleFollow(creatorId);
 
-    // ボタンを「フォローする」に変更
-    const card = document.getElementById(`creator-${creatorId}`);
-    if (card) {
-      const button = card.querySelector('.following-button');
-      if (button) {
-        button.className = 'following-button unfollow-style';
-        button.innerHTML = '<span>フォローする</span>';
-        button.onclick = (e) => followCreator(creatorId, e);
-        button.blur(); // フォーカスを外してホバー状態を解除
-      }
+    // カスタム更新処理があれば実行
+    if (updateCallback) {
+      updateCallback(creatorId, false);
     }
 
-    renderProfile(); // フォロー中の数を更新
+    // プロフィール更新（profile.js固有処理）
+    renderProfile();
+
+    // 配信中タブのHTML再描画（フォロー解除により表示が変わる可能性があるため）
+    renderLiveCreators();
+
+    // フォロー中カウント更新
+    const followingCountEl = document.getElementById('followingCount');
+    if (followingCountEl) {
+      const followedCreators = getFollowedCreators();
+      followingCountEl.textContent = followedCreators.length;
+    }
+
     closeUnfollowModal();
   };
 
   modal.classList.add('active');
-}
+};
 
-// フォロー解除モーダルを閉じる
-function closeUnfollowModal() {
-  const modal = document.getElementById('unfollowModal');
-  modal.classList.remove('active');
-}
-
-// フォローする
-function followCreator(creatorId, event) {
+followCreator = function(creatorId, event) {
   event.preventDefault();
   event.stopPropagation();
 
-  const creator = creators.find(c => c.id === creatorId);
-  const creatorName = creator ? creator.name : '配信者';
-
   toggleFollow(creatorId);
 
-  // ボタンを「フォロー中」に変更
-  const card = document.getElementById(`creator-${creatorId}`);
-  if (card) {
-    const button = card.querySelector('.following-button');
-    if (button) {
-      button.className = 'following-button';
-      button.innerHTML = '<span>フォロー中</span>';
-      button.onclick = (e) => unfollowCreator(creatorId, e);
-      button.blur(); // フォーカスを外してホバー状態を解除
-    }
-  }
+  // プロフィール更新（profile.js固有処理）
+  renderProfile();
 
-  renderProfile(); // フォロー中の数を更新
-}
+  // 配信中タブのHTML再描画（フォロー追加により表示が変わる可能性があるため）
+  renderLiveCreators();
+
+  // フォロー中カウント更新
+  const followingCountEl = document.getElementById('followingCount');
+  if (followingCountEl) {
+    const followedCreators = getFollowedCreators();
+    followingCountEl.textContent = followedCreators.length;
+  }
+};
 
 // アカウント削除モーダルを表示
 function confirmDeleteAccount() {

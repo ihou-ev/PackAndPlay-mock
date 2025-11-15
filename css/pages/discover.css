@@ -79,7 +79,7 @@ body {
 
 .tab-content {
   display: none;
-  background: white;
+  background: #f9fafb;
   border-radius: 0 0 1rem 1rem;
   padding: 1.5rem;
 }
@@ -194,22 +194,29 @@ body {
   align-items: start;
 }
 
+/* ランキングリストは1列表示 */
+#rankingList.creators-list {
+  grid-template-columns: 1fr;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
 /* 配信者カード */
 .creator-card {
   background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
   display: flex;
   flex-direction: column;
   cursor: pointer;
   position: relative;
+  min-height: 240px;
+  padding: 0;
 }
 
 .creator-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  transform: translateY(-2px);
+  background: white;
 }
 
 .creator-card-banner {
@@ -226,6 +233,8 @@ body {
   left: 1rem;
   z-index: 2;
 }
+
+/* アバターの位置に合わせて名前を配置 */
 
 .creator-card-avatar {
   width: 48px;
@@ -250,6 +259,9 @@ body {
   gap: 0.125rem;
   padding: 1.75rem 1rem 0 1rem;
   margin: 0;
+  align-items: flex-start;
+  width: 100%;
+  background: white;
 }
 
 .creator-card-avatar .live-signal {
@@ -277,59 +289,91 @@ body {
 
 .creator-card-text {
   width: 100%;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .creator-card-name {
   font-size: 0.9375rem;
   font-weight: 700;
   color: #2d1b3d;
+  text-align: left;
+  width: 100%;
+  display: block;
 }
 
 .creator-card-id {
   font-size: 0.75rem;
   color: #9ca3af;
+  text-align: left;
+  width: 100%;
+  display: block;
+}
+
+.creator-card-bio {
+  font-size: 0.75rem;
+  color: #6b7280;
+  text-align: left;
+  width: 100%;
+  display: block;
+  margin-top: 0.25rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .creator-card-stats {
   font-size: 0.75rem;
   color: #6b7280;
-  padding: 0.5rem 1rem 0.75rem 1rem;
+  padding: 0.5rem 1rem 3rem 1rem;
   margin: 0;
+  background: white;
 }
 
 .creator-card-follow-btn {
-  width: 100%;
-  margin: 0;
-  padding: 0.625rem 1rem;
-  border-radius: 0;
-  border: 2px solid #e5e7eb;
-  border-left: none;
-  border-right: none;
-  border-bottom: none;
-  background: white;
-  color: #2d1b3d;
+  position: absolute;
+  right: 1rem;
+  top: 170px;
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1.5px solid #d1d5db;
+  color: #6b7280;
+  font-size: 0.8125rem;
   font-weight: 600;
-  font-size: 0.875rem;
+  border-radius: 9999px;
   cursor: pointer;
   transition: all 0.2s;
-  position: relative;
-  z-index: 2;
+  white-space: nowrap;
+  z-index: 3;
 }
 
 .creator-card-follow-btn:hover {
+  background: #f3f4f6;
   border-color: #FF1B8D;
   color: #FF1B8D;
 }
 
 .creator-card-follow-btn.following {
-  background: #FF1B8D;
-  color: white;
+  background: transparent;
   border-color: #FF1B8D;
+  color: #FF1B8D;
 }
 
 .creator-card-follow-btn.following:hover {
-  background: #e01677;
-  border-color: #e01677;
+  background: #fff0f7;
+}
+
+.creator-card-follow-btn.unfollow-style {
+  border-color: #d1d5db;
+  color: #6b7280;
+}
+
+.creator-card-follow-btn.unfollow-style:hover {
+  background: #f3f4f6;
+  border-color: #FF1B8D;
+  color: #FF1B8D;
 }
 
 .creator-card-link {
@@ -468,6 +512,11 @@ body {
     align-items: start;
   }
 
+  /* モバイルでもランキングは1列 */
+  #rankingList.creators-list {
+    grid-template-columns: 1fr;
+  }
+
   .creator-card-banner {
     height: 100px;
   }
@@ -492,31 +541,47 @@ body {
   .creator-card-info {
     padding: 1.5rem 0.75rem 0 0.75rem;
     margin: 0;
+    align-items: flex-start;
+    width: 100%;
+  }
+
+  .creator-card-text {
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .creator-card-name {
     font-size: 0.8125rem;
+    text-align: left;
+    width: 100%;
+    display: block;
   }
 
   .creator-card-id {
     font-size: 0.6875rem;
+    text-align: left;
+    width: 100%;
+    display: block;
+  }
+
+  .creator-card-bio {
+    font-size: 0.6875rem;
+    margin-top: 0.25rem;
   }
 
   .creator-card-stats {
     font-size: 0.6875rem;
-    padding: 0.375rem 0.75rem 0.625rem 0.75rem;
+    padding: 0.375rem 0.75rem 2.5rem 0.75rem;
     margin: 0;
   }
 
   .creator-card-follow-btn {
     font-size: 0.75rem;
     padding: 0.5rem 0.75rem;
-    width: 100%;
-    margin: 0;
-    border-radius: 0;
-    border-left: none;
-    border-right: none;
-    border-bottom: none;
+    right: 0.75rem;
+    top: 130px;
   }
 
   .sparks-consumed {
