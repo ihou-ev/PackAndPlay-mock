@@ -13,11 +13,6 @@
       display: flex;
     }
 
-    /* サイドバーをモバイルでは非表示 */
-    .sidebar {
-      display: none;
-    }
-
     /* メインラッパーのマージンを削除 */
     .main-wrapper {
       margin-left: 0;
@@ -543,11 +538,6 @@
 
 
     /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
-
-    /* モバイルでサイドバーを表示 */
-    .sidebar.mobile-open {
-      display: flex;
-    }
 
     /* モバイルフッター */
     .mobile-footer {

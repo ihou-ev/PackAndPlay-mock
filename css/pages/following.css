@@ -12,10 +12,6 @@ body {
   display: flex;
 }
 
-.sidebar {
-  display: none;
-}
-
 .main-wrapper {
   margin-left: 0;
 }
@@ -228,7 +224,3 @@ body {
 }
 
 /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
-
-.sidebar.mobile-open {
-  display: flex;
-}
