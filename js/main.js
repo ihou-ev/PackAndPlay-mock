@@ -457,6 +457,12 @@ function renderSidebarNav(currentPage = '') {
           </svg>
           配信者を探す
         </a>
+        <a href="following.html" class="sidebar-nav-link${currentPage === 'following' ? ' active' : ''}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>
+          フォロー中
+        </a>
         <a href="dashboard/index.html" class="sidebar-nav-link${currentPage === 'dashboard' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3zM14 13a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z"></path>
@@ -497,6 +503,12 @@ function renderSidebarNav(currentPage = '') {
           </svg>
           配信者を探す
         </a>
+        <a href="following.html" class="sidebar-nav-link${currentPage === 'following' ? ' active' : ''}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+          </svg>
+          フォロー中
+        </a>
         <a href="inventory.html" class="sidebar-nav-link${currentPage === 'inventory' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
@@ -536,4 +548,116 @@ function renderSidebarNav(currentPage = '') {
   }
 
   sidebarNav.innerHTML = navHTML;
+}
+
+// モバイルメニュー管理（共通関数）
+function toggleMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const button = document.getElementById('mobileMenuButton');
+  const overlay = document.getElementById('mobileMenuOverlay');
+
+  const isOpen = sidebar.classList.contains('mobile-open');
+
+  if (isOpen) {
+    closeMobileMenu();
+  } else {
+    openMobileMenu();
+  }
+}
+
+function openMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const button = document.getElementById('mobileMenuButton');
+  const overlay = document.getElementById('mobileMenuOverlay');
+
+  sidebar.classList.add('mobile-open');
+  button.classList.add('active');
+  overlay.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+  const sidebar = document.getElementById('sidebar');
+  const button = document.getElementById('mobileMenuButton');
+  const overlay = document.getElementById('mobileMenuOverlay');
+
+  sidebar.classList.remove('mobile-open');
+  button.classList.remove('active');
+  overlay.style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// フォロー関連共通関数
+function unfollowCreator(creatorId, event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const creator = creators.find(c => c.id === creatorId);
+  const creatorName = creator ? creator.name : '配信者';
+
+  showUnfollowModal(creatorId, creatorName);
+}
+
+function showUnfollowModal(creatorId, creatorName) {
+  const modal = document.getElementById('unfollowModal');
+  const message = document.getElementById('unfollowModalMessage');
+  const confirmButton = document.getElementById('unfollowConfirmButton');
+
+  message.textContent = `${creatorName}のフォローを解除しますか？`;
+
+  confirmButton.onclick = function() {
+    toggleFollow(creatorId);
+
+    const card = document.getElementById(`creator-${creatorId}`);
+    if (card) {
+      const button = card.querySelector('.following-button');
+      if (button) {
+        button.className = 'following-button unfollow-style';
+        button.innerHTML = '<span>フォローする</span>';
+        button.onclick = (e) => followCreator(creatorId, e);
+        button.blur();
+      }
+    }
+
+    // フォロー中カウント更新
+    const followingCountEl = document.getElementById('followingCount');
+    if (followingCountEl) {
+      const followedCreators = getFollowedCreators();
+      followingCountEl.textContent = followedCreators.length;
+    }
+
+    closeUnfollowModal();
+  };
+
+  modal.classList.add('active');
+}
+
+function closeUnfollowModal() {
+  const modal = document.getElementById('unfollowModal');
+  modal.classList.remove('active');
+}
+
+function followCreator(creatorId, event) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  toggleFollow(creatorId);
+
+  const card = document.getElementById(`creator-${creatorId}`);
+  if (card) {
+    const button = card.querySelector('.following-button');
+    if (button) {
+      button.className = 'following-button';
+      button.innerHTML = '<span>フォロー中</span>';
+      button.onclick = (e) => unfollowCreator(creatorId, e);
+      button.blur();
+    }
+  }
+
+  // フォロー中カウント更新
+  const followingCountEl = document.getElementById('followingCount');
+  if (followingCountEl) {
+    const followedCreators = getFollowedCreators();
+    followingCountEl.textContent = followedCreators.length;
+  }
 }

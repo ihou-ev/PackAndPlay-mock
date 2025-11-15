@@ -1,0 +1,93 @@
+    .pack-opening-container {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 0;
+    }
+
+    .pack-box {
+      width: 300px;
+      height: 400px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8rem;
+      cursor: pointer;
+      transition: transform 0.3s;
+      box-shadow: var(--shadow-xl);
+      position: relative;
+    }
+
+    .pack-box:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .pack-box.opening {
+      animation: shake 0.5s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+
+    .card-reveal {
+      width: 300px;
+      background: var(--surface);
+      border-radius: 1rem;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow-xl);
+      animation: cardReveal 1s ease-out;
+    }
+
+    @keyframes cardReveal {
+      0% {
+        transform: scale(0) rotate(180deg);
+        opacity: 0;
+      }
+      50% {
+        transform: scale(1.2) rotate(-10deg);
+      }
+      100% {
+        transform: scale(1) rotate(0deg);
+        opacity: 1;
+      }
+    }
+
+    .card-icon {
+      font-size: 6rem;
+      margin-bottom: 1rem;
+    }
+
+    .sparkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background: white;
+      border-radius: 50%;
+      animation: sparkle 1s ease-out;
+    }
+
+    @keyframes sparkle {
+      0% {
+        transform: scale(0);
+        opacity: 1;
+      }
+      100% {
+        transform: scale(1);
+        opacity: 0;
+      }
+    }

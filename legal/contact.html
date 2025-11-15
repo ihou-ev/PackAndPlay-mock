@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>お問い合わせ - Pack&Play</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <!-- コンポーネントベースCSS -->
+  <link rel="stylesheet" href="../css/app.css">
   <style>
     body {
       background: var(--background);
@@ -272,6 +273,11 @@
     </div>
   </div>
 
+  <!-- コンポーネントベースJavaScript -->
+  <script src="../js/services/storage.js"></script>
+  <script src="../js/core/utils.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/toast.js"></script>
   <script src="../js/main.js"></script>
   <script>
     function handleSubmit(event) {

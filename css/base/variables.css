@@ -1,0 +1,48 @@
+/* Pack&Play - CSS変数定義 */
+
+:root {
+  /* カラーパレット - ビビッドな絵の具テーマ */
+  --primary: #FF1B8D; /* ビビッドマゼンタ */
+  --primary-dark: #D4006E;
+  --secondary: #00D4FF; /* ビビッドシアン */
+  --accent: #FFD600; /* ビビッドイエロー */
+  --background: #FFF8F0;
+  --surface: #ffffff;
+  --text: #2D1B3D;
+  --text-light: #7B6B8F;
+  --border: #E8D5FF;
+  --success: #00E676;
+  --warning: #FF9500;
+  --error: #FF3B30;
+  --live-badge: #00E676;
+
+  /* レアリティカラー - ビビッド */
+  --rarity-n: #9B9B9B;
+  --rarity-r: #007AFF;
+  --rarity-sr: #AF52DE;
+  --rarity-ur: #FF9500;
+
+  /* スペーシング */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+
+  /* フォント */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', monospace;
+
+  /* 角丸 */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* 影 */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}

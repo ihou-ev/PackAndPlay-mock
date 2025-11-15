@@ -1,0 +1,142 @@
+    body {
+      background-color: white;
+      background-image: url('../../image/Top1.png');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-container {
+      max-width: 500px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.95);
+      padding: 3rem 2rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .login-back {
+      display: inline-block;
+      color: #2d1b3d;
+      text-decoration: none;
+      font-weight: 600;
+      margin-bottom: 2rem;
+      padding: 0.5rem 1rem;
+      border-radius: var(--radius-md);
+      background: #f3f4f6;
+      transition: all 0.2s;
+    }
+
+    .login-back:hover {
+      background: #e5e7eb;
+      transform: translateX(-2px);
+    }
+
+    .login-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #2d1b3d;
+      margin-bottom: 0.75rem;
+    }
+
+    .login-description {
+      font-size: 1.125rem;
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    .platform-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .platform-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      padding: 1.25rem 2rem;
+      border: 3px solid #e5e7eb;
+      border-radius: var(--radius-lg);
+      background: white;
+      font-weight: 700;
+      font-size: 1.125rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      width: 100%;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .platform-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .platform-btn-youtube {
+      border-color: #FF3B30;
+      color: #FF3B30;
+    }
+
+    .platform-btn-youtube:hover {
+      background: #FF3B30;
+      color: white;
+      border-color: #FF3B30;
+    }
+
+    .platform-btn-twitch {
+      border-color: #AF52DE;
+      color: #AF52DE;
+    }
+
+    .platform-btn-twitch:hover {
+      background: #AF52DE;
+      color: white;
+      border-color: #AF52DE;
+    }
+
+    .platform-btn-x {
+      border-color: #2D1B3D;
+      color: #2D1B3D;
+    }
+
+    .platform-btn-x:hover {
+      background: #2D1B3D;
+      color: white;
+      border-color: #2D1B3D;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        background-attachment: scroll;
+        padding: 1rem;
+      }
+
+      .login-container {
+        padding: 2rem 1.5rem;
+      }
+
+      .login-title {
+        font-size: 2rem;
+      }
+
+      .login-description {
+        font-size: 1rem;
+      }
+
+      .platform-btn {
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+      }
+    }

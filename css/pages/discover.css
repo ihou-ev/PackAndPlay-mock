@@ -1,0 +1,533 @@
+/* discover.html専用スタイル */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+body {
+  display: flex;
+  background: #f9fafb;
+}
+
+/* サイドバーのスタイルはcss/components/sidebar.cssで定義 */
+/* .main-wrapperのスタイルはcss/layouts/container.cssで定義 */
+
+/* 配信者を探すコンテンツ */
+.discover-content {
+  max-width: 1200px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.discover-header {
+  margin-bottom: 2rem;
+}
+
+.discover-title {
+  font-size: 1.875rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  margin-bottom: 0.5rem;
+}
+
+.discover-description {
+  color: #6b7280;
+  font-size: 0.9375rem;
+}
+
+/* タブUI */
+.tabs-container {
+  background: white;
+  border-radius: 1rem 1rem 0 0;
+  padding: 0;
+  margin-bottom: 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.tabs-list {
+  display: flex;
+  gap: 0;
+  padding: 0 1rem;
+}
+
+.tab-button {
+  padding: 1rem 1.5rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+
+.tab-button:hover {
+  color: #2d1b3d;
+}
+
+.tab-button.active {
+  color: #FF1B8D;
+  border-bottom-color: #FF1B8D;
+}
+
+.tab-content {
+  display: none;
+  background: white;
+  border-radius: 0 0 1rem 1rem;
+  padding: 1.5rem;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* フィルターとセレクト */
+.filter-select-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+  padding: 0;
+}
+
+.filter-select {
+  padding: 0.625rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 120px;
+}
+
+.filter-select:hover {
+  border-color: #d1d5db;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #FF1B8D;
+  box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+}
+
+/* 検索ボックス */
+.search-box-container {
+  margin-bottom: 1.5rem;
+}
+
+/* 検索とフィルター */
+.search-filter-section {
+  background: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  width: 100%;
+}
+
+.search-box {
+  position: relative;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.search-input {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s;
+  box-sizing: border-box;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #FF1B8D;
+  box-shadow: 0 0 0 3px rgba(255, 27, 141, 0.1);
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.filter-btn {
+  padding: 0.625rem 1.25rem;
+  border: 2px solid #e5e7eb;
+  border-radius: 0.75rem;
+  background: white;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
+
+.filter-btn:hover {
+  border-color: #FF1B8D;
+  color: #FF1B8D;
+}
+
+.filter-btn.active {
+  background: #FF1B8D;
+  color: white;
+  border-color: #FF1B8D;
+}
+
+/* 配信者リスト */
+.creators-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  align-items: start;
+}
+
+/* 配信者カード */
+.creator-card {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  position: relative;
+}
+
+.creator-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
+}
+
+.creator-card-banner {
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  position: relative;
+  border-radius: 1rem 1rem 0 0;
+}
+
+.creator-card-avatar-wrapper {
+  position: absolute;
+  bottom: -24px;
+  left: 1rem;
+  z-index: 2;
+}
+
+.creator-card-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  position: relative;
+  border: 3px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.creator-card-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  padding: 1.75rem 1rem 0 1rem;
+  margin: 0;
+}
+
+.creator-card-avatar .live-signal {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  background: #22c55e;
+  border-radius: 50%;
+  border: 2px solid white;
+  animation: pulse-signal 2s ease-in-out infinite;
+}
+
+@keyframes pulse-signal {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.1);
+  }
+}
+
+.creator-card-text {
+  width: 100%;
+}
+
+.creator-card-name {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #2d1b3d;
+}
+
+.creator-card-id {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.creator-card-stats {
+  font-size: 0.75rem;
+  color: #6b7280;
+  padding: 0.5rem 1rem 0.75rem 1rem;
+  margin: 0;
+}
+
+.creator-card-follow-btn {
+  width: 100%;
+  margin: 0;
+  padding: 0.625rem 1rem;
+  border-radius: 0;
+  border: 2px solid #e5e7eb;
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  background: white;
+  color: #2d1b3d;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  z-index: 2;
+}
+
+.creator-card-follow-btn:hover {
+  border-color: #FF1B8D;
+  color: #FF1B8D;
+}
+
+.creator-card-follow-btn.following {
+  background: #FF1B8D;
+  color: white;
+  border-color: #FF1B8D;
+}
+
+.creator-card-follow-btn.following:hover {
+  background: #e01677;
+  border-color: #e01677;
+}
+
+.creator-card-link {
+  text-decoration: none;
+  color: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+}
+
+/* ランキング番号（カード版） */
+.creator-card.ranking-card {
+  position: relative;
+}
+
+.ranking-badge {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #6b7280;
+  color: white;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.ranking-badge.gold {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+}
+
+.ranking-badge.silver {
+  background: linear-gradient(135deg, #d1d5db 0%, #9ca3af 100%);
+}
+
+.ranking-badge.bronze {
+  background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+}
+
+.sparks-consumed {
+  color: #FF1B8D;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+/* 空の状態 */
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+  background: white;
+  border-radius: 1rem;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state-text {
+  font-size: 0.9375rem;
+}
+
+.hidden {
+  display: none;
+}
+
+/* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
+
+.sidebar.mobile-active {
+  transform: translateX(0);
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  body {
+    display: block;
+  }
+
+  .mobile-menu-button {
+    display: flex;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s;
+  }
+
+  .main-wrapper {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .discover-content {
+    padding: 1rem;
+    padding-top: 3.5rem;
+    max-width: 100%;
+  }
+
+  .discover-title {
+    font-size: 1.5rem;
+  }
+
+  .discover-description {
+    font-size: 0.875rem;
+  }
+
+  .search-filter-section {
+    padding: 1rem;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-box {
+    width: 100%;
+  }
+
+  .search-input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .creators-list {
+    width: 100%;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.875rem;
+    align-items: start;
+  }
+
+  .creator-card-banner {
+    height: 100px;
+  }
+
+  .creator-card-avatar-wrapper {
+    bottom: -20px;
+    left: 0.75rem;
+  }
+
+  .creator-card-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+    border-width: 2px;
+  }
+
+  .creator-card-avatar .live-signal {
+    width: 12px;
+    height: 12px;
+  }
+
+  .creator-card-info {
+    padding: 1.5rem 0.75rem 0 0.75rem;
+    margin: 0;
+  }
+
+  .creator-card-name {
+    font-size: 0.8125rem;
+  }
+
+  .creator-card-id {
+    font-size: 0.6875rem;
+  }
+
+  .creator-card-stats {
+    font-size: 0.6875rem;
+    padding: 0.375rem 0.75rem 0.625rem 0.75rem;
+    margin: 0;
+  }
+
+  .creator-card-follow-btn {
+    font-size: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    width: 100%;
+    margin: 0;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+  }
+
+  .sparks-consumed {
+    font-size: 0.6875rem;
+  }
+
+  .ranking-badge {
+    width: 30px;
+    height: 30px;
+    font-size: 0.75rem;
+    top: 0.5rem;
+    right: 0.5rem;
+  }
+}

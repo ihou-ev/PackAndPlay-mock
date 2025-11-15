@@ -1,0 +1,46 @@
+/* Pack&Play - バッジコンポーネント */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: 9999px;
+}
+
+.badge-live {
+  background: var(--live-badge);
+  color: white;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.badge-rarity-n {
+  background: var(--rarity-n);
+  color: white;
+}
+
+.badge-rarity-r {
+  background: var(--rarity-r);
+  color: white;
+}
+
+.badge-rarity-sr {
+  background: var(--rarity-sr);
+  color: white;
+}
+
+.badge-rarity-ur {
+  background: var(--rarity-ur);
+  color: white;
+}

@@ -1,0 +1,55 @@
+/* Pack&Play - カードコンポーネント */
+
+.card {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.card-body {
+  padding: var(--spacing-lg);
+}
+
+.card-footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--border);
+  background: #f9fafb;
+}
+
+/* 共通カードベーススタイル */
+.creator-card,
+.following-card,
+.timeline-item {
+  background: white;
+  padding: 1rem;
+  transition: all 0.2s;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.creator-card:last-child,
+.following-card:last-child,
+.timeline-item:last-child {
+  border-bottom: none;
+}
+
+.creator-card:hover,
+.following-card:hover,
+.timeline-item:hover {
+  background: #f9fafb;
+}
