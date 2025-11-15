@@ -1,4 +1,4 @@
-/* discover.html専用スタイル */
+/* discover.html専用スタイル（モバイル版） */
 
 html, body {
   margin: 0;
@@ -9,19 +9,41 @@ html, body {
 }
 
 body {
-  display: flex;
+  display: block;
   background: #f9fafb;
 }
 
 /* サイドバーのスタイルはcss/components/sidebar.cssで定義 */
 /* .main-wrapperのスタイルはcss/layouts/container.cssで定義 */
 
+/* モバイルメニューボタンを表示 */
+.mobile-menu-button {
+  display: flex;
+}
+
+/* サイドバーを初期状態で非表示 */
+.sidebar {
+  transform: translateX(-100%);
+  transition: transform 0.3s;
+}
+
+.sidebar.mobile-active {
+  transform: translateX(0);
+}
+
+/* メインコンテンツ */
+.main-wrapper {
+  margin-left: 0;
+  width: 100%;
+}
+
 /* 配信者を探すコンテンツ */
 .discover-content {
-  max-width: 1200px;
+  max-width: 100%;
   width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 1rem;
+  padding-top: 3.5rem;
 }
 
 .discover-header {
@@ -29,7 +51,7 @@ body {
 }
 
 .discover-title {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 800;
   color: #2d1b3d;
   margin-bottom: 0.5rem;
@@ -37,7 +59,7 @@ body {
 
 .discover-description {
   color: #6b7280;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
 }
 
 /* タブUI */
@@ -128,10 +150,11 @@ body {
 .search-filter-section {
   background: white;
   border-radius: 1rem;
-  padding: 1.5rem;
+  padding: 1rem;
   margin-bottom: 1.5rem;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   width: 100%;
+  box-sizing: border-box;
 }
 
 .search-box {
@@ -188,8 +211,8 @@ body {
 /* 配信者リスト */
 .creators-list {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1.25rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.875rem;
   width: 100%;
   align-items: start;
 }
@@ -221,7 +244,7 @@ body {
 
 .creator-card-banner {
   width: 100%;
-  height: 140px;
+  height: 100px;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   position: relative;
   border-radius: 1rem 1rem 0 0;
@@ -229,16 +252,14 @@ body {
 
 .creator-card-avatar-wrapper {
   position: absolute;
-  bottom: -24px;
-  left: 1rem;
+  bottom: -20px;
+  left: 0.75rem;
   z-index: 2;
 }
 
-/* アバターの位置に合わせて名前を配置 */
-
 .creator-card-avatar {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   display: flex;
@@ -246,10 +267,10 @@ body {
   justify-content: center;
   color: white;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1rem;
   flex-shrink: 0;
   position: relative;
-  border: 3px solid white;
+  border: 2px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -257,7 +278,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.125rem;
-  padding: 1.75rem 1rem 0 1rem;
+  padding: 1.5rem 0.75rem 0 0.75rem;
   margin: 0;
   align-items: flex-start;
   width: 100%;
@@ -268,8 +289,8 @@ body {
   position: absolute;
   top: -2px;
   right: -2px;
-  width: 14px;
-  height: 14px;
+  width: 12px;
+  height: 12px;
   background: #22c55e;
   border-radius: 50%;
   border: 2px solid white;
@@ -296,7 +317,7 @@ body {
 }
 
 .creator-card-name {
-  font-size: 0.9375rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   color: #2d1b3d;
   text-align: left;
@@ -305,7 +326,7 @@ body {
 }
 
 .creator-card-id {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: #9ca3af;
   text-align: left;
   width: 100%;
@@ -313,7 +334,7 @@ body {
 }
 
 .creator-card-bio {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: #6b7280;
   text-align: left;
   width: 100%;
@@ -325,22 +346,22 @@ body {
 }
 
 .creator-card-stats {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   color: #6b7280;
-  padding: 0.5rem 1rem 3rem 1rem;
+  padding: 0.375rem 0.75rem 2.5rem 0.75rem;
   margin: 0;
   background: white;
 }
 
 .creator-card-follow-btn {
   position: absolute;
-  right: 1rem;
-  top: 170px;
-  padding: 0.5rem 1rem;
+  right: 0.75rem;
+  top: 130px;
+  padding: 0.5rem 0.75rem;
   background: transparent;
   border: 1.5px solid #d1d5db;
   color: #6b7280;
-  font-size: 0.8125rem;
+  font-size: 0.75rem;
   font-weight: 600;
   border-radius: 9999px;
   cursor: pointer;
@@ -394,15 +415,15 @@ body {
 
 .ranking-badge {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 36px;
-  height: 36px;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   background: #6b7280;
   color: white;
   font-weight: 700;
-  font-size: 0.875rem;
+  font-size: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -425,7 +446,7 @@ body {
 .sparks-consumed {
   color: #FF1B8D;
   font-weight: 600;
-  font-size: 0.875rem;
+  font-size: 0.6875rem;
 }
 
 /* 空の状態 */
@@ -448,151 +469,4 @@ body {
 
 .hidden {
   display: none;
-}
-
-/* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
-
-.sidebar.mobile-active {
-  transform: translateX(0);
-}
-
-/* モバイル対応 */
-@media (max-width: 768px) {
-  body {
-    display: block;
-  }
-
-  .mobile-menu-button {
-    display: flex;
-  }
-
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-  }
-
-  .main-wrapper {
-    margin-left: 0;
-    width: 100%;
-  }
-
-  .discover-content {
-    padding: 1rem;
-    padding-top: 3.5rem;
-    max-width: 100%;
-  }
-
-  .discover-title {
-    font-size: 1.5rem;
-  }
-
-  .discover-description {
-    font-size: 0.875rem;
-  }
-
-  .search-filter-section {
-    padding: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .search-box {
-    width: 100%;
-  }
-
-  .search-input {
-    width: 100%;
-    box-sizing: border-box;
-  }
-
-  .creators-list {
-    width: 100%;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0.875rem;
-    align-items: start;
-  }
-
-  /* モバイルでもランキングは1列 */
-  #rankingList.creators-list {
-    grid-template-columns: 1fr;
-  }
-
-  .creator-card-banner {
-    height: 100px;
-  }
-
-  .creator-card-avatar-wrapper {
-    bottom: -20px;
-    left: 0.75rem;
-  }
-
-  .creator-card-avatar {
-    width: 40px;
-    height: 40px;
-    font-size: 1rem;
-    border-width: 2px;
-  }
-
-  .creator-card-avatar .live-signal {
-    width: 12px;
-    height: 12px;
-  }
-
-  .creator-card-info {
-    padding: 1.5rem 0.75rem 0 0.75rem;
-    margin: 0;
-    align-items: flex-start;
-    width: 100%;
-  }
-
-  .creator-card-text {
-    text-align: left;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .creator-card-name {
-    font-size: 0.8125rem;
-    text-align: left;
-    width: 100%;
-    display: block;
-  }
-
-  .creator-card-id {
-    font-size: 0.6875rem;
-    text-align: left;
-    width: 100%;
-    display: block;
-  }
-
-  .creator-card-bio {
-    font-size: 0.6875rem;
-    margin-top: 0.25rem;
-  }
-
-  .creator-card-stats {
-    font-size: 0.6875rem;
-    padding: 0.375rem 0.75rem 2.5rem 0.75rem;
-    margin: 0;
-  }
-
-  .creator-card-follow-btn {
-    font-size: 0.75rem;
-    padding: 0.5rem 0.75rem;
-    right: 0.75rem;
-    top: 130px;
-  }
-
-  .sparks-consumed {
-    font-size: 0.6875rem;
-  }
-
-  .ranking-badge {
-    width: 30px;
-    height: 30px;
-    font-size: 0.75rem;
-    top: 0.5rem;
-    right: 0.5rem;
-  }
 }

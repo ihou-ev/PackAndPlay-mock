@@ -1,22 +1,24 @@
+    /* login.html専用スタイル（モバイル版） */
+
     body {
       background-color: white;
       background-image: url('../../image/Top1.png');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
-      background-attachment: fixed;
+      background-attachment: scroll;
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 2rem;
+      padding: 1rem;
     }
 
     .login-container {
       max-width: 500px;
       width: 100%;
       background: rgba(255, 255, 255, 0.95);
-      padding: 3rem 2rem;
+      padding: 2rem 1.5rem;
       border-radius: 1.5rem;
       box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
     }
@@ -44,14 +46,14 @@
     }
 
     .login-title {
-      font-size: 2.5rem;
+      font-size: 2rem;
       font-weight: 900;
       color: #2d1b3d;
       margin-bottom: 0.75rem;
     }
 
     .login-description {
-      font-size: 1.125rem;
+      font-size: 1rem;
       color: #4b5563;
       font-weight: 500;
     }
@@ -67,12 +69,12 @@
       align-items: center;
       justify-content: center;
       gap: 0.75rem;
-      padding: 1.25rem 2rem;
+      padding: 1rem 1.5rem;
       border: 3px solid #e5e7eb;
       border-radius: var(--radius-lg);
       background: white;
       font-weight: 700;
-      font-size: 1.125rem;
+      font-size: 1rem;
       cursor: pointer;
       transition: all 0.3s;
       width: 100%;
@@ -115,28 +117,4 @@
       background: #2D1B3D;
       color: white;
       border-color: #2D1B3D;
-    }
-
-    @media (max-width: 768px) {
-      body {
-        background-attachment: scroll;
-        padding: 1rem;
-      }
-
-      .login-container {
-        padding: 2rem 1.5rem;
-      }
-
-      .login-title {
-        font-size: 2rem;
-      }
-
-      .login-description {
-        font-size: 1rem;
-      }
-
-      .platform-btn {
-        padding: 1rem 1.5rem;
-        font-size: 1rem;
-      }
     }

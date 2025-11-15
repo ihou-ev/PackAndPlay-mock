@@ -1,4 +1,4 @@
-/* Pack&Play - サイドバーコンポーネント */
+/* Pack&Play - サイドバーコンポーネント（モバイル版） */
 
 .sidebar {
   position: fixed;
@@ -13,6 +13,8 @@
   flex-direction: column;
   overflow-y: auto;
   z-index: 1000;
+  transform: translateX(-100%);
+  transition: transform 0.3s;
 }
 
 .sidebar-logo {
@@ -95,11 +97,4 @@
 
 .sidebar.mobile-active {
   transform: translateX(0);
-}
-
-@media (max-width: 768px) {
-  .sidebar {
-    transform: translateX(-100%);
-    transition: transform 0.3s;
-  }
 }

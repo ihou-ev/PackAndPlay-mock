@@ -1,261 +1,234 @@
-    body {
-      overflow-x: hidden;
-      background: #f9fafb;
-      display: flex;
-      min-height: 100vh;
-    }
+body {
+  overflow-x: hidden;
+  background: #f9fafb;
+  display: block;
+  min-height: 100vh;
+}
 
-    /* サイドバーのスタイルはcss/components/sidebar.cssで定義 */
-    /* .main-wrapperのスタイルはcss/layouts/container.cssで定義 */
+/* サイドバーのスタイルはcss/components/sidebar.cssで定義 */
+/* .main-wrapperのスタイルはcss/layouts/container.cssで定義 */
 
-    /* メインコンテンツエリア */
-    .following-content {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 2rem 1rem;
-      width: 100%;
-    }
+.mobile-menu-button {
+  display: flex;
+}
 
-    /* ヘッダー */
-    .page-header {
-      background: white;
-      padding: 1.5rem 1rem;
-      border-bottom: 1px solid #e5e7eb;
-      margin-bottom: 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-    }
+.sidebar {
+  display: none;
+}
 
-    .page-title {
-      font-size: 1.5rem;
-      font-weight: 800;
-      color: #2d1b3d;
-      margin: 0;
-    }
+.main-wrapper {
+  margin-left: 0;
+}
 
-    .back-link {
-      color: #6b7280;
-      text-decoration: none;
-      font-size: 0.9375rem;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 0.5rem;
-      transition: all 0.2s;
-      background: #f3f4f6;
-    }
+/* メインコンテンツエリア */
+.following-content {
+  padding: 0;
+  width: 100%;
+}
 
-    .back-link:hover {
-      background: #e5e7eb;
-      color: #2d1b3d;
-    }
+/* ヘッダー */
+.page-header {
+  background: white;
+  padding: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  margin-bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
 
-    /* ソートコントロール */
-    .sort-control {
-      padding: 1rem;
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.page-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  margin: 0;
+}
 
-    .following-count-text {
-      font-size: 0.9375rem;
-      color: #6b7280;
-      font-weight: 600;
-    }
+.back-link {
+  color: #6b7280;
+  text-decoration: none;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  background: #f3f4f6;
+}
 
-    .sort-select {
-      padding: 0.375rem 0.75rem;
-      border: 1px solid #d1d5db;
-      border-radius: 0.375rem;
-      background: transparent;
-      font-weight: 500;
-      font-size: 0.8125rem;
-      cursor: pointer;
-      transition: all 0.2s;
-      color: #6b7280;
-    }
+.back-link:hover {
+  background: #e5e7eb;
+  color: #2d1b3d;
+}
 
-    .sort-select:focus {
-      outline: none;
-      border-color: #9ca3af;
-    }
+/* ソートコントロール */
+.sort-control {
+  padding: 1rem;
+  padding-left: 3.5rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
-    /* フォロー中リスト */
-    .following-list {
-      background: white;
-    }
+.following-count-text {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-weight: 600;
+}
 
+.sort-select {
+  padding: 0.375rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  background: transparent;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #6b7280;
+}
 
-    .following-empty {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: #9ca3af;
-      font-size: 0.875rem;
-      background: white;
-    }
+.sort-select:focus {
+  outline: none;
+  border-color: #9ca3af;
+}
 
-    /* フォロー中カード */
-    .following-card {
-      position: relative;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      padding: 1rem;
-      background: white;
-      border-bottom: 1px solid #e5e7eb;
-      transition: background 0.2s;
-    }
+/* フォロー中リスト */
+.following-list {
+  background: white;
+}
 
-    .following-card:last-child {
-      border-bottom: none;
-    }
+.following-empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #9ca3af;
+  font-size: 0.875rem;
+  background: white;
+}
 
-    .following-card:hover {
-      background: #f9fafb;
-    }
+/* フォロー中カード */
+.following-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  transition: background 0.2s;
+}
 
-    .following-card-link {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex: 1;
-      min-width: 0;
-      text-decoration: none;
-      color: inherit;
-      padding-right: 7rem;
-    }
+.following-card:last-child {
+  border-bottom: none;
+}
 
-    .following-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #FF1B8D, #00D4FF);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: white;
-      flex-shrink: 0;
-      position: relative;
-    }
+.following-card:hover {
+  background: #f9fafb;
+}
 
-    .following-live-signal {
-      position: absolute;
-      top: -2px;
-      right: -2px;
-      width: 14px;
-      height: 14px;
-      background: #10b981;
-      border: 2px solid white;
-      border-radius: 50%;
-      animation: pulse 2s ease-in-out infinite;
-    }
+.following-card-link {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+  padding-right: 7rem;
+}
 
-    @keyframes pulse {
-      0%, 100% {
-        opacity: 1;
-      }
-      50% {
-        opacity: 0.5;
-      }
-    }
+.following-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+  position: relative;
+}
 
-    .following-info {
-      flex: 1;
-      min-width: 0;
-    }
+.following-live-signal {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  background: #10b981;
+  border: 2px solid white;
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
 
-    .following-name {
-      font-weight: 700;
-      color: #2d1b3d;
-      font-size: 0.9375rem;
-      margin-bottom: 0.25rem;
-    }
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
 
-    .following-bio {
-      color: #6b7280;
-      font-size: 0.875rem;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
+.following-info {
+  flex: 1;
+  min-width: 0;
+}
 
-    .following-button {
-      position: absolute;
-      right: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 0.5rem 1rem;
-      background: transparent;
-      border: 1.5px solid #FF1B8D;
-      color: #FF1B8D;
-      font-size: 0.8125rem;
-      font-weight: 600;
-      border-radius: 9999px;
-      cursor: pointer;
-      transition: all 0.2s;
-      white-space: nowrap;
-    }
+.following-name {
+  font-weight: 700;
+  color: #2d1b3d;
+  font-size: 0.9375rem;
+  margin-bottom: 0.25rem;
+}
 
-    .following-button:hover {
-      background: #fff0f7;
-    }
+.following-bio {
+  color: #6b7280;
+  font-size: 0.875rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
-    .following-button.unfollow-style {
-      border-color: #d1d5db;
-      color: #6b7280;
-    }
+.following-button {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: 1.5px solid #FF1B8D;
+  color: #FF1B8D;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
 
-    .following-button.unfollow-style:hover {
-      background: #f3f4f6;
-      border-color: #FF1B8D;
-      color: #FF1B8D;
-    }
+.following-button:hover {
+  background: #fff0f7;
+}
 
-    /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
+.following-button.unfollow-style {
+  border-color: #d1d5db;
+  color: #6b7280;
+}
 
-    .sidebar.mobile-open {
-      display: flex;
-    }
+.following-button.unfollow-style:hover {
+  background: #f3f4f6;
+  border-color: #FF1B8D;
+  color: #FF1B8D;
+}
 
-    /* レスポンシブ */
-    @media (max-width: 768px) {
-      body {
-        display: block;
-      }
+/* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
 
-      .mobile-menu-button {
-        display: flex;
-      }
-
-      .sidebar {
-        display: none;
-      }
-
-      .main-wrapper {
-        margin-left: 0;
-      }
-
-      .following-content {
-        padding: 0;
-      }
-
-      .sort-control {
-        padding-left: 3.5rem;
-      }
-
-      .page-header {
-        padding: 1rem;
-      }
-
-      .page-title {
-        font-size: 1.25rem;
-      }
-
-      /* カードコンポーネントのモバイル対応は css/style.css で定義 */
-    }
+.sidebar.mobile-open {
+  display: flex;
+}

@@ -1,18 +1,37 @@
+    /* history.html専用スタイル（モバイル版） */
+
     body {
       overflow-x: hidden;
       background: #f9fafb;
-      display: flex;
+      display: block;
       min-height: 100vh;
     }
 
     /* サイドバーのスタイルはcss/components/sidebar.cssで定義 */
     /* .main-wrapperのスタイルはcss/layouts/container.cssで定義 */
 
+    /* モバイルメニューボタンを表示 */
+    .mobile-menu-button {
+      display: flex;
+    }
+
+    .sidebar {
+      display: none;
+    }
+
+    .sidebar.mobile-open {
+      display: flex;
+    }
+
+    .main-wrapper {
+      margin-left: 0;
+    }
+
     /* メインコンテンツエリア */
     .history-content {
       max-width: 680px;
       margin: 0 auto;
-      padding: 2rem 1rem;
+      padding: 0;
       width: 100%;
     }
 
@@ -33,7 +52,7 @@
 
     /* フィルター */
     .history-filters {
-      padding: 1rem;
+      padding: 0.75rem 1rem 0.75rem 3.5rem;
       border-bottom: 1px solid #e5e7eb;
       display: flex;
       justify-content: space-between;
@@ -74,15 +93,7 @@
     }
 
     .history-header {
-      display: grid;
-      grid-template-columns: 130px 80px 110px 90px 1fr;
-      gap: 0.75rem;
-      padding: 0.625rem 1rem;
-      background: #f9fafb;
-      border-bottom: 2px solid #e5e7eb;
-      font-size: 0.75rem;
-      font-weight: 700;
-      color: #6b7280;
+      display: none;
     }
 
     .history-header-cell {
@@ -91,9 +102,9 @@
 
     .history-item {
       display: grid;
-      grid-template-columns: 130px 80px 110px 90px 1fr;
-      gap: 0.75rem;
-      padding: 0.75rem 1rem;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 0.75rem;
       border-bottom: 1px solid #e5e7eb;
       transition: background 0.2s;
       align-items: start;
@@ -108,40 +119,39 @@
     }
 
     .history-item-date {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: #2d1b3d;
       font-weight: 500;
       white-space: nowrap;
     }
 
     .history-item-type {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       font-weight: 500;
       color: #2d1b3d;
       white-space: nowrap;
     }
 
     .history-item-creator {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: #6b7280;
       font-weight: 500;
     }
 
     .history-item-amount {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       font-weight: 500;
-      text-align: right;
+      text-align: left;
       white-space: nowrap;
       color: #2d1b3d;
     }
 
     .history-item-details {
-      font-size: 0.75rem;
+      font-size: 0.6875rem;
       color: #6b7280;
       line-height: 1.4;
       word-break: break-word;
     }
-
 
     /* 空状態 */
     .history-empty {
@@ -166,13 +176,6 @@
     .history-empty-subtext {
       font-size: 0.875rem;
       color: #9ca3af;
-    }
-
-    /* モバイルメニューボタンとオーバーレイは css/style.css で定義 */
-
-    /* モバイルでサイドバーを表示 */
-    .sidebar.mobile-open {
-      display: flex;
     }
 
     /* モバイルフッター */
@@ -208,65 +211,4 @@
       text-align: center;
       color: #9ca3af;
       font-size: 0.75rem;
-    }
-
-    /* レスポンシブ */
-    @media (max-width: 768px) {
-      body {
-        display: block;
-      }
-
-      /* モバイルメニューボタンを表示 */
-      .mobile-menu-button {
-        display: flex;
-      }
-
-      .sidebar {
-        display: none;
-      }
-
-      .main-wrapper {
-        margin-left: 0;
-      }
-
-      .history-content {
-        padding: 0;
-      }
-
-      .history-filters {
-        padding: 0.75rem 1rem 0.75rem 3.5rem;
-      }
-
-      .history-header {
-        display: none;
-      }
-
-      .history-item {
-        grid-template-columns: 1fr;
-        gap: 0.5rem;
-        padding: 0.75rem;
-      }
-
-      .history-item-date {
-        font-size: 0.6875rem;
-      }
-
-      .history-item-type {
-        font-size: 0.6875rem;
-      }
-
-      .history-item-creator {
-        font-size: 0.6875rem;
-      }
-
-      .history-item-amount {
-        text-align: left;
-        font-size: 0.6875rem;
-      }
-
-      .history-item-details {
-        word-break: break-word;
-        font-size: 0.6875rem;
-        line-height: 1.4;
-      }
     }
