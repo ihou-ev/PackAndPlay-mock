@@ -80,12 +80,25 @@
         </div>
       </div>
 
-      <!-- 配信中バナー -->
-      <div class="live-banner" id="liveBanner" style="display: none;">
-        <div class="live-banner-icon">🔴</div>
-        <div class="live-banner-text">配信中</div>
-        <a href="tanaka-stream.html" class="live-banner-button">配信を見る</a>
-      </div>
+      <!-- 配信中サムネイル -->
+      <a href="tanaka-stream.html" class="live-stream-thumbnail" id="liveStreamThumbnail" style="display: none;">
+        <div class="live-stream-thumbnail-image">
+          <div class="live-badge">
+            <span class="live-badge-dot"></span>
+            <span class="live-badge-text">LIVE</span>
+          </div>
+          <div class="live-stream-play-button">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="white">
+              <circle cx="24" cy="24" r="24" fill="rgba(0, 0, 0, 0.6)"/>
+              <path d="M18 14v20l16-10z" fill="white"/>
+            </svg>
+          </div>
+        </div>
+        <div class="live-stream-info">
+          <div class="live-stream-title">配信中</div>
+          <div class="live-stream-viewers" id="liveViewerCount">視聴者数を読み込み中...</div>
+        </div>
+      </a>
 
       <!-- タブ -->
       <div class="creator-tabs">

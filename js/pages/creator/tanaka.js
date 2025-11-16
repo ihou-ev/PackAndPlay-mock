@@ -112,16 +112,23 @@ Pack&Playでカードパックを販売しているので、
   aboutText.textContent = aboutContent;
 }
 
-// 配信中バナーの表示
+// 配信中サムネイルの表示
 function updateLiveBanner() {
-  const liveBanner = document.getElementById('liveBanner');
+  const liveStreamThumbnail = document.getElementById('liveStreamThumbnail');
   const liveSignal = document.getElementById('liveSignal');
+  const liveViewerCount = document.getElementById('liveViewerCount');
 
   if (creatorData && creatorData.isLive) {
-    liveBanner.style.display = 'flex';
+    liveStreamThumbnail.style.display = 'block';
     liveSignal.style.display = 'block';
+
+    // 視聴者数をランダムに生成（デモ用）
+    const viewerCount = Math.floor(Math.random() * 500) + 50;
+    if (liveViewerCount) {
+      liveViewerCount.textContent = `${viewerCount.toLocaleString()}人が視聴中`;
+    }
   } else {
-    liveBanner.style.display = 'none';
+    liveStreamThumbnail.style.display = 'none';
     liveSignal.style.display = 'none';
   }
 }
