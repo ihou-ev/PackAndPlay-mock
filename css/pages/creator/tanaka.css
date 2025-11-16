@@ -18,14 +18,6 @@ body {
   display: flex;
 }
 
-.sidebar {
-  display: none;
-}
-
-.sidebar.mobile-open {
-  display: flex;
-}
-
 .main-wrapper {
   margin-left: 0;
 }
@@ -33,7 +25,7 @@ body {
 /* メインコンテンツエリア */
 .creator-content {
   width: 100%;
-  max-width: 100%;
+  max-width: 600px;
   margin: 0 auto;
   background: white;
 }
