@@ -37,23 +37,32 @@ function renderFollowingCreators(sortBy = 'default') {
     });
   }
 
-  followingGrid.innerHTML = sortedCreators.map(creator => `
-    <div class="following-card" id="creator-${creator.id}">
-      <a href="creator/${creator.slug}.html" class="following-card-link">
-        <div class="following-avatar">
-          ${creator.name.charAt(0)}
-          ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
-        </div>
-        <div class="following-info">
-          <div class="following-name">${creator.name}</div>
-          <div class="following-bio">${creator.bio || ''}</div>
-        </div>
-      </a>
-      <button class="following-button" onclick="unfollowCreator(${creator.id}, event)">
-        <span>フォロー中</span>
-      </button>
-    </div>
-  `).join('');
+  followingGrid.innerHTML = sortedCreators.map(creator => {
+    const avatarContent = creator.slug === 'tanaka'
+      ? `<img src="image/tanaka_avatar.png" alt="${creator.name}" class="following-avatar-img">`
+      : creator.name.charAt(0);
+    const avatarClass = creator.slug === 'tanaka' ? 'following-avatar has-image' : 'following-avatar';
+
+    return `
+      <div class="following-card" id="creator-${creator.id}">
+        <a href="creator/${creator.slug}.html" class="following-card-link">
+          <div class="following-avatar-wrapper">
+            <div class="${avatarClass}">
+              ${avatarContent}
+            </div>
+            ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
+          </div>
+          <div class="following-info">
+            <div class="following-name">${creator.name}</div>
+            <div class="following-bio">${creator.bio || ''}</div>
+          </div>
+        </a>
+        <button class="following-button" onclick="unfollowCreator(${creator.id}, event)">
+          <span>フォロー中</span>
+        </button>
+      </div>
+    `;
+  }).join('');
 }
 
 function sortFollowingCreators() {

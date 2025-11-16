@@ -55,13 +55,15 @@
     <main class="creator-home-content">
       <!-- プロフィールヘッダー -->
       <div class="creator-header">
-        <div class="creator-banner"></div>
+        <div class="creator-banner">
+          <img src="../image/tanaka_banner.png" alt="バナー" class="creator-banner-img">
+        </div>
         <div class="creator-profile">
           <div class="creator-avatar-wrapper">
             <div class="creator-avatar" id="creatorAvatar">
               <img src="../image/tanaka_avatar.png" alt="田中太郎" class="creator-avatar-img">
-              <span class="live-signal" id="liveSignal" style="display: none;"></span>
             </div>
+            <span class="live-signal" id="liveSignal" style="display: none;"></span>
           </div>
           <div class="creator-info">
             <div class="creator-name" id="creatorName">田中太郎</div>
@@ -88,7 +90,7 @@
             <span class="live-badge-text">LIVE</span>
           </div>
           <div class="live-stream-play-button">
-            <svg width="48" height="48" viewBox="0 0 48 48" fill="white">
+            <svg viewBox="0 0 48 48" fill="white">
               <circle cx="24" cy="24" r="24" fill="rgba(0, 0, 0, 0.6)"/>
               <path d="M18 14v20l16-10z" fill="white"/>
             </svg>
@@ -109,9 +111,26 @@
 
       <!-- タブコンテンツ -->
       <div class="tab-content active" id="homeContent">
-        <div class="packs-section">
-          <h2 class="section-title">パック一覧</h2>
-          <div class="packs-grid" id="packsGrid">
+        <!-- 自己紹介 -->
+        <div class="activity-section">
+          <h2 class="section-title">自己紹介</h2>
+          <div class="activity-intro" id="activityIntro">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <!-- おすすめ動画 -->
+        <div class="activity-section">
+          <h2 class="section-title">おすすめ動画</h2>
+          <div class="recommended-videos" id="recommendedVideos">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <!-- おすすめ記事 -->
+        <div class="activity-section">
+          <h2 class="section-title">おすすめ記事</h2>
+          <div class="recommended-articles" id="recommendedArticles">
             <!-- JavaScriptで動的に生成 -->
           </div>
         </div>

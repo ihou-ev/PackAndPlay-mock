@@ -22,7 +22,12 @@ function renderProfile() {
 
   // ヘッダー画像表示
   const headerImageElement = document.getElementById('profileHeaderImage');
-  if (selectedHeaderImage) {
+  if (session.creatorSlug === 'tanaka') {
+    // 田中太郎の場合は専用バナーを表示
+    headerImageElement.style.backgroundImage = `url(image/tanaka_banner.png)`;
+    headerImageElement.style.backgroundSize = 'cover';
+    headerImageElement.style.backgroundPosition = 'center 35%';
+  } else if (selectedHeaderImage) {
     headerImageElement.style.backgroundImage = `url(${selectedHeaderImage})`;
     headerImageElement.style.backgroundSize = 'cover';
     headerImageElement.style.backgroundPosition = 'center';
@@ -35,7 +40,16 @@ function renderProfile() {
   const avatarElement = document.getElementById('profileAvatar');
   avatarElement.innerHTML = ''; // クリア
 
-  if (selectedAvatarImage) {
+  // 田中太郎の場合は専用アバターを表示
+  if (session.creatorSlug === 'tanaka') {
+    const img = document.createElement('img');
+    img.src = 'image/tanaka_avatar.png';
+    img.style.width = '100%';
+    img.style.height = '100%';
+    img.style.objectFit = 'cover';
+    avatarElement.appendChild(img);
+    avatarElement.style.background = 'white';
+  } else if (selectedAvatarImage) {
     // 画像がある場合は画像を表示
     const img = document.createElement('img');
     img.src = selectedAvatarImage;
@@ -43,10 +57,12 @@ function renderProfile() {
     img.style.height = '100%';
     img.style.objectFit = 'cover';
     avatarElement.appendChild(img);
+    avatarElement.style.background = 'white';
   } else {
     // 画像がない場合は頭文字を表示
     const initial = session.name ? session.name.charAt(0) : '?';
     avatarElement.textContent = initial;
+    avatarElement.style.background = '';
   }
 
   // 名前
@@ -292,26 +308,35 @@ function renderLiveCreators() {
 
   liveEmpty.style.display = 'none';
 
-  liveGrid.innerHTML = liveCreators.map(creator => `
-    <div class="following-card" id="creator-${creator.id}">
-      <a href="creator/${creator.slug}.html" class="following-card-link">
-        <div class="following-avatar">
-          ${creator.name.charAt(0)}
-          <span class="following-live-signal"></span>
-        </div>
-        <div class="following-info">
-          <div class="following-name-row">
-            <span class="following-name">${creator.name}</span>
-            <span class="following-id">@${creator.slug}</span>
+  liveGrid.innerHTML = liveCreators.map(creator => {
+    const avatarContent = creator.slug === 'tanaka'
+      ? `<img src="image/tanaka_avatar.png" alt="${creator.name}" class="following-avatar-img">`
+      : creator.name.charAt(0);
+    const avatarClass = creator.slug === 'tanaka' ? 'following-avatar has-image' : 'following-avatar';
+
+    return `
+      <div class="following-card" id="creator-${creator.id}">
+        <a href="creator/${creator.slug}.html" class="following-card-link">
+          <div class="following-avatar-wrapper">
+            <div class="${avatarClass}">
+              ${avatarContent}
+            </div>
+            <span class="following-live-signal"></span>
           </div>
-          <div class="following-bio">${creator.bio || ''}</div>
-        </div>
-      </a>
-      <button class="following-button" onclick="unfollowCreator(${creator.id}, event)">
-        <span>フォロー中</span>
-      </button>
-    </div>
-  `).join('');
+          <div class="following-info">
+            <div class="following-name-row">
+              <span class="following-name">${creator.name}</span>
+              <span class="following-id">@${creator.slug}</span>
+            </div>
+            <div class="following-bio">${creator.bio || ''}</div>
+          </div>
+        </a>
+        <button class="following-button" onclick="unfollowCreator(${creator.id}, event)">
+          <span>フォロー中</span>
+        </button>
+      </div>
+    `;
+  }).join('');
 }
 
 // フォロー・フォロー解除関数はmain.jsで定義されたものを使用
@@ -567,9 +592,15 @@ function renderTimeline() {
     const initial = creator ? creator.name.charAt(0) : '?';
     const creatorSlug = creator ? creator.slug : '';
 
+    // 田中太郎の場合は画像を表示
+    const avatarContent = creatorSlug === 'tanaka'
+      ? `<img src="image/tanaka_avatar.png" alt="${item.creatorName}" style="width: 100%; height: 100%; object-fit: cover; object-position: center 50%;">`
+      : initial;
+    const avatarClass = creatorSlug === 'tanaka' ? 'timeline-avatar has-image' : 'timeline-avatar';
+
     return `
       <div class="timeline-item">
-        <div class="timeline-avatar">${initial}</div>
+        <div class="${avatarClass}">${avatarContent}</div>
         <div class="timeline-content">
           <div class="timeline-header">
             <span class="timeline-creator-name">${item.creatorName}</span>

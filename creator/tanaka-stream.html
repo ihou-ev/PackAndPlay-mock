@@ -73,9 +73,11 @@
 
       <!-- 配信者情報バー（統合版） -->
       <div class="stream-info-bar" id="streamInfoBar">
-        <div class="creator-info-section">
-          <div class="creator-avatar" id="creatorAvatar">
-            <img src="../image/tanaka_avatar.png" alt="田中太郎" class="creator-avatar-img">
+        <a href="tanaka.html" class="creator-info-section">
+          <div class="creator-avatar-wrapper">
+            <div class="creator-avatar" id="creatorAvatar">
+              <img src="../image/tanaka_avatar.png" alt="田中太郎" class="creator-avatar-img">
+            </div>
             <span class="live-signal" id="liveSignal" style="display: none;"></span>
           </div>
           <div class="creator-info-text">
@@ -84,7 +86,7 @@
               <span class="follower-count" id="followerCount">0 フォロワー</span>
             </div>
           </div>
-        </div>
+        </a>
         <button type="button" class="following-button" id="followButton">
           <span>フォローする</span>
         </button>

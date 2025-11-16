@@ -72,9 +72,8 @@ function updateFollowerCount() {
   followerCountEl.textContent = count.toLocaleString();
 }
 
-// パック一覧の表示
+// パック一覧の表示（パックタブのみ）
 function renderPacks() {
-  const packsGrid = document.getElementById('packsGrid');
   const packsGridFull = document.getElementById('packsGridFull');
 
   const creatorPacks = packs.filter(p => p.creatorSlug === creatorSlug);
@@ -89,8 +88,105 @@ function renderPacks() {
     </a>
   `).join('');
 
-  if (packsGrid) packsGrid.innerHTML = packHTML;
   if (packsGridFull) packsGridFull.innerHTML = packHTML;
+}
+
+// 活動紹介の表示
+function renderActivityIntro() {
+  const activityIntro = document.getElementById('activityIntro');
+  if (!activityIntro) return;
+
+  const introHTML = `
+    <p>はじめまして、田中太郎です！</p>
+    <p>Pack&Playで活動している配信者で、主にゲーム実況やトークを中心に配信しています。</p>
+    <p>毎週月・水・金の20時から定期配信を行っていて、視聴者の皆さんと楽しく盛り上がっています。</p>
+    <p>カードパックを使った視聴者参加型の配信スタイルが特徴で、皆さんのカードで配信を盛り上げてくれると嬉しいです！</p>
+  `;
+
+  activityIntro.innerHTML = introHTML;
+}
+
+// おすすめ動画の表示
+function renderRecommendedVideos() {
+  const recommendedVideos = document.getElementById('recommendedVideos');
+  if (!recommendedVideos) return;
+
+  const videos = [
+    {
+      id: 1,
+      title: '【初心者向け】マインクラフト基本解説！最初の夜を乗り越えよう',
+      views: '12.5万回視聴',
+      date: '2週間前',
+      url: 'tanaka-stream.html'
+    },
+    {
+      id: 2,
+      title: 'Pack&Playのカード機能を使ってみた！配信がもっと楽しくなる',
+      views: '8.2万回視聴',
+      date: '1ヶ月前',
+      url: 'tanaka-stream.html'
+    },
+    {
+      id: 3,
+      title: '視聴者参加型企画！カードでサプライズ連発の神回',
+      views: '15.3万回視聴',
+      date: '2ヶ月前',
+      url: 'tanaka-stream.html'
+    }
+  ];
+
+  const videosHTML = videos.map(video => `
+    <a href="${video.url}" class="video-card">
+      <div class="video-card-thumbnail">
+        <div class="video-card-play"></div>
+      </div>
+      <div class="video-card-content">
+        <div class="video-card-title">${video.title}</div>
+        <div class="video-card-meta">${video.views} • ${video.date}</div>
+      </div>
+    </a>
+  `).join('');
+
+  recommendedVideos.innerHTML = videosHTML;
+}
+
+// おすすめ記事の表示
+function renderRecommendedArticles() {
+  const recommendedArticles = document.getElementById('recommendedArticles');
+  if (!recommendedArticles) return;
+
+  const articles = [
+    {
+      id: 1,
+      title: 'Pack&Play活動開始から1年！振り返りと今後の展望',
+      date: '2025年10月15日',
+      url: '#'
+    },
+    {
+      id: 2,
+      title: '配信者が語る：視聴者参加型配信の楽しさと工夫',
+      date: '2025年9月20日',
+      url: '#'
+    },
+    {
+      id: 3,
+      title: '【インタビュー】Pack&Playで配信スタイルが変わった話',
+      date: '2025年8月10日',
+      url: '#'
+    }
+  ];
+
+  const articlesHTML = articles.map(article => `
+    <a href="${article.url}" class="article-card">
+      <div class="article-card-thumbnail"></div>
+      <div class="article-card-content">
+        <div class="article-card-title">${article.title}</div>
+        <div class="article-card-meta">${article.date}</div>
+      </div>
+    </a>
+  `).join('');
+
+  recommendedArticles.innerHTML = articlesHTML;
 }
 
 // aboutテキストの表示
@@ -120,7 +216,7 @@ function updateLiveBanner() {
   const liveViewerCount = document.getElementById('liveViewerCount');
 
   if (creatorData && creatorData.isLive) {
-    liveStreamThumbnail.style.display = 'block';
+    liveStreamThumbnail.style.display = 'flex';
     liveSignal.style.display = 'block';
 
     // 配信タイトルを設定
@@ -161,6 +257,9 @@ function init() {
 
   initFollowButton();
   updateFollowerCount();
+  renderActivityIntro();
+  renderRecommendedVideos();
+  renderRecommendedArticles();
   renderPacks();
   renderAbout();
   updateLiveBanner();

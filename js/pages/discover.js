@@ -72,16 +72,24 @@ document.addEventListener('DOMContentLoaded', function() {
       else if (rank === 2) badgeClass = ' silver';
       else if (rank === 3) badgeClass = ' bronze';
 
+      const avatarContent = creator.slug === 'tanaka'
+        ? `<img src="image/tanaka_avatar.png" alt="${creator.name}" class="creator-card-avatar-img">`
+        : creator.name.charAt(0);
+      const avatarClass = creator.slug === 'tanaka' ? 'creator-card-avatar has-image' : 'creator-card-avatar';
+      const bannerStyle = creator.slug === 'tanaka'
+        ? `background-image: url('image/tanaka_banner.png'); background-size: cover; background-position: center 35%;`
+        : '';
+
       return `
         <div class="creator-card ranking-card" id="ranking-creator-${creator.id}">
           <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
-          <div class="creator-card-banner">
+          <div class="creator-card-banner" style="${bannerStyle}">
             <div class="ranking-badge${badgeClass}">${rank}</div>
             <div class="creator-card-avatar-wrapper">
-              <div class="creator-card-avatar">
-                ${creator.name.charAt(0)}
-                ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+              <div class="${avatarClass}">
+                ${avatarContent}
               </div>
+              ${creator.isLive ? '<span class="live-signal"></span>' : ''}
             </div>
           </div>
           <div class="creator-card-info">
@@ -148,15 +156,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     list.innerHTML = filtered.map(creator => {
       const isFollowing = followedIds.includes(creator.id);
+      const avatarContent = creator.slug === 'tanaka'
+        ? `<img src="image/tanaka_avatar.png" alt="${creator.name}" class="creator-card-avatar-img">`
+        : creator.name.charAt(0);
+      const avatarClass = creator.slug === 'tanaka' ? 'creator-card-avatar has-image' : 'creator-card-avatar';
+      const bannerStyle = creator.slug === 'tanaka'
+        ? `background-image: url('image/tanaka_banner.png'); background-size: cover; background-position: center 35%;`
+        : '';
+
       return `
         <div class="creator-card" id="creator-${creator.id}">
           <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
-          <div class="creator-card-banner">
+          <div class="creator-card-banner" style="${bannerStyle}">
             <div class="creator-card-avatar-wrapper">
-              <div class="creator-card-avatar">
-                ${creator.name.charAt(0)}
-                ${creator.isLive ? '<span class="live-signal"></span>' : ''}
+              <div class="${avatarClass}">
+                ${avatarContent}
               </div>
+              ${creator.isLive ? '<span class="live-signal"></span>' : ''}
             </div>
           </div>
           <div class="creator-card-info">
