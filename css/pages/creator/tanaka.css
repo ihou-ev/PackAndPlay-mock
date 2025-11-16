@@ -63,6 +63,13 @@ body {
   border: 3px solid white;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
   position: relative;
+  overflow: hidden;
+}
+
+.creator-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .live-signal {
