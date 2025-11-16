@@ -99,7 +99,7 @@ The login page supports social authentication only (no email/password):
 - **Twitch** - Available for both viewers and creators
 - **X (Twitter)** - Available for viewers only (automatically hidden for creators)
 
-When the user selects the "配信者" (Creator) role, the X login button is automatically hidden via JavaScript. This is implemented in the `selectRole()` function which dynamically shows/hides the X button based on the selected role.
+When the user selects the "ストリーマー" (Creator) role, the X login button is automatically hidden via JavaScript. This is implemented in the `selectRole()` function which dynamically shows/hides the X button based on the selected role.
 
 ### File Organization
 
@@ -130,7 +130,7 @@ When the user selects the "配信者" (Creator) role, the X login button is auto
 
 **Important**: The entry point is now a landing page (LP) with three sections:
 1. **Hero Section**: Full-screen catchphrase with animated icon, quick login buttons, and scroll indicator
-   - Two prominent CTA buttons: "👤 視聴者として始める" and "🎬 配信者として始める"
+   - Two prominent CTA buttons: "👤 視聴者として始める" and "🎬 ストリーマーとして始める"
    - Clicking these buttons logs the user in immediately with YouTube (default)
 2. **Description Section**: 30-second explanation for streamers with feature cards
 3. **Login Section**: Simplified social login buttons (YouTube, Twitch, X)
@@ -375,7 +375,7 @@ When using `file://` protocol:
 
 **Creator Flow**:
 1. Open app at `index.html` (landing page)
-2. Click "🎬 配信者として始める" button in hero section → Auto-logs in with YouTube
+2. Click "🎬 ストリーマーとして始める" button in hero section → Auto-logs in with YouTube
 3. OR scroll down and click any social login button (YouTube or Twitch)
 4. Dashboard shows stats
 5. Create cards at `dashboard/cards.html`

@@ -42,7 +42,7 @@
 
     /* ヘッダー画像 */
     .profile-header-image {
-      height: 120px;
+      height: 180px;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       cursor: pointer;
       position: relative;
@@ -324,7 +324,7 @@
 
 
 
-    /* フォロー中の配信者セクション */
+    /* フォロー中のストリーマーセクション */
     .following-section {
       background: white;
       border-bottom: 1px solid #e5e7eb;

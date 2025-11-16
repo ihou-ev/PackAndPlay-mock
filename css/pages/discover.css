@@ -37,7 +37,7 @@ body {
   width: 100%;
 }
 
-/* 配信者を探すコンテンツ */
+/* ストリーマーを探すコンテンツ */
 .discover-content {
   max-width: 600px;
   width: 100%;
@@ -208,7 +208,7 @@ body {
   border-color: #FF1B8D;
 }
 
-/* 配信者リスト */
+/* ストリーマーリスト */
 .creators-list {
   display: grid;
   grid-template-columns: 1fr;
@@ -219,7 +219,7 @@ body {
   align-items: start;
 }
 
-/* 配信者カード */
+/* ストリーマーカード */
 .creator-card {
   background: white;
   border-radius: 1rem;

@@ -1,6 +1,6 @@
 // Pack&Play モックデータ
 
-// 配信者データ
+// ストリーマーデータ
 const creators = [
   {
     id: 1,
@@ -28,7 +28,7 @@ const creators = [
     slug: 'vtuber_alice',
     name: 'アリスちゃんねる',
     displayName: 'Alice Channel',
-    bio: 'バーチャル配信者 ✨ 歌とゲームが大好き！',
+    bio: 'バーチャルストリーマー ✨ 歌とゲームが大好き！',
     channelUrl: 'https://youtube.com/@alice',
     isLive: false,
     packCount: 5,
@@ -142,7 +142,7 @@ const creators = [
     slug: 'ito_game',
     name: 'いとさくらのゲーム実況',
     displayName: '伊藤さくら',
-    bio: 'ホラーゲーム中心の実況配信者 | 毎日20時から',
+    bio: 'ホラーゲーム中心の実況ストリーマー | 毎日20時から',
     channelUrl: 'https://twitch.tv/itogame',
     isLive: false,
     packCount: 7,
@@ -218,7 +218,7 @@ const creators = [
     slug: 'kato_horror',
     name: 'かとまりホラー実況',
     displayName: '加藤真理',
-    bio: 'ホラゲー専門配信者 👻 絶叫注意！',
+    bio: 'ホラゲー専門ストリーマー 👻 絶叫注意！',
     channelUrl: 'https://youtube.com/@katohorror',
     isLive: false,
     packCount: 6,
@@ -254,7 +254,7 @@ const creators = [
 // discover.html用のエイリアス
 const mockCreators = creators;
 
-// フォロー中の配信者（デモ用）
+// フォロー中のストリーマー（デモ用）
 // 実際のアプリではユーザーごとにlocalStorageに保存
 const defaultFollowedCreatorIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; // 10人のサンプル（配信中5人、配信中でない5人）
 

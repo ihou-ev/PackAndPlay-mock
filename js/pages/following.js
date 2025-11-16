@@ -7,7 +7,7 @@ if (!requireLogin()) {
 const session = getCurrentSession();
 
 
-// フォロー中の配信者を表示
+// フォロー中のストリーマーを表示
 function renderFollowingCreators(sortBy = 'default') {
   const followingGrid = document.getElementById('followingGrid');
   const followingEmpty = document.getElementById('followingEmpty');

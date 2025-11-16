@@ -287,7 +287,7 @@ function goToCharge() {
   // 将来的には: window.location.href = 'charge.html';
 }
 
-// 配信中の配信者のみを表示
+// 配信中のストリーマーのみを表示
 function renderLiveCreators() {
   const liveGrid = document.getElementById('liveGrid');
   const liveEmpty = document.getElementById('liveEmpty');

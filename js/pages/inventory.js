@@ -23,7 +23,7 @@ let currentFilters = {
 
 let selectedCard = null;
 
-// 配信者フィルターの選択肢を生成
+// ストリーマーフィルターの選択肢を生成
 const creators = [...new Set(inventory.map(c => c.creatorName))];
 const creatorFilter = document.getElementById('creatorFilter');
 creators.forEach(creator => {
@@ -181,12 +181,12 @@ function renderInventoryNav() {
 
   if (isLoggedIn()) {
     navHtml = `
-      <a href="discover.html" class="inventory-nav-link">配信者を探す</a>
+      <a href="discover.html" class="inventory-nav-link">ストリーマーを探す</a>
       <a href="profile.html" class="inventory-nav-link">プロフィール</a>
       <a href="javascript:void(0)" onclick="logout()" class="inventory-nav-link">ログアウト</a>
     `;
     mobileNavHtml = `
-      <a href="discover.html" class="mobile-menu-link">配信者を探す</a>
+      <a href="discover.html" class="mobile-menu-link">ストリーマーを探す</a>
       <a href="profile.html" class="mobile-menu-link">プロフィール</a>
       <a href="javascript:void(0)" onclick="logout(); closeMobileMenu();" class="mobile-menu-link">ログアウト</a>
     `;

@@ -1,60 +1,54 @@
-// discover.html専用スクリプト
+// ranking.html専用スクリプト
 
 // DOMが読み込まれてから実行
 document.addEventListener('DOMContentLoaded', function() {
   // サイドバーのナビゲーションを生成（main.jsの共通関数を使用）
-  renderSidebarNav('discover');
+  renderSidebarNav('ranking');
 
   // 状態管理
-  let currentSort = 'followers';
-  let searchQuery = '';
+  let currentPeriod = 'today';
 
-  // ソート変更
-  window.sortCreators = function() {
-    currentSort = document.getElementById('sortSelect').value;
-    renderCreators();
+  // スパーク数をフォーマット（K単位）
+  function formatSparks(num) {
+    if (num >= 1000) {
+      const k = num / 1000;
+      // 小数点1桁まで表示（.0の場合は整数表示）
+      return k % 1 === 0 ? `${k}K` : `${k.toFixed(1)}K`;
+    }
+    return num.toString();
+  }
+
+  // 期間フィルター切り替え
+  window.filterByPeriod = function() {
+    currentPeriod = document.getElementById('periodSelect').value;
+    renderRanking();
   };
 
-  // ストリーマーリスト表示
-  function renderCreators() {
-    const list = document.getElementById('creatorsList');
-    const emptyState = document.getElementById('emptyState');
+  // ランキング表示
+  function renderRanking() {
+    const list = document.getElementById('rankingList');
     const followedCreators = getFollowedCreators();
     const followedIds = followedCreators.map(c => c.id);
 
-    // フィルタリング
-    let filtered = [...creators];
+    // スパーク消費量でソート
+    let ranked = [...creators].sort((a, b) => {
+      const aValue = a.sparksConsumed ? a.sparksConsumed[currentPeriod] : 0;
+      const bValue = b.sparksConsumed ? b.sparksConsumed[currentPeriod] : 0;
+      return bValue - aValue;
+    });
 
-    if (searchQuery) {
-      filtered = filtered.filter(c =>
-        c.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        c.slug.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-    }
-
-    // ソート
-    if (currentSort === 'followers') {
-      filtered.sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0));
-    } else if (currentSort === 'name') {
-      filtered.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
-    } else if (currentSort === 'live') {
-      filtered.sort((a, b) => {
-        if (a.isLive && !b.isLive) return -1;
-        if (!a.isLive && b.isLive) return 1;
-        return 0;
-      });
-    }
-
-    if (filtered.length === 0) {
-      list.innerHTML = '';
-      emptyState.classList.remove('hidden');
-      return;
-    }
-
-    emptyState.classList.add('hidden');
-
-    list.innerHTML = filtered.map(creator => {
+    list.innerHTML = ranked.map((creator, index) => {
       const isFollowing = followedIds.includes(creator.id);
+      const rank = index + 1;
+      const sparks = creator.sparksConsumed ? creator.sparksConsumed[currentPeriod] : 0;
+      const isTopThree = rank <= 3;
+
+      // ランキングバッジのクラスを決定
+      let badgeClass = '';
+      if (rank === 1) badgeClass = ' gold';
+      else if (rank === 2) badgeClass = ' silver';
+      else if (rank === 3) badgeClass = ' bronze';
+
       const avatarContent = creator.slug === 'tanaka'
         ? `<img src="image/tanaka_avatar.png" alt="${creator.name}" class="creator-card-avatar-img">`
         : creator.name.charAt(0);
@@ -64,9 +58,10 @@ document.addEventListener('DOMContentLoaded', function() {
         : '';
 
       return `
-        <div class="creator-card" id="creator-${creator.id}">
+        <div class="creator-card ranking-card" id="ranking-creator-${creator.id}">
           <a href="creator/${creator.slug}.html" class="creator-card-link"></a>
           <div class="creator-card-banner" style="${bannerStyle}">
+            <div class="ranking-badge${badgeClass}">${rank}</div>
             <div class="creator-card-avatar-wrapper">
               <div class="${avatarClass}">
                 ${avatarContent}
@@ -82,9 +77,9 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
           <div class="creator-card-stats">
-            <img src="image/follower.svg" alt="followers" class="follower-icon"> ${(creator.followerCount || 0).toLocaleString()}
+            <span class="sparks-consumed"><img src="image/spark.svg" alt="spark" class="spark-icon"> ${formatSparks(sparks)}</span>
           </div>
-          <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorDiscover(${creator.id}, event)` : `followCreatorDiscover(${creator.id}, event)`}">
+          <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorRanking(${creator.id}, event)` : `followCreatorRanking(${creator.id}, event)`}">
             ${isFollowing ? 'フォロー中' : 'フォローする'}
           </button>
         </div>
@@ -92,8 +87,8 @@ document.addEventListener('DOMContentLoaded', function() {
     }).join('');
   }
 
-  // フォロー解除（discover.js専用、main.jsの汎用関数を使用してHTML再描画）
-  window.unfollowCreatorDiscover = function(creatorId, event) {
+  // フォロー解除（ranking.js専用、main.jsの汎用関数を使用してHTML再描画）
+  window.unfollowCreatorRanking = function(creatorId, event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -103,12 +98,12 @@ document.addEventListener('DOMContentLoaded', function() {
     // main.jsのshowUnfollowModalを使用
     showUnfollowModal(creatorId, creatorName, function() {
       // フォロー解除後にHTML再描画
-      renderCreators();
+      renderRanking();
     });
   };
 
-  // フォローする（discover.js専用、HTML再描画）
-  window.followCreatorDiscover = function(creatorId, event) {
+  // フォローする（ranking.js専用、HTML再描画）
+  window.followCreatorRanking = function(creatorId, event) {
     event.preventDefault();
     event.stopPropagation();
 
@@ -122,17 +117,11 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // フォロー後にHTML再描画
-    renderCreators();
+    renderRanking();
   };
 
-  // 検索
-  document.getElementById('searchInput').addEventListener('input', function(e) {
-    searchQuery = e.target.value;
-    renderCreators();
-  });
-
   // 初期表示
-  renderCreators();
+  renderRanking();
 
   // モバイルメニュー
   window.toggleMobileMenu = function() {

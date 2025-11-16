@@ -1,4 +1,4 @@
-// 配信者情報を取得
+// ストリーマー情報を取得
 const creatorSlug = 'tanaka';
 const creator = getCreatorBySlug(creatorSlug);
 const creatorPacks = getPacksByCreator(creatorSlug);
@@ -26,7 +26,7 @@ function renderCreatorSidebarNav() {
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          配信者を探す
+          ストリーマーを探す
         </a>
         <a href="${getRelativePath('dashboard/index.html')}" class="sidebar-nav-link">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -67,7 +67,7 @@ function renderCreatorSidebarNav() {
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          配信者を探す
+          ストリーマーを探す
         </a>
         <a href="${getRelativePath('following.html')}" class="sidebar-nav-link">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -115,7 +115,7 @@ function renderCreatorSidebarNav() {
         <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
         </svg>
-        配信者を探す
+        ストリーマーを探す
       </a>
     `;
   }
@@ -337,7 +337,7 @@ function toggleDescription() {
 function renderCards() {
   const grid = document.getElementById('cardsGrid');
 
-  // インベントリからこの配信者の未使用カードのみを取得
+  // インベントリからこのストリーマーの未使用カードのみを取得
   const inventory = loadFromStorage('inventory', []);
   const creatorCards = inventory.filter(card => card.creatorSlug === creatorSlug && !card.isUsed);
 

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#667eea">
-  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="description" content="ストリーマー専用カードパック販売プラットフォーム">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pack&Play">
@@ -73,7 +73,7 @@
     <!-- フィルター -->
     <div class="filters">
       <select id="creatorFilter" class="filter-select" onchange="applyFilters()">
-        <option value="">すべての配信者</option>
+        <option value="">すべてのストリーマー</option>
       </select>
 
       <select id="rarityFilter" class="filter-select" onchange="applyFilters()">
@@ -99,7 +99,7 @@
     <div id="emptyState" class="empty-state hidden">
       <div class="empty-state-icon">🎴</div>
       <div class="empty-state-text">カードがありません</div>
-      <a href="discover.html" class="empty-btn">配信者を探してパックを購入</a>
+      <a href="discover.html" class="empty-btn">ストリーマーを探してパックを購入</a>
     </div>
   </main>
 
@@ -114,11 +114,11 @@
         <div id="messageInput" class="hidden">
           <div class="form-group">
             <label class="form-label">メッセージ（任意）</label>
-            <textarea id="viewerMessage" class="form-textarea" placeholder="配信者へのメッセージを入力..."></textarea>
+            <textarea id="viewerMessage" class="form-textarea" placeholder="ストリーマーへのメッセージを入力..."></textarea>
           </div>
         </div>
         <p style="color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
-          配信者が配信中の場合のみカードを使用できます。
+          ストリーマーが配信中の場合のみカードを使用できます。
         </p>
       </div>
       <div class="modal-footer">

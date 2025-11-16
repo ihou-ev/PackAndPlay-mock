@@ -1,4 +1,4 @@
-// creator/tanaka.html専用スクリプト（配信者ホームページ）
+// creator/tanaka.html専用スクリプト（ストリーマーホームページ）
 
 const creatorSlug = 'tanaka';
 const creatorData = getCreatorBySlug(creatorSlug);
@@ -98,7 +98,7 @@ function renderActivityIntro() {
 
   const introHTML = `
     <p>はじめまして、田中太郎です！</p>
-    <p>Pack&Playで活動している配信者で、主にゲーム実況やトークを中心に配信しています。</p>
+    <p>Pack&Playで活動しているストリーマーで、主にゲーム実況やトークを中心に配信しています。</p>
     <p>毎週月・水・金の20時から定期配信を行っていて、視聴者の皆さんと楽しく盛り上がっています。</p>
     <p>カードパックを使った視聴者参加型の配信スタイルが特徴で、皆さんのカードで配信を盛り上げてくれると嬉しいです！</p>
   `;
@@ -164,7 +164,7 @@ function renderRecommendedArticles() {
     },
     {
       id: 2,
-      title: '配信者が語る：視聴者参加型配信の楽しさと工夫',
+      title: 'ストリーマーが語る：視聴者参加型配信の楽しさと工夫',
       date: '2025年9月20日',
       url: '#'
     },
@@ -194,7 +194,7 @@ function renderAbout() {
   const aboutText = document.getElementById('aboutText');
   if (!aboutText) return;
 
-  const aboutContent = `配信者について
+  const aboutContent = `ストリーマーについて
 
 毎週月・水・金の20時から配信しています。
 ゲーム実況やトークを中心に活動中！

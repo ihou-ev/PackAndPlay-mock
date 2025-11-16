@@ -8,13 +8,14 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pack&Play">
-  <title>履歴 - Pack&Play</title>
+  <title>Pack&Play - ランキング</title>
   <!-- コンポーネントベースCSS -->
   <link rel="stylesheet" href="css/app.css">
-  <link rel="stylesheet" href="css/pages/history.css">
+  <link rel="stylesheet" href="css/pages/discover.css">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
+</head>
 <body>
   <!-- モバイルメニューボタン -->
   <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
@@ -50,52 +51,42 @@
     </div>
   </aside>
 
-  <!-- メインコンテンツラッパー -->
+  <!-- メインコンテンツ -->
   <div class="main-wrapper">
-    <!-- メインコンテンツ -->
-    <main class="history-content">
-      <!-- フィルター -->
-      <div class="history-filters">
-        <span class="filter-label">種別で絞り込む</span>
-        <select id="filterSelect" class="filter-select" onchange="applyFilters()">
-          <option value="all">すべて</option>
-          <option value="charge">チャージ</option>
-          <option value="purchase">購入</option>
-          <option value="usage">使用</option>
-          <option value="splash">スプラッシュ</option>
+    <div class="discover-content">
+      <!-- ヘッダー -->
+      <div class="discover-header">
+        <h1 class="discover-title">ランキング</h1>
+        <p class="discover-description">人気のストリーマーをチェックしよう</p>
+      </div>
+
+      <!-- 期間フィルター -->
+      <div class="filter-select-container">
+        <select id="periodSelect" class="filter-select" onchange="filterByPeriod()">
+          <option value="today">24時間</option>
+          <option value="week">今週</option>
+          <option value="month">今月</option>
+          <option value="year">今年</option>
         </select>
       </div>
 
-      <!-- 履歴リスト -->
-      <div class="history-list">
-        <!-- ヘッダー -->
-        <div class="history-header">
-          <div class="history-header-cell">日時</div>
-          <div class="history-header-cell">種別</div>
-          <div class="history-header-cell">ストリーマー</div>
-          <div class="history-header-cell">スパーク金額</div>
-          <div class="history-header-cell">内容</div>
-        </div>
-        <!-- 履歴アイテム -->
-        <div id="historyItems">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
+      <!-- ランキングリスト -->
+      <div class="creators-list" id="rankingList">
+        <!-- JavaScriptで動的に生成 -->
       </div>
-    </main>
+    </div>
+  </div>
 
-    <!-- モバイル用フッター -->
-    <footer class="mobile-footer">
-      <div class="mobile-footer-links">
-        <a href="legal/terms.html" class="mobile-footer-link">利用規約</a>
-        <a href="legal/privacy.html" class="mobile-footer-link">プライバシー</a>
-        <a href="legal/commerce.html" class="mobile-footer-link">特商法表記</a>
-        <a href="legal/scta.html" class="mobile-footer-link">資金決済法</a>
-        <a href="legal/contact.html" class="mobile-footer-link">お問い合わせ</a>
+  <!-- フォロー解除確認モーダル -->
+  <div class="confirm-modal" id="unfollowModal">
+    <div class="confirm-modal-content">
+      <div class="confirm-modal-title">フォロー解除の確認</div>
+      <div class="confirm-modal-message" id="unfollowModalMessage"></div>
+      <div class="confirm-modal-buttons">
+        <button class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
+        <button class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
       </div>
-      <div class="mobile-footer-copyright">
-        © 2025 Pack&Play
-      </div>
-    </footer>
+    </div>
   </div>
 
   <!-- コンポーネントベースJavaScript -->
@@ -105,6 +96,6 @@
   <script src="js/components/toast.js"></script>
   <script src="js/mock-data.js"></script>
   <script src="js/main.js"></script>
-  <script src="js/pages/history.js"></script>
+  <script src="js/pages/ranking.js"></script>
 </body>
 </html>

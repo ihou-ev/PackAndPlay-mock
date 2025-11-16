@@ -3,11 +3,11 @@ const urlParams = new URLSearchParams(window.location.search);
 const role = urlParams.get('role') || 'viewer';
 
 // ロールに応じた表示を設定
-const roleText = role === 'creator' ? '配信者' : '視聴者';
+const roleText = role === 'creator' ? 'ストリーマー' : '視聴者';
 
 document.getElementById('loginTitle').textContent = `${roleText}としてログイン`;
 
-// 配信者の場合はXボタンを非表示
+// ストリーマーの場合はXボタンを非表示
 if (role === 'creator') {
   document.getElementById('xPlatformBtn').style.display = 'none';
 }
@@ -42,7 +42,7 @@ function selectPlatform(platform) {
 
     saveToStorage('session', session);
 
-    // フォロー中の配信者を初期化（初回ログイン時のみ）
+    // フォロー中のストリーマーを初期化（初回ログイン時のみ）
     if (!loadFromStorage('followedCreators')) {
       saveToStorage('followedCreators', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]); // デフォルトで10人フォロー
     }

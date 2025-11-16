@@ -1,13 +1,15 @@
-// ログインチェック
-if (!requireLogin()) {
-  // ログインが必要な場合、requireLogin関数内でリダイレクトされる
-}
+// DOMが読み込まれてから実行
+document.addEventListener('DOMContentLoaded', function() {
+  // ログインチェック
+  if (!requireLogin()) {
+    // ログインが必要な場合、requireLogin関数内でリダイレクトされる
+  }
 
-// セッション情報を取得
-const session = getCurrentSession();
+  // セッション情報を取得
+  const session = getCurrentSession();
 
-// モックデータ - 統合した履歴
-const allHistory = [
+  // モックデータ - 統合した履歴
+  const allHistory = [
   // チャージ履歴
   {
     type: 'charge',
@@ -138,88 +140,108 @@ const allHistory = [
   }
 ];
 
-// 日付でソート（新しい順）
-allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
+  // 日付でソート（新しい順）
+  allHistory.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-// フィルター適用
-function applyFilters() {
-  const filterValue = document.getElementById('filterSelect').value;
+  // フィルター適用
+  window.applyFilters = function() {
+    const filterValue = document.getElementById('filterSelect').value;
 
-  // フィルタリングされた履歴
-  let filteredHistory = allHistory;
+    // フィルタリングされた履歴
+    let filteredHistory = allHistory;
 
-  if (filterValue !== 'all') {
-    filteredHistory = allHistory.filter(item => item.type === filterValue);
-  }
-
-  renderHistory(filteredHistory);
-}
-
-// 履歴を表示
-function renderHistory(historyData) {
-  const container = document.getElementById('historyItems');
-
-  if (historyData.length === 0) {
-    container.innerHTML = `
-      <div class="history-empty">
-        <div class="history-empty-icon">📋</div>
-        <div class="history-empty-text">履歴がありません</div>
-        <div class="history-empty-subtext">選択した種別の履歴が表示されます</div>
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = historyData.map(item => {
-    const date = new Date(item.date);
-    const formattedDate = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
-
-    let typeLabel = '';
-    let typeClass = '';
-    let creator = '-';
-    let amount = '-';
-    let details = '';
-
-    if (item.type === 'charge') {
-      typeLabel = 'チャージ';
-      typeClass = 'charge';
-      amount = `+${item.amount.toLocaleString()}`;
-      details = item.method;
-    } else if (item.type === 'purchase') {
-      typeLabel = '購入';
-      typeClass = 'purchase';
-      creator = item.creatorName;
-      amount = `-${item.price.toLocaleString()}`;
-      details = `${item.packName} | 獲得: ${item.cardReceived}`;
-    } else if (item.type === 'usage') {
-      typeLabel = '使用';
-      typeClass = 'usage';
-      creator = item.creatorName;
-      amount = '-';
-      details = `${item.cardName} (${item.rarity})`;
-    } else if (item.type === 'splash') {
-      typeLabel = 'スプラッシュ';
-      typeClass = 'splash';
-      creator = item.creatorName;
-      amount = `-${item.amount.toLocaleString()}`;
-      details = item.message || '(メッセージなし)';
+    if (filterValue !== 'all') {
+      filteredHistory = allHistory.filter(item => item.type === filterValue);
     }
 
-    return `
-      <div class="history-item">
-        <div class="history-item-date">${formattedDate}</div>
-        <div class="history-item-type ${typeClass}">${typeLabel}</div>
-        <div class="history-item-creator">${creator}</div>
-        <div class="history-item-amount">${amount}</div>
-        <div class="history-item-details">${details}</div>
-      </div>
-    `;
-  }).join('');
-}
+    renderHistory(filteredHistory);
+  };
+
+  // 履歴を表示
+  function renderHistory(historyData) {
+    const container = document.getElementById('historyItems');
+
+    if (historyData.length === 0) {
+      container.innerHTML = `
+        <div class="history-empty">
+          <div class="history-empty-icon">📋</div>
+          <div class="history-empty-text">履歴がありません</div>
+          <div class="history-empty-subtext">選択した種別の履歴が表示されます</div>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = historyData.map(item => {
+      const date = new Date(item.date);
+      const formattedDate = `${date.getFullYear()}/${String(date.getMonth() + 1).padStart(2, '0')}/${String(date.getDate()).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+
+      let typeLabel = '';
+      let typeClass = '';
+      let creator = '';
+      let amount = '';
+      let amountClass = '';
+      let details = '';
+
+      if (item.type === 'charge') {
+        typeLabel = 'チャージ';
+        typeClass = 'charge';
+        amount = `+${item.amount.toLocaleString()} スパーク`;
+        amountClass = 'text-green';
+        details = `支払方法: ${item.method}`;
+      } else if (item.type === 'purchase') {
+        typeLabel = '購入';
+        typeClass = 'purchase';
+        creator = `<div class="history-item-creator">${item.creatorName}</div>`;
+        amount = `-${item.price.toLocaleString()} スパーク`;
+        amountClass = 'text-red';
+        details = `<div class="history-item-pack">${item.packName}</div><div class="history-item-card">獲得カード: ${item.cardReceived}</div>`;
+      } else if (item.type === 'usage') {
+        typeLabel = '使用';
+        typeClass = 'usage';
+        creator = `<div class="history-item-creator">${item.creatorName}</div>`;
+        amount = '';
+        details = `カード: ${item.cardName} (${item.rarity})`;
+      } else if (item.type === 'splash') {
+        typeLabel = 'スプラッシュ';
+        typeClass = 'splash';
+        creator = `<div class="history-item-creator">${item.creatorName}</div>`;
+        amount = `-${item.amount.toLocaleString()} スパーク`;
+        amountClass = 'text-red';
+        details = item.message ? `<div class="history-item-message">"${item.message}"</div>` : '<div class="history-item-message text-muted">(メッセージなし)</div>';
+      }
+
+      return `
+        <div class="history-item">
+          <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+            <div class="history-item-date">${formattedDate}</div>
+            <div class="history-item-type ${typeClass}">${typeLabel}</div>
+          </div>
+          ${creator}
+          ${amount ? `<div class="history-item-amount ${amountClass}">${amount}</div>` : ''}
+          <div class="history-item-details">${details}</div>
+        </div>
+      `;
+    }).join('');
+  }
 
 
-// モバイルメニュー関数はjs/main.jsで定義
+  // モバイルメニュー
+  window.toggleMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.toggle('mobile-active');
+    overlay.classList.toggle('active');
+  };
 
-// 初期表示
-renderSidebarNav('history'); // main.jsの共通関数を使用
-applyFilters();
+  window.closeMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  };
+
+  // 初期表示
+  renderSidebarNav('history'); // main.jsの共通関数を使用
+  applyFilters();
+});

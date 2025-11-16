@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#667eea">
-  <meta name="description" content="配信者専用カードパック販売プラットフォーム">
+  <meta name="description" content="ストリーマー専用カードパック販売プラットフォーム">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pack&Play">
-  <title>Pack&Play - 配信者を探す</title>
+  <title>Pack&Play - ストリーマーを探す</title>
   <!-- コンポーネントベースCSS -->
   <link rel="stylesheet" href="css/app.css">
   <link rel="stylesheet" href="css/pages/discover.css">
@@ -56,70 +56,37 @@
     <div class="discover-content">
       <!-- ヘッダー -->
       <div class="discover-header">
-        <h1 class="discover-title">配信者を探す</h1>
-        <p class="discover-description">お気に入りの配信者を見つけて、カードパックで応援しよう</p>
+        <h1 class="discover-title">ストリーマーを探す</h1>
+        <p class="discover-description">お気に入りのストリーマーを見つけて、カードパックで応援しよう</p>
       </div>
 
-      <!-- タブUI -->
-      <div class="tabs-container">
-        <div class="tabs-list">
-          <button class="tab-button active" id="rankingTab" onclick="switchTab('ranking')">
-            ランキング
-          </button>
-          <button class="tab-button" id="allListTab" onclick="switchTab('allList')">
-            全体の一覧
-          </button>
-        </div>
+      <!-- 検索ボックス -->
+      <div class="search-box-container">
+        <input
+          type="search"
+          id="searchInput"
+          placeholder="ストリーマーを検索..."
+          class="search-input"
+        >
       </div>
 
-      <!-- ランキングタブコンテンツ -->
-      <div class="tab-content active" id="rankingContent">
-        <!-- 期間フィルター -->
-        <div class="filter-select-container">
-          <select id="periodSelect" class="filter-select" onchange="filterByPeriod()">
-            <option value="today">24時間</option>
-            <option value="week">今週</option>
-            <option value="month">今月</option>
-            <option value="year">今年</option>
-          </select>
-        </div>
-
-        <!-- ランキングリスト -->
-        <div class="creators-list" id="rankingList">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
+      <!-- ソートフィルター -->
+      <div class="filter-select-container">
+        <select id="sortSelect" class="filter-select" onchange="sortCreators()">
+          <option value="followers">フォロワー数順</option>
+          <option value="name">名前順</option>
+          <option value="live">配信中</option>
+        </select>
       </div>
 
-      <!-- 全体の一覧タブコンテンツ -->
-      <div class="tab-content" id="allListContent">
-        <!-- 検索ボックス -->
-        <div class="search-box-container">
-          <input
-            type="search"
-            id="searchInput"
-            placeholder="配信者を検索..."
-            class="search-input"
-          >
-        </div>
+      <!-- ストリーマーリスト -->
+      <div class="creators-list" id="creatorsList">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
 
-        <!-- ソートフィルター -->
-        <div class="filter-select-container">
-          <select id="sortSelect" class="filter-select" onchange="sortCreators()">
-            <option value="followers">フォロワー数順</option>
-            <option value="name">名前順</option>
-            <option value="live">配信中</option>
-          </select>
-        </div>
-
-        <!-- 配信者リスト -->
-        <div class="creators-list" id="creatorsList">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
-
-        <div id="emptyState" class="empty-state hidden">
-          <div class="empty-state-icon">🔍</div>
-          <div class="empty-state-text">配信者が見つかりませんでした</div>
-        </div>
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">🔍</div>
+        <div class="empty-state-text">ストリーマーが見つかりませんでした</div>
       </div>
     </div>
   </div>

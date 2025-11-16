@@ -30,7 +30,7 @@ body {
   background: white;
 }
 
-/* 配信者情報バー（モバイル） */
+/* ストリーマー情報バー（モバイル） */
 .creator-info-section {
   display: flex;
   align-items: center;

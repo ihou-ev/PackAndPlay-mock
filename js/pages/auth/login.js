@@ -52,7 +52,7 @@ function performLogin(role, email) {
     saveToStorage('session', session);
 
     hideLoading();
-    showToast(`${role === 'creator' ? '配信者' : '視聴者'}としてログインしました`, 'success');
+    showToast(`${role === 'creator' ? 'ストリーマー' : '視聴者'}としてログインしました`, 'success');
 
     // リダイレクト
     setTimeout(() => {

@@ -292,7 +292,7 @@ function requireCreatorRole() {
 
   const session = getCurrentSession();
   if (session.role !== 'creator') {
-    showToast('配信者のみアクセス可能です', 'error');
+    showToast('ストリーマーのみアクセス可能です', 'error');
     setTimeout(() => {
       window.location.href = getRelativePath('discover.html');
     }, 1000);
@@ -372,9 +372,9 @@ function updateNavbar() {
     const role = session.role;
 
     if (role === 'creator') {
-      // 配信者用ナビゲーション
+      // ストリーマー用ナビゲーション
       navLinks.innerHTML = `
-        <li><a href="${getRelativePath('discover.html')}">配信者を探す</a></li>
+        <li><a href="${getRelativePath('discover.html')}">ストリーマーを探す</a></li>
         <li><a href="${getRelativePath('dashboard/index.html')}">ダッシュボード</a></li>
         <li><a href="${getRelativePath('dashboard/cards.html')}">カード管理</a></li>
         <li><a href="${getRelativePath('dashboard/redemptions.html')}">承認待ち</a></li>
@@ -387,7 +387,7 @@ function updateNavbar() {
     } else {
       // 視聴者用ナビゲーション
       navLinks.innerHTML = `
-        <li><a href="${getRelativePath('discover.html')}">配信者を探す</a></li>
+        <li><a href="${getRelativePath('discover.html')}">ストリーマーを探す</a></li>
         <li><a href="${getRelativePath('inventory.html')}">マイカード</a></li>
         <li>
           <button class="btn btn-sm btn-outline" onclick="logout()" style="margin-left: 1rem;">
@@ -399,7 +399,7 @@ function updateNavbar() {
   } else {
     // 未ログイン
     navLinks.innerHTML = `
-      <li><a href="${getRelativePath('discover.html')}">配信者を探す</a></li>
+      <li><a href="${getRelativePath('discover.html')}">ストリーマーを探す</a></li>
       <li>
         <a href="${getRelativePath('index.html')}" class="btn btn-sm btn-primary" style="margin-left: 1rem;">
           ログイン
@@ -451,11 +451,17 @@ function renderSidebarNav(currentPage = '') {
           </svg>
           プロフィール
         </a>
+        <a href="${getRelativePath('ranking.html')}" class="sidebar-nav-link${currentPage === 'ranking' ? ' active' : ''}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+          ランキング
+        </a>
         <a href="${getRelativePath('discover.html')}" class="sidebar-nav-link${currentPage === 'discover' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          配信者を探す
+          ストリーマーを探す
         </a>
         <a href="${getRelativePath('following.html')}" class="sidebar-nav-link${currentPage === 'following' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -497,11 +503,17 @@ function renderSidebarNav(currentPage = '') {
           </svg>
           プロフィール
         </a>
+        <a href="${getRelativePath('ranking.html')}" class="sidebar-nav-link${currentPage === 'ranking' ? ' active' : ''}">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+          </svg>
+          ランキング
+        </a>
         <a href="${getRelativePath('discover.html')}" class="sidebar-nav-link${currentPage === 'discover' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
           </svg>
-          配信者を探す
+          ストリーマーを探す
         </a>
         <a href="${getRelativePath('following.html')}" class="sidebar-nav-link${currentPage === 'following' ? ' active' : ''}">
           <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -594,7 +606,7 @@ function unfollowCreator(creatorId, event, updateCallback) {
   event.stopPropagation();
 
   const creator = creators.find(c => c.id === creatorId);
-  const creatorName = creator ? creator.name : '配信者';
+  const creatorName = creator ? creator.name : 'ストリーマー';
 
   showUnfollowModal(creatorId, creatorName, updateCallback);
 }
