@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
           <div class="creator-card-stats">
-            👤 ${(creator.followerCount || 0).toLocaleString()}
+            <img src="../image/follower.png" alt="followers" class="follower-icon"> ${(creator.followerCount || 0).toLocaleString()}
           </div>
           <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorDiscover(${creator.id}, event, 'list')` : `followCreatorDiscover(${creator.id}, event, 'list')`}">
             ${isFollowing ? 'フォロー中' : 'フォローする'}
