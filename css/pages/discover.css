@@ -423,6 +423,15 @@ body {
   color: #FF1B8D;
   font-weight: 600;
   font-size: 0.6875rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.spark-icon {
+  width: 12px;
+  height: 12px;
+  color: #FF1B8D;
 }
 
 /* 空の状態 */

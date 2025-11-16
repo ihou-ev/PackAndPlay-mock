@@ -92,7 +92,7 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
           <div class="creator-card-stats">
-            <span class="sparks-consumed">${formatSparks(sparks)} スパーク</span>
+            <span class="sparks-consumed"><img src="image/spark.svg" alt="spark" class="spark-icon"> ${formatSparks(sparks)}</span>
           </div>
           <button class="creator-card-follow-btn${isFollowing ? ' following' : ' unfollow-style'}" onclick="${isFollowing ? `unfollowCreatorDiscover(${creator.id}, event, 'ranking')` : `followCreatorDiscover(${creator.id}, event, 'ranking')`}">
             ${isFollowing ? 'フォロー中' : 'フォローする'}
