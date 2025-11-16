@@ -39,7 +39,7 @@ body {
 
 /* 配信者を探すコンテンツ */
 .discover-content {
-  max-width: 100%;
+  max-width: 600px;
   width: 100%;
   margin: 0 auto;
   padding: 1rem;
