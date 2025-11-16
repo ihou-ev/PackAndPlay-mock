@@ -165,8 +165,13 @@ body {
   transform: none !important;
 }
 
+.following-button:hover span {
+  font-size: 0;
+}
+
 .following-button:hover span::before {
   content: 'フォロー解除';
+  font-size: 0.75rem;
 }
 
 .following-button.unfollow-style {
