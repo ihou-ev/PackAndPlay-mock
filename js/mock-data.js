@@ -11,6 +11,7 @@ const creators = [
     channelUrl: 'https://youtube.com/@tanaka',
     isLive: true,
     streamUrl: 'https://www.youtube.com/embed/jfKfPfyJRdk',
+    streamTitle: '【初心者向け】マインクラフト基本解説！最初の夜を乗り越えよう',
     streamDescription: '今日は初心者向けにマインクラフトの基本を解説していきます！\n\n【今回の内容】\n・サバイバルモードの始め方\n・最初の夜を乗り越える方法\n・家の建て方と基本的な装備の作り方\n\n初めての方でも分かりやすく説明するので、気軽にコメントしてくださいね！\n質問があればチャットで教えてください 🎮',
     packCount: 3,
     totalSales: 250000,

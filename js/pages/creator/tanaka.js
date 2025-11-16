@@ -116,11 +116,17 @@ Pack&Playでカードパックを販売しているので、
 function updateLiveBanner() {
   const liveStreamThumbnail = document.getElementById('liveStreamThumbnail');
   const liveSignal = document.getElementById('liveSignal');
+  const liveStreamTitle = document.getElementById('liveStreamTitle');
   const liveViewerCount = document.getElementById('liveViewerCount');
 
   if (creatorData && creatorData.isLive) {
     liveStreamThumbnail.style.display = 'block';
     liveSignal.style.display = 'block';
+
+    // 配信タイトルを設定
+    if (liveStreamTitle) {
+      liveStreamTitle.textContent = creatorData.streamTitle || '配信中';
+    }
 
     // 視聴者数をランダムに生成（デモ用）
     const viewerCount = Math.floor(Math.random() * 500) + 50;
