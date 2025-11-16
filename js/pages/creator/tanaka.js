@@ -752,42 +752,20 @@ function purchasePack(packId) {
   }
 }
 
-// モバイルメニューの開閉
-function toggleMobileMenu() {
+// モバイルメニュー
+window.toggleMobileMenu = function() {
   const sidebar = document.getElementById('sidebar');
-  const button = document.getElementById('mobileMenuButton');
   const overlay = document.getElementById('mobileMenuOverlay');
+  sidebar.classList.toggle('mobile-active');
+  overlay.classList.toggle('active');
+};
 
-  const isOpen = sidebar.classList.contains('mobile-open');
-
-  if (isOpen) {
-    closeMobileMenu();
-  } else {
-    openMobileMenu();
-  }
-}
-
-function openMobileMenu() {
+window.closeMobileMenu = function() {
   const sidebar = document.getElementById('sidebar');
-  const button = document.getElementById('mobileMenuButton');
   const overlay = document.getElementById('mobileMenuOverlay');
-
-  sidebar.classList.add('mobile-open');
-  button.classList.add('active');
-  overlay.style.display = 'block';
-  document.body.style.overflow = 'hidden';
-}
-
-function closeMobileMenu() {
-  const sidebar = document.getElementById('sidebar');
-  const button = document.getElementById('mobileMenuButton');
-  const overlay = document.getElementById('mobileMenuOverlay');
-
-  sidebar.classList.remove('mobile-open');
-  button.classList.remove('active');
-  overlay.style.display = 'none';
-  document.body.style.overflow = '';
-}
+  sidebar.classList.remove('mobile-active');
+  overlay.classList.remove('active');
+};
 
 // サンプルカードを追加
 function addSampleCards() {
