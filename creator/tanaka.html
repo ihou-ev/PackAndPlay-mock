@@ -15,6 +15,7 @@
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
 <body>
   <!-- モバイルメニューボタン -->
   <button type="button" class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
@@ -51,141 +52,70 @@
 
   <!-- メインコンテンツラッパー -->
   <div class="main-wrapper">
-    <main class="creator-content">
-      <!-- 配信プレイヤー -->
-      <div class="stream-player-wrapper">
-        <!-- 配信中の場合はiframeを表示 -->
-        <iframe
-          id="streamPlayer"
-          class="stream-player"
-          src=""
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-          style="display: none;">
-        </iframe>
-
-        <!-- 配信していない場合 -->
-        <div class="stream-offline" id="streamOffline">
-          <div class="stream-offline-icon">📺</div>
-          <div class="stream-offline-text">現在配信していません</div>
-        </div>
-      </div>
-
-      <!-- 配信者情報バー（統合版） -->
-      <div class="stream-info-bar" id="streamInfoBar">
-        <div class="creator-info-section">
-          <div class="creator-avatar" id="creatorAvatar">
-            田
-            <span class="live-signal" id="liveSignal" style="display: none;"></span>
+    <main class="creator-home-content">
+      <!-- プロフィールヘッダー -->
+      <div class="creator-header">
+        <div class="creator-banner"></div>
+        <div class="creator-profile">
+          <div class="creator-avatar-wrapper">
+            <div class="creator-avatar" id="creatorAvatar">
+              田
+              <span class="live-signal" id="liveSignal" style="display: none;"></span>
+            </div>
           </div>
-          <div class="creator-info-text">
+          <div class="creator-info">
             <div class="creator-name" id="creatorName">田中太郎</div>
-            <div class="creator-meta">
-              <span class="follower-count" id="followerCount">0 フォロワー</span>
+            <div class="creator-id">@tanaka</div>
+            <div class="creator-bio" id="creatorBio">
+              Pack&Playで活動中の配信者です。毎週月・水・金の20時から配信しています！
+            </div>
+            <div class="creator-stats">
+              <img src="../image/follower.svg" alt="followers" class="follower-icon">
+              <span id="followerCount">0</span>
             </div>
           </div>
+          <button type="button" class="follow-button" id="followButton">
+            <span>フォローする</span>
+          </button>
         </div>
-        <button type="button" class="following-button" id="followButton">
-          <span>フォローする</span>
-        </button>
       </div>
 
-      <!-- アクションパネル -->
-      <div class="action-panel">
-        <div class="action-tabs">
-          <button type="button" class="action-tab active" id="overviewTab" onclick="switchActionTab('overview')">概要</button>
-          <button type="button" class="action-tab" onclick="switchActionTab('cards')">カード</button>
-          <button type="button" class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
-          <button type="button" class="action-tab" onclick="switchActionTab('packs')">パック</button>
-        </div>
+      <!-- 配信中バナー -->
+      <div class="live-banner" id="liveBanner" style="display: none;">
+        <div class="live-banner-icon">🔴</div>
+        <div class="live-banner-text">配信中</div>
+        <a href="tanaka-stream.html" class="live-banner-button">配信を見る</a>
+      </div>
 
-        <!-- 概要タブ -->
-        <div class="action-content active" id="overviewContent">
-          <div class="stream-description-wrapper">
-            <div class="stream-description-content collapsed" id="streamDescription">
-              <!-- JavaScriptで動的に生成 -->
-            </div>
-            <div class="stream-description-fade" id="streamDescriptionFade"></div>
-          </div>
-          <button type="button" class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
-            <span id="toggleText">もっと見る</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          <div class="stream-description-empty" id="streamDescriptionEmpty" style="display: none;">
-            配信概要はありません
-          </div>
-        </div>
+      <!-- タブ -->
+      <div class="creator-tabs">
+        <button type="button" class="creator-tab active" id="homeTab" onclick="switchTab('home')">ホーム</button>
+        <button type="button" class="creator-tab" id="packsTab" onclick="switchTab('packs')">パック</button>
+        <button type="button" class="creator-tab" id="aboutTab" onclick="switchTab('about')">について</button>
+      </div>
 
-        <!-- カードタブ -->
-        <div class="action-content" id="cardsContent">
-          <div class="cards-grid" id="cardsGrid">
+      <!-- タブコンテンツ -->
+      <div class="tab-content active" id="homeContent">
+        <div class="packs-section">
+          <h2 class="section-title">パック一覧</h2>
+          <div class="packs-grid" id="packsGrid">
             <!-- JavaScriptで動的に生成 -->
           </div>
         </div>
+      </div>
 
-        <!-- スプラッシュタブ -->
-        <div class="action-content" id="splashContent">
-          <!-- プレビュー -->
-          <div class="splash-preview" id="splashPreview" data-tier="1">
-            <div class="splash-preview-header">
-              <div class="splash-preview-avatar" id="splashPreviewAvatar">視</div>
-              <div class="splash-preview-info">
-                <div class="splash-preview-name" id="splashPreviewName">視聴者</div>
-                <div class="splash-preview-amount" id="splashPreviewAmount">100スパーク</div>
-              </div>
-            </div>
-            <div class="splash-preview-message">
-              <textarea
-                class="splash-preview-input"
-                id="splashMessage"
-                placeholder="メッセージを送るには200スパーク以上必要です"
-                maxlength="0"
-                disabled></textarea>
-            </div>
+      <div class="tab-content" id="packsContent">
+        <div class="packs-section">
+          <div class="packs-grid" id="packsGridFull">
+            <!-- JavaScriptで動的に生成 -->
           </div>
-
-          <!-- 金額コントロール -->
-          <div class="splash-slider-container">
-            <!-- 金額入力（スライダー上部中央） -->
-            <div class="splash-amount-input-wrapper">
-              <input
-                type="number"
-                class="splash-amount-input"
-                id="splashAmountInput"
-                min="100"
-                max="50000"
-                step="100"
-                value="100"
-                oninput="updateFromInput()"
-                onkeydown="handleSparkKeydown(event)">
-              <span class="splash-amount-unit">スパーク</span>
-            </div>
-
-            <!-- スライドバー -->
-            <div class="splash-slider-wrapper">
-              <input
-                type="range"
-                class="splash-slider"
-                id="splashSlider"
-                min="0"
-                max="10"
-                value="0"
-                step="1"
-                oninput="updateFromSlider(this.value)">
-            </div>
-          </div>
-
-          <!-- 送信ボタン -->
-          <button type="button" class="send-button" id="sendSplashButton" onclick="sendSplash()">
-            スプラッシュを送る
-          </button>
         </div>
+      </div>
 
-        <!-- パックタブ -->
-        <div class="action-content" id="packsContent">
-          <div class="packs-grid" id="packsGrid">
+      <div class="tab-content" id="aboutContent">
+        <div class="about-section">
+          <h2 class="section-title">配信者について</h2>
+          <div class="about-text" id="aboutText">
             <!-- JavaScriptで動的に生成 -->
           </div>
         </div>
@@ -199,49 +129,8 @@
       <div class="confirm-modal-title">フォロー解除の確認</div>
       <div class="confirm-modal-message" id="unfollowModalMessage"></div>
       <div class="confirm-modal-buttons">
-        <button class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
-        <button class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- カード使用確認モーダル -->
-  <div class="use-card-modal" id="useCardModal">
-    <div class="use-card-modal-content">
-      <div class="use-card-modal-header">
-        <div class="use-card-modal-icon">🎴</div>
-        <div class="use-card-modal-title">カード使用の確認</div>
-      </div>
-      <div class="use-card-modal-message" id="useCardModalMessage"></div>
-      <div class="use-card-modal-buttons">
-        <button type="button" class="use-card-modal-button use-card-modal-button-cancel" onclick="closeUseCardModal()">キャンセル</button>
-        <button type="button" class="use-card-modal-button use-card-modal-button-confirm" id="useCardConfirmButton">使用する</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- スプラッシュ送信確認モーダル -->
-  <div class="use-card-modal" id="splashModal">
-    <div class="use-card-modal-content">
-      <div class="use-card-modal-header">
-        <div class="use-card-modal-icon">💰</div>
-        <div class="use-card-modal-title">スプラッシュ送信の確認</div>
-      </div>
-      <div class="use-card-modal-message">
-        <div style="margin-bottom: 1rem;">
-          <strong style="color: #FF1B8D; font-size: 1.5rem;" id="splashModalAmount">100</strong>
-          <span style="color: #6b7280; margin-left: 0.25rem;">スパーク</span>
-        </div>
-        <div style="color: #6b7280; font-size: 0.875rem;">
-          メッセージ: <span id="splashModalMessage">なし</span>
-        </div>
-        <div style="margin-top: 1rem; color: #6b7280; font-size: 0.875rem;">
-          このスプラッシュを送信しますか？
-        </div>
-      </div>
-      <div class="use-card-modal-buttons">
-        <button type="button" class="use-card-modal-button use-card-modal-button-cancel" onclick="closeSplashModal()">キャンセル</button>
-        <button type="button" class="use-card-modal-button use-card-modal-button-confirm" id="splashConfirmButton">送信する</button>
+        <button type="button" class="confirm-modal-button confirm-modal-button-cancel" onclick="closeUnfollowModal()">キャンセル</button>
+        <button type="button" class="confirm-modal-button confirm-modal-button-confirm" id="unfollowConfirmButton">解除する</button>
       </div>
     </div>
   </div>
