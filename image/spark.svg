@@ -1,22 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <defs>
+    <radialGradient id="sparkGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+    </radialGradient>
+  </defs>
   <!-- トゲトゲの星型火花 -->
-  <path d="M12 2l1.5 7-1.5 3-1.5-3L12 2z"/>
-  <path d="M22 12l-7 1.5-3-1.5 3-1.5L22 12z"/>
-  <path d="M12 22l-1.5-7 1.5-3 1.5 3L12 22z"/>
-  <path d="M2 12l7-1.5 3 1.5-3 1.5L2 12z"/>
-  <path d="M19.8 4.2l-5.3 5.3-2.5-0.5 0.5-2.5L19.8 4.2z"/>
-  <path d="M19.8 19.8l-5.3-5.3-0.5-2.5 2.5 0.5L19.8 19.8z"/>
-  <path d="M4.2 19.8l5.3-5.3 2.5 0.5-0.5 2.5L4.2 19.8z"/>
-  <path d="M4.2 4.2l5.3 5.3 0.5 2.5-2.5-0.5L4.2 4.2z"/>
+  <path fill="url(#sparkGradient)" d="M12 2l1.5 7-1.5 3-1.5-3L12 2z"/>
+  <path fill="url(#sparkGradient)" d="M22 12l-7 1.5-3-1.5 3-1.5L22 12z"/>
+  <path fill="url(#sparkGradient)" d="M12 22l-1.5-7 1.5-3 1.5 3L12 22z"/>
+  <path fill="url(#sparkGradient)" d="M2 12l7-1.5 3 1.5-3 1.5L2 12z"/>
+  <path fill="url(#sparkGradient)" d="M19.8 4.2l-5.3 5.3-2.5-0.5 0.5-2.5L19.8 4.2z"/>
+  <path fill="url(#sparkGradient)" d="M19.8 19.8l-5.3-5.3-0.5-2.5 2.5 0.5L19.8 19.8z"/>
+  <path fill="url(#sparkGradient)" d="M4.2 19.8l5.3-5.3 2.5 0.5-0.5 2.5L4.2 19.8z"/>
+  <path fill="url(#sparkGradient)" d="M4.2 4.2l5.3 5.3 0.5 2.5-2.5-0.5L4.2 4.2z"/>
   <!-- 中心の星 -->
-  <circle cx="12" cy="12" r="2.5"/>
+  <circle fill="#fbbf24" cx="12" cy="12" r="2.5"/>
   <!-- 小さなトゲ -->
-  <polygon points="12,7 11.5,9 12.5,9"/>
-  <polygon points="15.5,8.5 14,9.5 14.5,10.5"/>
-  <polygon points="17,12 15,11.5 15,12.5"/>
-  <polygon points="15.5,15.5 14.5,14 14,15"/>
-  <polygon points="12,17 12.5,15 11.5,15"/>
-  <polygon points="8.5,15.5 10,14.5 9.5,13.5"/>
-  <polygon points="7,12 9,12.5 9,11.5"/>
-  <polygon points="8.5,8.5 9.5,10 10,9"/>
+  <polygon fill="#f59e0b" points="12,7 11.5,9 12.5,9"/>
+  <polygon fill="#f59e0b" points="15.5,8.5 14,9.5 14.5,10.5"/>
+  <polygon fill="#f59e0b" points="17,12 15,11.5 15,12.5"/>
+  <polygon fill="#f59e0b" points="15.5,15.5 14.5,14 14,15"/>
+  <polygon fill="#f59e0b" points="12,17 12.5,15 11.5,15"/>
+  <polygon fill="#f59e0b" points="8.5,15.5 10,14.5 9.5,13.5"/>
+  <polygon fill="#f59e0b" points="7,12 9,12.5 9,11.5"/>
+  <polygon fill="#f59e0b" points="8.5,8.5 9.5,10 10,9"/>
 </svg>
