@@ -586,6 +586,21 @@ function renderTimeline() {
   }).join('');
 }
 
+// モバイルメニュー
+window.toggleMobileMenu = function() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  sidebar.classList.toggle('mobile-active');
+  overlay.classList.toggle('active');
+};
+
+window.closeMobileMenu = function() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  sidebar.classList.remove('mobile-active');
+  overlay.classList.remove('active');
+};
+
 // 初期表示
 renderSidebarNav('profile');
 renderProfile();

@@ -93,7 +93,20 @@ showUnfollowModal = function(creatorId, creatorName, updateCallback) {
   modal.classList.add('active');
 };
 
-// フォロー関連関数、モバイルメニュー関数はjs/main.jsで定義
+// モバイルメニュー
+window.toggleMobileMenu = function() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  sidebar.classList.toggle('mobile-active');
+  overlay.classList.toggle('active');
+};
+
+window.closeMobileMenu = function() {
+  const sidebar = document.getElementById('sidebar');
+  const overlay = document.getElementById('mobileMenuOverlay');
+  sidebar.classList.remove('mobile-active');
+  overlay.classList.remove('active');
+};
 
 // 初期表示
 renderSidebarNav(''); // main.jsの共通関数を使用
