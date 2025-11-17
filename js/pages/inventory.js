@@ -13,6 +13,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // 状態管理
   let inventory = loadFromStorage('inventory', []);
   let selectedCard = null;
+  let isModalOpening = false;
 
   // 初期データ生成（デモ用）
   // 常に最新のデータを生成（開発用）
@@ -181,7 +182,14 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     modalCardCooldown.textContent = cooldownMap[card.rarity] || '1分';
 
+    // モーダルを開く
+    isModalOpening = true;
     modal.classList.add('active');
+
+    // 次のイベントループでフラグをリセット
+    setTimeout(() => {
+      isModalOpening = false;
+    }, 100);
   };
 
   // カード詳細モーダルを閉じる
@@ -263,6 +271,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // モーダルオーバーレイのクリックでモーダルを閉じる
     useCardModal.addEventListener('click', function(e) {
+      // モーダルを開いている最中はクリックを無視
+      if (isModalOpening) return;
       closeUseCardModal();
     });
   }
