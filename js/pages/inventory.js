@@ -90,35 +90,22 @@ document.addEventListener('DOMContentLoaded', function() {
         <div class="inventory-card${usedClass}" data-card-id="${card.id}">
           <div class="card-frame">
             <svg class="card-frame-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="frame-gradient-${card.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
-                </linearGradient>
-                <linearGradient id="shine-gradient-${card.id}" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
-                  <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
-                </linearGradient>
-              </defs>
               <!-- メインフレーム -->
-              <rect x="2" y="2" width="196" height="276" rx="8" fill="none" stroke="url(#frame-gradient-${card.id})" stroke-width="3"/>
-
-              <!-- 光沢効果 -->
-              <rect x="5" y="5" width="30" height="60" rx="4" fill="url(#shine-gradient-${card.id})" opacity="0.6"/>
+              <rect x="2" y="2" width="196" height="276" rx="8" fill="none" stroke="#000000" stroke-width="3"/>
 
               <!-- コーナー装飾 左上 -->
-              <path d="M 8 8 L 20 8 L 8 20 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <path d="M 8 8 L 20 8 L 8 20 Z" fill="#000000" opacity="0.5"/>
               <!-- コーナー装飾 右上 -->
-              <path d="M 192 8 L 180 8 L 192 20 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <path d="M 192 8 L 180 8 L 192 20 Z" fill="#000000" opacity="0.5"/>
               <!-- コーナー装飾 左下 -->
-              <path d="M 8 272 L 20 272 L 8 260 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <path d="M 8 272 L 20 272 L 8 260 Z" fill="#000000" opacity="0.5"/>
               <!-- コーナー装飾 右下 -->
-              <path d="M 192 272 L 180 272 L 192 260 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <path d="M 192 272 L 180 272 L 192 260 Z" fill="#000000" opacity="0.5"/>
 
               <!-- 装飾ライン 上部 -->
-              <line x1="30" y1="8" x2="170" y2="8" stroke="url(#frame-gradient-${card.id})" stroke-width="1" opacity="0.3"/>
+              <line x1="30" y1="8" x2="170" y2="8" stroke="#000000" stroke-width="1" opacity="0.3"/>
               <!-- 装飾ライン 下部 -->
-              <line x1="30" y1="272" x2="170" y2="272" stroke="url(#frame-gradient-${card.id})" stroke-width="1" opacity="0.3"/>
+              <line x1="30" y1="272" x2="170" y2="272" stroke="#000000" stroke-width="1" opacity="0.3"/>
             </svg>
           </div>
           <div class="card-content">
@@ -127,7 +114,6 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="card-text-area">
               <div class="card-name">${card.name}</div>
-              <div class="card-creator">${card.creatorName}</div>
             </div>
           </div>
         </div>
