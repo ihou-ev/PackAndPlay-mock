@@ -15,10 +15,9 @@ document.addEventListener('DOMContentLoaded', function() {
   let selectedCard = null;
 
   // 初期データ生成（デモ用）
-  if (inventory.length === 0) {
-    inventory = generateDemoInventory();
-    saveToStorage('inventory', inventory);
-  }
+  // 常に最新のデータを生成（開発用）
+  inventory = generateDemoInventory();
+  saveToStorage('inventory', inventory);
 
   // 統計情報を更新
   function updateStats() {
