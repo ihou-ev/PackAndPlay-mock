@@ -363,7 +363,7 @@ body {
 
 /* モーダル - 中央配置 */
 .modal-overlay {
-  display: none;
+  display: flex;
   position: fixed;
   top: 0;
   left: 0;
@@ -374,11 +374,16 @@ body {
   align-items: center;
   justify-content: center;
   padding: 1rem;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.2s ease-out, visibility 0.2s ease-out;
 }
 
 .modal-overlay.active {
-  display: flex;
-  animation: fadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
 }
 
 @keyframes fadeIn {
@@ -398,9 +403,14 @@ body {
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  animation: scaleIn 0.2s ease-out;
   -webkit-overflow-scrolling: touch;
   position: relative;
+  transform: scale(0.95);
+  transition: transform 0.2s ease-out;
+}
+
+.modal-overlay.active .modal {
+  transform: scale(1);
 }
 
 @keyframes scaleIn {
