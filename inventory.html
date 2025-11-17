@@ -123,34 +123,26 @@
   <div class="modal-overlay" id="useCardModal">
     <div class="modal">
       <button class="modal-close" onclick="closeUseCardModal()">&times;</button>
-      <div class="modal-header">
-        <h3 class="modal-title" id="modalCardName">カード詳細</h3>
-        <div class="modal-rarity-badge" id="modalCardRarity">N</div>
-      </div>
       <div class="modal-body">
         <div class="modal-card-info">
-          <div class="modal-card-meta">
-            <div class="modal-meta-item">
-              <span class="modal-meta-label">ストリーマー:</span>
-              <span class="modal-meta-value" id="modalCardCreator"></span>
-            </div>
-            <div class="modal-meta-item">
-              <span class="modal-meta-label">パック:</span>
-              <span class="modal-meta-value" id="modalCardPack"></span>
-            </div>
+          <h3 class="modal-card-name" id="modalCardName">カード詳細</h3>
+          <p class="modal-card-flavor" id="modalCardFlavor"></p>
+          <p class="modal-card-description" id="modalCardDescription"></p>
+          <div class="modal-info-item">
+            <span class="modal-info-label">ストリーマー</span>
+            <span class="modal-info-value" id="modalCardCreator"></span>
           </div>
-          <div class="modal-card-description" id="modalCardDescription">
-            <!-- JavaScriptで動的に生成 -->
+          <div class="modal-info-item">
+            <span class="modal-info-label">パック</span>
+            <span class="modal-info-value" id="modalCardPack"></span>
           </div>
-          <div class="modal-card-stats">
-            <div class="modal-stat-item">
-              <div class="modal-stat-label">所有数</div>
-              <div class="modal-stat-value stat-count" id="modalCardCount">0</div>
-            </div>
-            <div class="modal-stat-item">
-              <div class="modal-stat-label">クールダウン</div>
-              <div class="modal-stat-value stat-cooldown" id="modalCardCooldown">1分</div>
-            </div>
+          <div class="modal-info-item">
+            <span class="modal-info-label">所有数</span>
+            <span class="modal-info-value" id="modalCardCount"></span>
+          </div>
+          <div class="modal-info-item">
+            <span class="modal-info-label">クールダウン</span>
+            <span class="modal-info-value" id="modalCardCooldown"></span>
           </div>
         </div>
       </div>

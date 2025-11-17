@@ -414,52 +414,6 @@ body {
   }
 }
 
-.modal-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  position: relative;
-}
-
-.modal-title {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
-  flex: 1;
-}
-
-.modal-rarity-badge {
-  position: absolute;
-  top: 1.5rem;
-  right: 3.5rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.375rem;
-  font-size: 0.875rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: white;
-}
-
-.modal-rarity-badge.rarity-N {
-  background: #71717a;
-}
-
-.modal-rarity-badge.rarity-R {
-  background: #3b82f6;
-}
-
-.modal-rarity-badge.rarity-SR {
-  background: #8b5cf6;
-}
-
-.modal-rarity-badge.rarity-UR {
-  background: #f59e0b;
-}
-
 .modal-close {
   background: none;
   border: none;
@@ -494,80 +448,59 @@ body {
 }
 
 .modal-card-info {
-  margin-bottom: 1.5rem;
-}
-
-.modal-card-meta {
-  background: #f9fafb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
-.modal-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.modal-meta-label {
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: #6b7280;
-  min-width: 90px;
-}
-
-.modal-meta-value {
-  font-size: 0.875rem;
-  font-weight: 500;
+.modal-card-name {
+  font-size: 1.5rem;
+  font-weight: 700;
   color: #111827;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e5e7eb;
+}
+
+.modal-card-flavor {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  font-style: italic;
+  line-height: 1.6;
+  margin: 0;
 }
 
 .modal-card-description {
   font-size: 0.9375rem;
-  color: #4b5563;
-  line-height: 1.6;
-  margin-bottom: 1.5rem;
-}
-
-.modal-card-stats {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.modal-stat-item {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  padding: 1rem;
-}
-
-.modal-stat-label {
-  font-size: 0.75rem;
-  color: #6b7280;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
-}
-
-.modal-stat-value {
-  font-size: 1.25rem;
-  font-weight: 700;
   color: #111827;
+  line-height: 1.6;
+  margin: 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
 }
 
-.modal-stat-value.stat-count {
-  color: #667eea;
+.modal-info-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #f3f4f6;
 }
 
-.modal-stat-value.stat-cooldown {
+.modal-info-item:last-child {
+  border-bottom: none;
+}
+
+.modal-info-label {
+  font-size: 0.875rem;
+  font-weight: 600;
   color: #6b7280;
+}
+
+.modal-info-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
 }
 
 .hidden {

@@ -147,24 +147,25 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // モーダルの要素を取得
     const modalCardName = document.getElementById('modalCardName');
-    const modalCardRarity = document.getElementById('modalCardRarity');
+    const modalCardFlavor = document.getElementById('modalCardFlavor');
+    const modalCardDescription = document.getElementById('modalCardDescription');
     const modalCardCreator = document.getElementById('modalCardCreator');
     const modalCardPack = document.getElementById('modalCardPack');
-    const modalCardDescription = document.getElementById('modalCardDescription');
     const modalCardCount = document.getElementById('modalCardCount');
     const modalCardCooldown = document.getElementById('modalCardCooldown');
 
-    // カード名とレアリティを設定
+    // カード名を設定
     modalCardName.textContent = card.name;
-    modalCardRarity.textContent = card.rarity;
-    modalCardRarity.className = `modal-rarity-badge rarity-${card.rarity}`;
+
+    // フレーバーテキストを設定（現在は空）
+    modalCardFlavor.textContent = card.flavor || '';
+
+    // カード説明を設定
+    modalCardDescription.textContent = card.effect;
 
     // ストリーマー名とパック名を設定
     modalCardCreator.textContent = card.creatorName;
     modalCardPack.textContent = card.packName;
-
-    // カード説明を設定
-    modalCardDescription.textContent = card.effect;
 
     // 所有数を計算（同じcardIdのカード数）
     const ownedCount = inventory.filter(c => c.cardId === card.cardId && !c.used).length;
