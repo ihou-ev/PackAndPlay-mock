@@ -123,6 +123,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const cards = cardGrid.querySelectorAll('.inventory-card');
     cards.forEach(card => {
       card.addEventListener('click', function(e) {
+        e.preventDefault(); // デフォルト動作を防止
         e.stopPropagation(); // イベントのバブリングを止める
         const cardId = this.getAttribute('data-card-id');
         openCardDetailModal(cardId);
@@ -180,10 +181,7 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     modalCardCooldown.textContent = cooldownMap[card.rarity] || '1分';
 
-    // 次のイベントループでモーダルを開く（イベント干渉を防ぐ）
-    setTimeout(() => {
-      modal.classList.add('active');
-    }, 0);
+    modal.classList.add('active');
   };
 
   // カード詳細モーダルを閉じる
@@ -255,10 +253,17 @@ document.addEventListener('DOMContentLoaded', function() {
   // モーダル外クリックで閉じる
   const useCardModal = document.getElementById('useCardModal');
   if (useCardModal) {
+    // モーダルコンテンツのクリックはバブリングを止める
+    const modalContent = useCardModal.querySelector('.modal');
+    if (modalContent) {
+      modalContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
+
+    // モーダルオーバーレイのクリックでモーダルを閉じる
     useCardModal.addEventListener('click', function(e) {
-      if (e.target === this) {
-        closeUseCardModal();
-      }
+      closeUseCardModal();
     });
   }
 
