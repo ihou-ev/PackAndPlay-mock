@@ -195,8 +195,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // モーダルを開く
     isModalOpening = true;
     console.log('モーダルを開く - isModalOpening:', isModalOpening);
-    modal.classList.add('active');
-    console.log('モーダルクラス追加後 - active:', modal.classList.contains('active'));
+
+    // 一度activeクラスを削除してから追加（アニメーションをリトリガーするため）
+    modal.classList.remove('active');
+    // 次のフレームで追加
+    requestAnimationFrame(() => {
+      modal.classList.add('active');
+      console.log('モーダルクラス追加後 - active:', modal.classList.contains('active'));
+    });
 
     // 次のイベントループでフラグをリセット
     setTimeout(() => {
