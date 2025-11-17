@@ -204,9 +204,11 @@ document.addEventListener('DOMContentLoaded', function() {
       // パック情報を取得
       const packDetails = packs.find(p => p.id === ownedCard.packId);
 
-      // effectを生成
+      // effectを生成（descriptionがあればそれを使用、なければ自動生成）
       let effect = '';
-      if (cardDetails.type === 'message') {
+      if (cardDetails.description) {
+        effect = cardDetails.description;
+      } else if (cardDetails.type === 'message') {
         effect = cardDetails.effectData?.message || 'メッセージを送信';
       } else if (cardDetails.type === 'action') {
         effect = `${cardDetails.effectData?.animation || 'アニメーション'}を再生`;
@@ -220,6 +222,7 @@ document.addEventListener('DOMContentLoaded', function() {
         name: cardDetails.name,
         rarity: cardDetails.rarity,
         type: cardDetails.type,
+        flavor: cardDetails.flavor || '',
         effect: effect,
         creatorName: ownedCard.creatorName,
         creatorId: ownedCard.creatorId || 1,

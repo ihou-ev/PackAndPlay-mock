@@ -339,6 +339,106 @@ const cards = [
     type: 'action',
     requiresApproval: false,
     effectData: { animation: 'epic-effect', sound: 'epic.mp3' }
+  },
+  {
+    id: 5,
+    name: 'Alt+F4',
+    rarity: 'UR',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「そのボタン、押すなって言ったのに！」',
+    description: '配信中のゲームを強制終了してください。泣いても止められません。',
+    effectData: { animation: 'game-close', sound: 'shutdown.mp3' }
+  },
+  {
+    id: 6,
+    name: 'サイレントタイム',
+    rarity: 'R',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「今のうちに全部コメント読めるかな？」',
+    description: 'マイクを15秒間ミュートしてください。リアクション禁止！',
+    effectData: { animation: 'mute', duration: 15 }
+  },
+  {
+    id: 7,
+    name: 'ハンズアップ！',
+    rarity: 'R',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「動くな。いや、マジで。」',
+    description: '両手を頭の上に上げて、10秒間フリーズしてください。攻撃禁止！',
+    effectData: { animation: 'freeze', duration: 10 }
+  },
+  {
+    id: 8,
+    name: 'インベントリ破壊',
+    rarity: 'SR',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「それ、捨てといたから。」',
+    description: '現在装備している武器またはアイテムをその場で捨ててください。',
+    effectData: { animation: 'inventory-drop' }
+  },
+  {
+    id: 9,
+    name: 'ノックノック',
+    rarity: 'R',
+    type: 'visual',
+    requiresApproval: false,
+    flavor: '「ねぇ、今ノックの音聞こえたよね？」',
+    description: 'リアルなノック音を配信で再生します。心臓に注意。',
+    effectData: { sound: 'knock.mp3' }
+  },
+  {
+    id: 10,
+    name: 'ジャンプスケアサプライズ',
+    rarity: 'SR',
+    type: 'visual',
+    requiresApproval: false,
+    flavor: '「ちょっとだけビックリさせるだけ…たぶん。」',
+    description: '急にびっくりする効果音が流れます。音量注意！',
+    effectData: { animation: 'jumpscare', sound: 'scream.mp3' }
+  },
+  {
+    id: 11,
+    name: 'お茶どうぞ',
+    rarity: 'N',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「水を飲まないとゲームオーバーだぞ？」',
+    description: '水を一口飲んでください。配信者の健康は視聴者の手の中に。',
+    effectData: { animation: 'drink-water' }
+  },
+  {
+    id: 12,
+    name: '姿勢を正そう',
+    rarity: 'N',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「姿勢が…甘いッ！」',
+    description: '椅子から背中を離して、姿勢を正してください。10秒間キープ',
+    effectData: { animation: 'posture-check', duration: 10 }
+  },
+  {
+    id: 13,
+    name: 'スクワットタイム',
+    rarity: 'R',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「足がプルプルするその瞬間を、みんなが待ってる。」',
+    description: '10回スクワットをしてください。立ち座り禁止です。',
+    effectData: { animation: 'squat', count: 10 }
+  },
+  {
+    id: 14,
+    name: 'ブラインドチャレンジ',
+    rarity: 'SR',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「見ちゃダメ！」',
+    description: '10秒間、目を閉じてプレイを続けてください。全力で信じて。',
+    effectData: { animation: 'blind', duration: 10 }
   }
 ];
 
@@ -373,12 +473,102 @@ const ownedCards = [
   },
   {
     id: 4,
-    cardId: 8,
+    cardId: 4,
     userId: 1,
-    packId: 3,
-    creatorName: 'アリスちゃんねる',
+    packId: 1,
+    creatorName: '田中太郎',
     isUsed: false,
     acquiredAt: '2025-11-02T14:20:00Z'
+  },
+  {
+    id: 5,
+    cardId: 5,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 6,
+    cardId: 6,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 7,
+    cardId: 7,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 8,
+    cardId: 8,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 9,
+    cardId: 9,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 10,
+    cardId: 10,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 11,
+    cardId: 11,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 12,
+    cardId: 12,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 13,
+    cardId: 13,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 14,
+    cardId: 14,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
   }
 ];
 
