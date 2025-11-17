@@ -17,142 +17,135 @@
   <link rel="apple-touch-icon" href="assets/images/icon-192.png">
 </head>
 <body>
-  <!-- ヘッダー -->
-  <header class="inventory-header">
-    <div class="inventory-header-container">
-      <a href="index.html" class="inventory-logo">Pack&Play</a>
-      <nav class="inventory-nav">
-        <!-- JavaScriptで動的に生成 -->
-      </nav>
-      <div class="hamburger-menu" onclick="toggleMobileMenu()">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
-        </svg>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="profile.html" class="sidebar-logo">
+      <img src="image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <!-- サイドバーフッター -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
       </div>
     </div>
-  </header>
-
-  <!-- モバイルメニュー -->
-  <div class="mobile-menu-overlay" onclick="closeMobileMenu()"></div>
-  <div class="mobile-menu">
-    <div class="mobile-menu-links" id="mobileMenuLinks">
-      <!-- JavaScriptで動的に生成 -->
-    </div>
-  </div>
-
-  <!-- ヒーローセクション -->
-  <section class="inventory-hero">
-    <div class="inventory-hero-content">
-      <h1 class="inventory-hero-title">マイカード</h1>
-      <p class="inventory-hero-description">あなたが所持しているカードの一覧です</p>
-    </div>
-  </section>
+  </aside>
 
   <!-- メインコンテンツ -->
-  <main class="inventory-content">
-    <!-- 統計情報 -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-label">総カード数</div>
-        <div id="totalCards" class="stat-value primary">0</div>
+  <div class="main-wrapper">
+    <div class="inventory-content">
+      <!-- ヘッダー -->
+      <div class="inventory-header">
+        <h1 class="inventory-title">マイカード</h1>
+        <p class="inventory-description">所持しているカードの一覧です</p>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">未使用</div>
-        <div id="unusedCards" class="stat-value success">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">使用済み</div>
-        <div id="usedCards" class="stat-value">0</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-label">UR カード</div>
-        <div id="urCards" class="stat-value warning">0</div>
-      </div>
-    </div>
 
-    <!-- フィルター -->
-    <div class="filters">
-      <select id="creatorFilter" class="filter-select" onchange="applyFilters()">
-        <option value="">すべてのストリーマー</option>
-      </select>
-
-      <select id="rarityFilter" class="filter-select" onchange="applyFilters()">
-        <option value="">すべてのレアリティ</option>
-        <option value="N">N（ノーマル）</option>
-        <option value="R">R（レア）</option>
-        <option value="SR">SR（スーパーレア）</option>
-        <option value="UR">UR（ウルトラレア）</option>
-      </select>
-
-      <select id="statusFilter" class="filter-select" onchange="applyFilters()">
-        <option value="">すべて</option>
-        <option value="unused">未使用のみ</option>
-        <option value="used">使用済みのみ</option>
-      </select>
-    </div>
-
-    <!-- カードリスト -->
-    <div id="cardGrid" class="card-grid">
-      <!-- JavaScriptで動的に生成 -->
-    </div>
-
-    <div id="emptyState" class="empty-state hidden">
-      <div class="empty-state-icon">🎴</div>
-      <div class="empty-state-text">カードがありません</div>
-      <a href="discover.html" class="empty-btn">ストリーマーを探してパックを購入</a>
-    </div>
-  </main>
-
-  <!-- カード使用モーダル -->
-  <div id="useCardModal" class="modal-overlay" style="display: none;">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">カードを使用</h2>
-      </div>
-      <div class="modal-body">
-        <div id="modalCardInfo"></div>
-        <div id="messageInput" class="hidden">
-          <div class="form-group">
-            <label class="form-label">メッセージ（任意）</label>
-            <textarea id="viewerMessage" class="form-textarea" placeholder="ストリーマーへのメッセージを入力..."></textarea>
+      <!-- 統計カード -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">総カード数</div>
+            <div class="stat-value" id="totalCards">0</div>
           </div>
         </div>
-        <p style="color: #6b7280; font-size: 0.875rem; margin-top: 1rem;">
-          ストリーマーが配信中の場合のみカードを使用できます。
-        </p>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">未使用</div>
+            <div class="stat-value stat-value-success" id="unusedCards">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">使用済み</div>
+            <div class="stat-value stat-value-muted" id="usedCards">0</div>
+          </div>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button class="modal-btn modal-btn-outline" onclick="closeModal('useCardModal')">キャンセル</button>
-        <button class="modal-btn modal-btn-primary" onclick="submitCardUse()">使用する</button>
+
+      <!-- フィルター -->
+      <div class="filters-section">
+        <div class="filters-row">
+          <select id="creatorFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべてのストリーマー</option>
+          </select>
+
+          <select id="rarityFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべてのレアリティ</option>
+            <option value="N">N（ノーマル）</option>
+            <option value="R">R（レア）</option>
+            <option value="SR">SR（スーパーレア）</option>
+            <option value="UR">UR（ウルトラレア）</option>
+          </select>
+
+          <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべて</option>
+            <option value="unused">未使用のみ</option>
+            <option value="used">使用済みのみ</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- カードグリッド -->
+      <div id="cardGrid" class="card-grid">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
+
+      <!-- 空状態 -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-text">カードがありません</div>
+        <div class="empty-state-subtext">ストリーマーを探してパックを購入しましょう</div>
+        <a href="discover.html" class="empty-state-button">ストリーマーを探す</a>
       </div>
     </div>
   </div>
 
-  <!-- フッター -->
-  <footer class="footer">
-    <div class="footer-content">
-      <div class="footer-section">
-        <h3 class="footer-title">Pack&Play</h3>
-        <p class="footer-description">応援を"演出"にする。</p>
-        <p class="footer-copyright">© 2025 Pack&Play. All rights reserved.</p>
+  <!-- カード詳細モーダル -->
+  <div class="modal-overlay" id="useCardModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeUseCardModal()">&times;</button>
+      <div class="modal-header">
+        <h3 class="modal-title" id="modalCardName">カード詳細</h3>
+        <div class="modal-rarity-badge" id="modalCardRarity">N</div>
       </div>
-      <div class="footer-section">
-        <h4 class="footer-heading">法的情報</h4>
-        <ul class="footer-links">
-          <li><a href="legal/terms.html">利用規約</a></li>
-          <li><a href="legal/commerce.html">特定商取引法に基づく表記</a></li>
-          <li><a href="legal/privacy.html">プライバシーポリシー</a></li>
-          <li><a href="legal/scta.html">資金決済法に基づく表示</a></li>
-        </ul>
-      </div>
-      <div class="footer-section">
-        <h4 class="footer-heading">サポート</h4>
-        <ul class="footer-links">
-          <li><a href="legal/contact.html">お問い合わせ</a></li>
-        </ul>
+      <div class="modal-body">
+        <div class="modal-card-info">
+          <div class="modal-card-description" id="modalCardDescription">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+          <div class="modal-card-stats">
+            <div class="modal-stat-item">
+              <div class="modal-stat-label">所有数</div>
+              <div class="modal-stat-value stat-count" id="modalCardCount">0</div>
+            </div>
+            <div class="modal-stat-item">
+              <div class="modal-stat-label">クールダウン</div>
+              <div class="modal-stat-value stat-cooldown" id="modalCardCooldown">1分</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <!-- コンポーネントベースJavaScript -->
   <script src="js/services/storage.js"></script>

@@ -1,233 +1,256 @@
-// インベントリデータを取得（ローカルストレージ + モックデータ）
-let inventory = loadFromStorage('inventory', []);
+// inventory.html専用スクリプト
 
-// モックデータも追加（デモ用）
-if (inventory.length === 0) {
-  inventory = [
-    { id: 1, name: 'こんにちは', rarity: 'N', type: 'message', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
-    { id: 2, name: 'いいね！', rarity: 'R', type: 'action', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-01' },
-    { id: 3, name: 'きらきら', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: true, acquiredAt: '2025-11-01' },
-    { id: 4, name: 'ハート', rarity: 'N', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-02' },
-    { id: 5, name: '花火', rarity: 'SR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-03' },
-    { id: 6, name: 'ありがとう', rarity: 'R', type: 'message', creatorName: 'ゲームマスター', isUsed: false, acquiredAt: '2025-11-03' },
-    { id: 7, name: 'レインボー', rarity: 'UR', type: 'visual', creatorName: '田中太郎', isUsed: false, acquiredAt: '2025-11-04' },
-    { id: 8, name: 'キラキラ', rarity: 'R', type: 'visual', creatorName: 'アリスちゃんねる', isUsed: false, acquiredAt: '2025-11-04' }
-  ];
-}
-
-let currentFilters = {
-  creator: '',
-  rarity: '',
-  status: ''
-};
-
-let selectedCard = null;
-
-// ストリーマーフィルターの選択肢を生成
-const creators = [...new Set(inventory.map(c => c.creatorName))];
-const creatorFilter = document.getElementById('creatorFilter');
-creators.forEach(creator => {
-  const option = document.createElement('option');
-  option.value = creator;
-  option.textContent = creator;
-  creatorFilter.appendChild(option);
-});
-
-function renderCards(cards) {
-  const grid = document.getElementById('cardGrid');
-  const emptyState = document.getElementById('emptyState');
-
-  if (cards.length === 0) {
-    grid.innerHTML = '';
-    emptyState.classList.remove('hidden');
+// DOMが読み込まれてから実行
+document.addEventListener('DOMContentLoaded', function() {
+  // ログインチェック
+  if (!requireLogin()) {
     return;
   }
 
-  emptyState.classList.add('hidden');
+  // サイドバーのナビゲーションを生成
+  renderSidebarNav('inventory');
 
-  const cardIcons = {
-    'message': '💬',
-    'action': '⚡',
-    'visual': '✨'
-  };
+  // 状態管理
+  let inventory = loadFromStorage('inventory', []);
+  let selectedCard = null;
 
-  grid.innerHTML = cards.map((card, index) => `
-    <div class="card-item ${card.isUsed ? 'used' : ''}">
-      <div class="card-icon-large">${cardIcons[card.type]}</div>
-      <div class="card-name">${card.name}</div>
-      <div class="badge badge-rarity-${card.rarity.toLowerCase()}">${card.rarity}</div>
-      <div class="card-creator">${card.creatorName}</div>
-      ${card.isUsed
-        ? '<div class="status-used">使用済み</div>'
-        : `<button class="use-btn" onclick="openUseModal(${index})">使う</button>`
-      }
-    </div>
-  `).join('');
-}
-
-function applyFilters() {
-  currentFilters.creator = document.getElementById('creatorFilter').value;
-  currentFilters.rarity = document.getElementById('rarityFilter').value;
-  currentFilters.status = document.getElementById('statusFilter').value;
-
-  let filtered = inventory;
-
-  if (currentFilters.creator) {
-    filtered = filtered.filter(c => c.creatorName === currentFilters.creator);
+  // 初期データ生成（デモ用）
+  if (inventory.length === 0) {
+    inventory = generateDemoInventory();
+    saveToStorage('inventory', inventory);
   }
 
-  if (currentFilters.rarity) {
-    filtered = filtered.filter(c => c.rarity === currentFilters.rarity);
+  // 統計情報を更新
+  function updateStats() {
+    const total = inventory.length;
+    const unused = inventory.filter(card => !card.used).length;
+    const used = inventory.filter(card => card.used).length;
+
+    document.getElementById('totalCards').textContent = total;
+    document.getElementById('unusedCards').textContent = unused;
+    document.getElementById('usedCards').textContent = used;
   }
 
-  if (currentFilters.status === 'unused') {
-    filtered = filtered.filter(c => !c.isUsed);
-  } else if (currentFilters.status === 'used') {
-    filtered = filtered.filter(c => c.isUsed);
+  // ストリーマーフィルターを生成
+  function populateCreatorFilter() {
+    const creatorFilter = document.getElementById('creatorFilter');
+    const creators = [...new Set(inventory.map(card => card.creatorName))];
+
+    creators.forEach(creatorName => {
+      const option = document.createElement('option');
+      option.value = creatorName;
+      option.textContent = creatorName;
+      creatorFilter.appendChild(option);
+    });
   }
 
-  renderCards(filtered);
-  updateStats();
-}
+  // フィルター適用
+  window.applyFilters = function() {
+    const creatorFilter = document.getElementById('creatorFilter').value;
+    const rarityFilter = document.getElementById('rarityFilter').value;
+    const statusFilter = document.getElementById('statusFilter').value;
 
-function updateStats() {
-  document.getElementById('totalCards').textContent = inventory.length;
-  document.getElementById('unusedCards').textContent = inventory.filter(c => !c.isUsed).length;
-  document.getElementById('usedCards').textContent = inventory.filter(c => c.isUsed).length;
-  document.getElementById('urCards').textContent = inventory.filter(c => c.rarity === 'UR').length;
-}
+    let filtered = [...inventory];
 
-function openUseModal(index) {
-  // フィルター適用後のカードから選択
-  const filtered = getFilteredCards();
-  selectedCard = filtered[index];
-
-  const cardIcons = {
-    'message': '💬',
-    'action': '⚡',
-    'visual': '✨'
-  };
-
-  document.getElementById('modalCardInfo').innerHTML = `
-    <div style="text-align: center; padding: 2rem;">
-      <div style="font-size: 4rem;">${cardIcons[selectedCard.type]}</div>
-      <div style="font-size: 1.5rem; font-weight: 700; margin: 1rem 0;">${selectedCard.name}</div>
-      <div class="badge badge-rarity-${selectedCard.rarity.toLowerCase()}">${selectedCard.rarity}</div>
-    </div>
-  `;
-
-  const messageInput = document.getElementById('messageInput');
-  if (selectedCard.type === 'message') {
-    messageInput.classList.remove('hidden');
-  } else {
-    messageInput.classList.add('hidden');
-  }
-
-  openModal('useCardModal');
-}
-
-function getFilteredCards() {
-  let filtered = inventory;
-
-  if (currentFilters.creator) {
-    filtered = filtered.filter(c => c.creatorName === currentFilters.creator);
-  }
-
-  if (currentFilters.rarity) {
-    filtered = filtered.filter(c => c.rarity === currentFilters.rarity);
-  }
-
-  if (currentFilters.status === 'unused') {
-    filtered = filtered.filter(c => !c.isUsed);
-  } else if (currentFilters.status === 'used') {
-    filtered = filtered.filter(c => c.isUsed);
-  }
-
-  return filtered;
-}
-
-function submitCardUse() {
-  const message = document.getElementById('viewerMessage').value;
-
-  showLoading();
-  setTimeout(() => {
-    hideLoading();
-    closeModal('useCardModal');
-
-    // カードを使用済みにマーク
-    const index = inventory.findIndex(c => c.id === selectedCard.id && c.acquiredAt === selectedCard.acquiredAt);
-    if (index !== -1) {
-      inventory[index].isUsed = true;
-      saveToStorage('inventory', inventory);
+    if (creatorFilter) {
+      filtered = filtered.filter(card => card.creatorName === creatorFilter);
     }
 
-    showToast('カードを使用しました！承認待ちキューに追加されました', 'success');
+    if (rarityFilter) {
+      filtered = filtered.filter(card => card.rarity === rarityFilter);
+    }
 
-    // 再描画
-    applyFilters();
-  }, 1500);
-}
+    if (statusFilter === 'unused') {
+      filtered = filtered.filter(card => !card.used);
+    } else if (statusFilter === 'used') {
+      filtered = filtered.filter(card => card.used);
+    }
 
-// ナビゲーション生成
-function renderInventoryNav() {
-  const session = getCurrentSession();
-  const nav = document.querySelector('.inventory-nav');
-  const mobileNav = document.getElementById('mobileMenuLinks');
+    renderCards(filtered);
+  };
 
-  if (!nav) return;
+  // カード表示
+  function renderCards(cardsToRender) {
+    const cardGrid = document.getElementById('cardGrid');
+    const emptyState = document.getElementById('emptyState');
 
-  let navHtml = '';
-  let mobileNavHtml = '';
+    if (cardsToRender.length === 0) {
+      cardGrid.innerHTML = '';
+      emptyState.classList.remove('hidden');
+      return;
+    }
 
-  if (isLoggedIn()) {
-    navHtml = `
-      <a href="discover.html" class="inventory-nav-link">ストリーマーを探す</a>
-      <a href="profile.html" class="inventory-nav-link">プロフィール</a>
-      <a href="javascript:void(0)" onclick="logout()" class="inventory-nav-link">ログアウト</a>
-    `;
-    mobileNavHtml = `
-      <a href="discover.html" class="mobile-menu-link">ストリーマーを探す</a>
-      <a href="profile.html" class="mobile-menu-link">プロフィール</a>
-      <a href="javascript:void(0)" onclick="logout(); closeMobileMenu();" class="mobile-menu-link">ログアウト</a>
-    `;
-  } else {
-    navHtml = `
-      <a href="index.html" class="inventory-nav-link">ログイン</a>
-    `;
-    mobileNavHtml = `
-      <a href="index.html" class="mobile-menu-link">ログイン</a>
-    `;
+    emptyState.classList.add('hidden');
+
+    cardGrid.innerHTML = cardsToRender.map(card => {
+      const usedClass = card.used ? ' used' : '';
+      const cardImage = card.imageUrl || ''; // 将来的にストリーマーが設定した画像
+
+      return `
+        <div class="inventory-card${usedClass}" onclick="openCardDetailModal('${card.id}')">
+          <div class="card-frame">
+            <svg class="card-frame-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="frame-gradient-${card.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                </linearGradient>
+                <linearGradient id="shine-gradient-${card.id}" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:rgba(255,255,255,0.3);stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:rgba(255,255,255,0);stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <!-- メインフレーム -->
+              <rect x="2" y="2" width="196" height="276" rx="8" fill="none" stroke="url(#frame-gradient-${card.id})" stroke-width="3"/>
+
+              <!-- 光沢効果 -->
+              <rect x="5" y="5" width="30" height="60" rx="4" fill="url(#shine-gradient-${card.id})" opacity="0.6"/>
+
+              <!-- コーナー装飾 左上 -->
+              <path d="M 8 8 L 20 8 L 8 20 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <!-- コーナー装飾 右上 -->
+              <path d="M 192 8 L 180 8 L 192 20 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <!-- コーナー装飾 左下 -->
+              <path d="M 8 272 L 20 272 L 8 260 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+              <!-- コーナー装飾 右下 -->
+              <path d="M 192 272 L 180 272 L 192 260 Z" fill="url(#frame-gradient-${card.id})" opacity="0.5"/>
+
+              <!-- 装飾ライン 上部 -->
+              <line x1="30" y1="8" x2="170" y2="8" stroke="url(#frame-gradient-${card.id})" stroke-width="1" opacity="0.3"/>
+              <!-- 装飾ライン 下部 -->
+              <line x1="30" y1="272" x2="170" y2="272" stroke="url(#frame-gradient-${card.id})" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="card-image-area">
+              ${cardImage ? `<img src="${cardImage}" alt="${card.name}" class="card-image">` : '<div class="card-image-placeholder"></div>'}
+            </div>
+            <div class="card-text-area">
+              <div class="card-name">${card.name}</div>
+              <div class="card-creator">${card.creatorName}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join('');
   }
 
-  nav.innerHTML = navHtml;
-  if (mobileNav) {
-    mobileNav.innerHTML = mobileNavHtml;
+  // 日付フォーマット
+  function formatDate(dateString) {
+    const date = new Date(dateString);
+    return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`;
   }
-}
 
-// モバイルメニュー制御
-function toggleMobileMenu() {
-  const hamburger = document.querySelector('.hamburger-menu');
-  const overlay = document.querySelector('.mobile-menu-overlay');
-  const menu = document.querySelector('.mobile-menu');
+  // カード詳細モーダルを開く
+  window.openCardDetailModal = function(cardId) {
+    const card = inventory.find(c => c.id === cardId);
+    if (!card) return;
 
-  hamburger.classList.toggle('active');
-  overlay.classList.toggle('active');
-  menu.classList.toggle('active');
-  document.body.style.overflow = menu.classList.contains('active') ? 'hidden' : '';
-}
+    selectedCard = card;
+    const modal = document.getElementById('useCardModal');
+    if (!modal) return;
 
-function closeMobileMenu() {
-  const hamburger = document.querySelector('.hamburger-menu');
-  const overlay = document.querySelector('.mobile-menu-overlay');
-  const menu = document.querySelector('.mobile-menu');
+    // モーダルの要素を取得
+    const modalCardName = document.getElementById('modalCardName');
+    const modalCardRarity = document.getElementById('modalCardRarity');
+    const modalCardDescription = document.getElementById('modalCardDescription');
+    const modalCardCount = document.getElementById('modalCardCount');
+    const modalCardCooldown = document.getElementById('modalCardCooldown');
 
-  hamburger.classList.remove('active');
-  overlay.classList.remove('active');
-  menu.classList.remove('active');
-  document.body.style.overflow = '';
-}
+    // カード名とレアリティを設定
+    modalCardName.textContent = card.name;
+    modalCardRarity.textContent = card.rarity;
+    modalCardRarity.className = `modal-rarity-badge rarity-${card.rarity}`;
 
-// 初期表示
-renderInventoryNav();
-applyFilters();
+    // カード説明を設定
+    modalCardDescription.textContent = card.effect;
+
+    // 所有数を計算（同じcardIdのカード数）
+    const ownedCount = inventory.filter(c => c.cardId === card.cardId && !c.used).length;
+    modalCardCount.textContent = `${ownedCount}枚`;
+
+    // クールダウンタイムを設定
+    const cooldownMap = {
+      'N': '1分',
+      'R': '5分',
+      'SR': '10分',
+      'UR': '30分'
+    };
+    modalCardCooldown.textContent = cooldownMap[card.rarity] || '1分';
+
+    modal.classList.add('active');
+  };
+
+  // カード詳細モーダルを閉じる
+  window.closeUseCardModal = function() {
+    const modal = document.getElementById('useCardModal');
+    modal.classList.remove('active');
+    selectedCard = null;
+  };
+
+  // デモ用インベントリ生成
+  function generateDemoInventory() {
+    if (typeof ownedCards === 'undefined' || typeof cards === 'undefined') {
+      return [];
+    }
+
+    // ownedCardsをベースに、cardsから詳細情報を取得
+    return ownedCards.map(ownedCard => {
+      const cardDetails = cards.find(c => c.id === ownedCard.cardId);
+      if (!cardDetails) return null;
+
+      // effectを生成
+      let effect = '';
+      if (cardDetails.type === 'message') {
+        effect = cardDetails.effectData?.message || 'メッセージを送信';
+      } else if (cardDetails.type === 'action') {
+        effect = `${cardDetails.effectData?.animation || 'アニメーション'}を再生`;
+      } else if (cardDetails.type === 'visual') {
+        effect = `${cardDetails.effectData?.animation || 'エフェクト'}を表示`;
+      }
+
+      return {
+        id: `card-${ownedCard.id}`,
+        cardId: cardDetails.id,
+        name: cardDetails.name,
+        rarity: cardDetails.rarity,
+        type: cardDetails.type,
+        effect: effect,
+        creatorName: ownedCard.creatorName,
+        creatorId: ownedCard.creatorId || 1,
+        acquiredAt: ownedCard.acquiredAt,
+        used: ownedCard.isUsed || false
+      };
+    }).filter(card => card !== null);
+  }
+
+  // モバイルメニュー
+  window.toggleMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.toggle('mobile-active');
+    overlay.classList.toggle('active');
+  };
+
+  window.closeMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  };
+
+  // モーダル外クリックで閉じる
+  const useCardModal = document.getElementById('useCardModal');
+  if (useCardModal) {
+    useCardModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeUseCardModal();
+      }
+    });
+  }
+
+  // 初期表示
+  updateStats();
+  populateCreatorFilter();
+  applyFilters();
+});
