@@ -198,6 +198,9 @@ document.addEventListener('DOMContentLoaded', function() {
     console.log('モーダル開く前のクラス:', modal.className);
     console.log('モーダル開く前のactive:', modal.classList.contains('active'));
 
+    // main.jsのcloseModal()で設定されたインラインスタイルをクリア
+    modal.style.display = '';
+
     modal.classList.add('active');
 
     console.log('モーダル開いた後のクラス:', modal.className);
