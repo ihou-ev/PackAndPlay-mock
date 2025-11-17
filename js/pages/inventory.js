@@ -122,7 +122,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // カードクリックイベントを追加
     const cards = cardGrid.querySelectorAll('.inventory-card');
     cards.forEach(card => {
-      card.addEventListener('click', function() {
+      card.addEventListener('click', function(e) {
+        e.stopPropagation(); // イベントのバブリングを止める
         const cardId = this.getAttribute('data-card-id');
         openCardDetailModal(cardId);
       });
@@ -179,7 +180,10 @@ document.addEventListener('DOMContentLoaded', function() {
     };
     modalCardCooldown.textContent = cooldownMap[card.rarity] || '1分';
 
-    modal.classList.add('active');
+    // 次のイベントループでモーダルを開く（イベント干渉を防ぐ）
+    setTimeout(() => {
+      modal.classList.add('active');
+    }, 0);
   };
 
   // カード詳細モーダルを閉じる
