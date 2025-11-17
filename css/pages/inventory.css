@@ -497,6 +497,35 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.modal-card-meta {
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.modal-meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-meta-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #6b7280;
+  min-width: 90px;
+}
+
+.modal-meta-value {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #111827;
+}
+
 .modal-card-description {
   font-size: 0.9375rem;
   color: #4b5563;

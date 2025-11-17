@@ -148,6 +148,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // モーダルの要素を取得
     const modalCardName = document.getElementById('modalCardName');
     const modalCardRarity = document.getElementById('modalCardRarity');
+    const modalCardCreator = document.getElementById('modalCardCreator');
+    const modalCardPack = document.getElementById('modalCardPack');
     const modalCardDescription = document.getElementById('modalCardDescription');
     const modalCardCount = document.getElementById('modalCardCount');
     const modalCardCooldown = document.getElementById('modalCardCooldown');
@@ -156,6 +158,10 @@ document.addEventListener('DOMContentLoaded', function() {
     modalCardName.textContent = card.name;
     modalCardRarity.textContent = card.rarity;
     modalCardRarity.className = `modal-rarity-badge rarity-${card.rarity}`;
+
+    // ストリーマー名とパック名を設定
+    modalCardCreator.textContent = card.creatorName;
+    modalCardPack.textContent = card.packName;
 
     // カード説明を設定
     modalCardDescription.textContent = card.effect;
@@ -185,7 +191,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // デモ用インベントリ生成
   function generateDemoInventory() {
-    if (typeof ownedCards === 'undefined' || typeof cards === 'undefined') {
+    if (typeof ownedCards === 'undefined' || typeof cards === 'undefined' || typeof packs === 'undefined') {
       return [];
     }
 
@@ -193,6 +199,9 @@ document.addEventListener('DOMContentLoaded', function() {
     return ownedCards.map(ownedCard => {
       const cardDetails = cards.find(c => c.id === ownedCard.cardId);
       if (!cardDetails) return null;
+
+      // パック情報を取得
+      const packDetails = packs.find(p => p.id === ownedCard.packId);
 
       // effectを生成
       let effect = '';
@@ -213,6 +222,8 @@ document.addEventListener('DOMContentLoaded', function() {
         effect: effect,
         creatorName: ownedCard.creatorName,
         creatorId: ownedCard.creatorId || 1,
+        packId: ownedCard.packId,
+        packName: packDetails ? packDetails.name : '不明なパック',
         acquiredAt: ownedCard.acquiredAt,
         used: ownedCard.isUsed || false
       };
