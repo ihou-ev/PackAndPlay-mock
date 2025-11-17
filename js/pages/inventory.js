@@ -122,8 +122,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // カードクリックイベントを追加
     const cards = cardGrid.querySelectorAll('.inventory-card');
+    console.log('カードイベント設定数:', cards.length);
     cards.forEach(card => {
       card.addEventListener('click', function(e) {
+        console.log('カードクリック:', this.getAttribute('data-card-id'));
         e.preventDefault(); // デフォルト動作を防止
         e.stopPropagation(); // イベントのバブリングを止める
         const cardId = this.getAttribute('data-card-id');
@@ -140,12 +142,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // カード詳細モーダルを開く
   window.openCardDetailModal = function(cardId) {
+    console.log('openCardDetailModal呼び出し:', cardId);
     const card = inventory.find(c => c.id === cardId);
-    if (!card) return;
+    if (!card) {
+      console.log('カードが見つかりません:', cardId);
+      return;
+    }
 
     selectedCard = card;
     const modal = document.getElementById('useCardModal');
-    if (!modal) return;
+    if (!modal) {
+      console.log('モーダル要素が見つかりません');
+      return;
+    }
+    console.log('モーダル要素取得成功');
 
     // モーダルの要素を取得
     const modalCardName = document.getElementById('modalCardName');
@@ -184,18 +194,23 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // モーダルを開く
     isModalOpening = true;
+    console.log('モーダルを開く - isModalOpening:', isModalOpening);
     modal.classList.add('active');
+    console.log('モーダルクラス追加後 - active:', modal.classList.contains('active'));
 
     // 次のイベントループでフラグをリセット
     setTimeout(() => {
       isModalOpening = false;
+      console.log('isModalOpeningフラグリセット:', isModalOpening);
     }, 100);
   };
 
   // カード詳細モーダルを閉じる
   window.closeUseCardModal = function() {
+    console.log('closeUseCardModal呼び出し');
     const modal = document.getElementById('useCardModal');
     modal.classList.remove('active');
+    console.log('モーダルクラス削除後 - active:', modal.classList.contains('active'));
     selectedCard = null;
   };
 
@@ -271,8 +286,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // モーダルオーバーレイのクリックでモーダルを閉じる
     useCardModal.addEventListener('click', function(e) {
+      console.log('モーダルオーバーレイクリック - isModalOpening:', isModalOpening);
       // モーダルを開いている最中はクリックを無視
-      if (isModalOpening) return;
+      if (isModalOpening) {
+        console.log('モーダル開き中のためクリックを無視');
+        return;
+      }
       closeUseCardModal();
     });
   }
