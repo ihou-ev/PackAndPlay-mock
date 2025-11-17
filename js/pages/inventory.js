@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const cardImage = card.imageUrl || ''; // 将来的にストリーマーが設定した画像
 
       return `
-        <div class="inventory-card${usedClass}" onclick="openCardDetailModal('${card.id}')">
+        <div class="inventory-card${usedClass}" data-card-id="${card.id}">
           <div class="card-frame">
             <svg class="card-frame-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
               <defs>
@@ -133,6 +133,15 @@ document.addEventListener('DOMContentLoaded', function() {
         </div>
       `;
     }).join('');
+
+    // カードクリックイベントを追加
+    const cards = cardGrid.querySelectorAll('.inventory-card');
+    cards.forEach(card => {
+      card.addEventListener('click', function() {
+        const cardId = this.getAttribute('data-card-id');
+        openCardDetailModal(cardId);
+      });
+    });
   }
 
   // 日付フォーマット
