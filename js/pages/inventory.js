@@ -195,8 +195,19 @@ document.addEventListener('DOMContentLoaded', function() {
     // モーダルを開く
     isModalOpening = true;
     console.log('モーダルを開く - isModalOpening:', isModalOpening);
+    console.log('モーダル開く前のクラス:', modal.className);
+    console.log('モーダル開く前のactive:', modal.classList.contains('active'));
+
     modal.classList.add('active');
+
+    console.log('モーダル開いた後のクラス:', modal.className);
     console.log('モーダルクラス追加後 - active:', modal.classList.contains('active'));
+
+    // 計算済みスタイルを確認
+    const computedStyle = window.getComputedStyle(modal);
+    console.log('モーダルのopacity:', computedStyle.opacity);
+    console.log('モーダルのvisibility:', computedStyle.visibility);
+    console.log('モーダルのdisplay:', computedStyle.display);
 
     // 次のイベントループでフラグをリセット
     setTimeout(() => {
@@ -209,8 +220,19 @@ document.addEventListener('DOMContentLoaded', function() {
   window.closeUseCardModal = function() {
     console.log('closeUseCardModal呼び出し');
     const modal = document.getElementById('useCardModal');
+    console.log('モーダル閉じる前のクラス:', modal.className);
+    console.log('モーダル閉じる前のactive:', modal.classList.contains('active'));
+
     modal.classList.remove('active');
+
+    console.log('モーダル閉じた後のクラス:', modal.className);
     console.log('モーダルクラス削除後 - active:', modal.classList.contains('active'));
+
+    // 計算済みスタイルを確認
+    const computedStyle = window.getComputedStyle(modal);
+    console.log('閉じた後のopacity:', computedStyle.opacity);
+    console.log('閉じた後のvisibility:', computedStyle.visibility);
+
     selectedCard = null;
   };
 
@@ -275,18 +297,24 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // モーダル外クリックで閉じる
   const useCardModal = document.getElementById('useCardModal');
+  console.log('モーダルイベントリスナー設定開始');
   if (useCardModal) {
     // モーダルコンテンツのクリックはバブリングを止める
     const modalContent = useCardModal.querySelector('.modal');
     if (modalContent) {
+      console.log('モーダルコンテンツのクリックイベント設定');
       modalContent.addEventListener('click', function(e) {
+        console.log('モーダルコンテンツクリック - stopPropagation');
         e.stopPropagation();
       });
     }
 
     // モーダルオーバーレイのクリックでモーダルを閉じる
+    console.log('モーダルオーバーレイのクリックイベント設定');
     useCardModal.addEventListener('click', function(e) {
       console.log('モーダルオーバーレイクリック - isModalOpening:', isModalOpening);
+      console.log('モーダルオーバーレイクリック - target:', e.target);
+      console.log('モーダルオーバーレイクリック - currentTarget:', e.currentTarget);
       // モーダルを開いている最中はクリックを無視
       if (isModalOpening) {
         console.log('モーダル開き中のためクリックを無視');
@@ -295,6 +323,7 @@ document.addEventListener('DOMContentLoaded', function() {
       closeUseCardModal();
     });
   }
+  console.log('モーダルイベントリスナー設定完了');
 
   // 初期表示
   updateStats();
