@@ -8,105 +8,124 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pack&Play">
-  <title>承認待ちキュー - Pack&Play</title>
+  <title>カード承認 - Pack&Play</title>
   <!-- コンポーネントベースCSS -->
   <link rel="stylesheet" href="../css/app.css">
   <link rel="stylesheet" href="../css/pages/dashboard/redemptions.css">
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
 <body>
-  <!-- ヘッダー -->
-  <header>
-    <nav class="navbar container">
-      <a href="../index.html" class="logo">
-        🎴 Pack&Play
-      </a>
-      <ul class="nav-links">
-        <!-- JavaScriptで動的に生成 -->
-      </ul>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../profile.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
     </nav>
-  </header>
+
+    <!-- サイドバーフッター -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="../legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
 
   <!-- メインコンテンツ -->
-  <main>
-    <section class="page-header">
-      <div class="container">
-        <div class="flex-between">
-          <div>
-            <h1 class="page-title">承認待ちキュー</h1>
-            <p class="page-description">視聴者が使用したカードの承認・却下を行います</p>
+  <div class="main-wrapper">
+    <div class="redemptions-content">
+      <!-- ヘッダー -->
+      <div class="redemptions-header">
+        <h1 class="redemptions-title">カード承認</h1>
+        <p class="redemptions-description">視聴者からのカード使用リクエストを承認・拒否できます</p>
+      </div>
+
+      <!-- 統計カード -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">承認待ち</div>
+            <div class="stat-value stat-value-warning" id="pendingCount">0</div>
           </div>
-          <div class="flex gap-2">
-            <span class="badge badge-live" style="font-size: 1rem; padding: 0.5rem 1rem;">
-              <span id="pendingCount">2</span>件の承認待ち
-            </span>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">本日承認</div>
+            <div class="stat-value stat-value-success" id="approvedToday">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">本日拒否</div>
+            <div class="stat-value stat-value-muted" id="rejectedToday">0</div>
           </div>
         </div>
       </div>
-    </section>
 
-    <section style="padding: 3rem 0;">
-      <div class="container">
-        <!-- フィルター -->
-        <div class="flex gap-2 mb-4">
-          <button class="btn btn-sm btn-outline" onclick="filterRedemptions('all')">すべて</button>
-          <button class="btn btn-sm btn-primary" onclick="filterRedemptions('pending')">承認待ち</button>
-          <button class="btn btn-sm btn-outline" onclick="filterRedemptions('approved')">承認済み</button>
-          <button class="btn btn-sm btn-outline" onclick="filterRedemptions('rejected')">却下</button>
-        </div>
-
-        <!-- 承認待ちリスト -->
-        <div id="redemptionsList">
+      <!-- 承認待ちリスト -->
+      <div class="section">
+        <h2 class="section-title">承認待ちリスト</h2>
+        <div id="pendingList" class="redemption-list">
           <!-- JavaScriptで動的に生成 -->
         </div>
-
-        <div id="emptyState" class="empty-state hidden">
-          <div class="empty-state-icon">✅</div>
-          <div class="empty-state-text">承認待ちのカードはありません</div>
+        <div id="pendingEmpty" class="empty-state hidden">
+          <div class="empty-state-text">承認待ちのカードがありません</div>
+          <div class="empty-state-subtext">視聴者がカードを使用すると、ここに表示されます</div>
         </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- 却下理由モーダル -->
-  <div id="rejectModal" class="modal-overlay" style="display: none;">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">却下理由</h2>
-      </div>
-      <div class="modal-body">
-        <p style="margin-bottom: 1rem;">このカード使用を却下しますか？</p>
-        <div class="form-group">
-          <label class="form-label">却下理由（任意）</label>
-          <textarea id="rejectReason" class="form-textarea" placeholder="却下理由を入力..."></textarea>
-        </div>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" data-close-modal="rejectModal">キャンセル</button>
-        <button class="btn btn-danger" onclick="submitReject()">却下する</button>
       </div>
     </div>
   </div>
 
-  <!-- フッター -->
-  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
-    <div class="container">
-      <div class="flex-between">
-        <div>
-          <div class="logo mb-2">🎴 Pack&Play</div>
-          <p style="color: var(--text-light); font-size: 0.875rem;">
-            © 2025 Pack&Play. All rights reserved.
-          </p>
+  <!-- カード詳細モーダル -->
+  <div class="modal-overlay" id="cardDetailModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeCardDetailModal()">&times;</button>
+      <div class="modal-body">
+        <h3 class="modal-title" id="modalCardName">カード詳細</h3>
+        <div class="modal-card-info">
+          <p class="modal-card-flavor" id="modalCardFlavor"></p>
+          <p class="modal-card-description" id="modalCardDescription"></p>
+          <div class="modal-info-item">
+            <span class="modal-info-label">視聴者</span>
+            <span class="modal-info-value" id="modalViewerName"></span>
+          </div>
+          <div class="modal-info-item">
+            <span class="modal-info-label">レアリティ</span>
+            <span class="modal-info-value" id="modalCardRarity"></span>
+          </div>
+          <div class="modal-info-item">
+            <span class="modal-info-label">リクエスト日時</span>
+            <span class="modal-info-value" id="modalRequestTime"></span>
+          </div>
         </div>
-        <div class="flex gap-3">
-          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
+        <div class="modal-actions">
+          <button class="button button-secondary" onclick="closeCardDetailModal()">閉じる</button>
+          <button class="button button-danger" onclick="rejectFromModal()">拒否</button>
+          <button class="button button-primary" onclick="approveFromModal()">承認</button>
         </div>
       </div>
     </div>
-  </footer>
+  </div>
 
   <!-- コンポーネントベースJavaScript -->
   <script src="../js/services/storage.js"></script>

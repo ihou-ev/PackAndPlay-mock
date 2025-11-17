@@ -405,12 +405,13 @@ body {
 }
 
 .creator-card-follow-btn.following {
-  background: #FF1B8D;
-  color: white;
+  background: transparent;
+  border: 1.5px solid #FF1B8D;
+  color: #FF1B8D;
 }
 
 .creator-card-follow-btn.following:hover {
-  background: #e0177d;
+  background: #fff0f7;
 }
 
 .creator-card-link {

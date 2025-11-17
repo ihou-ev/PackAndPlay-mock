@@ -1,0 +1,1041 @@
+/* dashboard/profile.html専用 */
+
+body {
+  overflow-x: hidden;
+  background: #f9fafb;
+  display: block;
+  min-height: 100vh;
+}
+
+.mobile-menu-button {
+  display: flex;
+}
+
+.main-wrapper {
+  margin-left: 0;
+}
+
+/* プロフィールコンテンツ */
+.profile-content {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  width: 100%;
+}
+
+/* ヘッダー */
+.profile-header {
+  margin-bottom: 2rem;
+}
+
+.profile-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  margin: 0 0 0.5rem 0;
+}
+
+.profile-description {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* セクション */
+.preview-section,
+.settings-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 1rem 0;
+}
+
+/* 設定カード */
+.settings-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* プロフィール編集カード */
+.profile-edit-card {
+  position: relative;
+  overflow: visible;
+  padding: 0;
+}
+
+/* バナー編集 */
+.profile-banner-edit {
+  height: 180px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+.profile-banner-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s;
+  opacity: 0;
+}
+
+.profile-banner-overlay p {
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.profile-banner-edit:hover .profile-banner-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 1;
+}
+
+/* アバターセクション */
+.profile-avatar-section {
+  margin-top: -40px;
+  margin-bottom: 1rem;
+  padding: 0 1.5rem;
+}
+
+.profile-avatar-edit {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF1B8D, #00D4FF);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+  border: 4px solid white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar-edit img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s;
+  opacity: 0;
+}
+
+.profile-avatar-edit:hover .profile-avatar-overlay {
+  background: rgba(0, 0, 0, 0.4);
+  opacity: 1;
+}
+
+/* 名前セクション */
+.profile-name-section {
+  margin-bottom: 0.5rem;
+  padding: 0 1.5rem;
+}
+
+.profile-name-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px dashed transparent;
+}
+
+.profile-name-edit:hover {
+  background: #f3f4f6;
+  border-color: #667eea;
+}
+
+.profile-name-display {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  margin: 0;
+  transition: all 0.2s;
+}
+
+.profile-name-edit:hover .profile-name-display {
+  color: #667eea;
+}
+
+.profile-name-edit .edit-icon {
+  color: #9ca3af;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.profile-name-edit:hover .edit-icon {
+  color: #667eea;
+}
+
+.profile-name-input {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  padding: 0.25rem 0.5rem;
+  border: 2px solid #667eea;
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 400px;
+  outline: none;
+  background: white;
+  font-family: inherit;
+}
+
+.profile-name-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* ユーザーID */
+.profile-user-id {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin-bottom: 0.75rem;
+  padding: 0 1.5rem;
+}
+
+/* Bio セクション */
+.profile-bio-section {
+  margin-bottom: 1.5rem;
+  padding: 0 1.5rem;
+}
+
+.profile-bio-edit {
+  cursor: pointer;
+  transition: all 0.2s;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: 2px dashed transparent;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 100%;
+}
+
+.profile-bio-edit:hover {
+  background: #f3f4f6;
+  border-color: #667eea;
+}
+
+.profile-bio-display {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  transition: all 0.2s;
+  margin: 0;
+}
+
+.profile-bio-edit:hover .profile-bio-display {
+  color: #667eea;
+}
+
+.profile-bio-edit .edit-icon {
+  color: #9ca3af;
+  transition: all 0.2s;
+  flex-shrink: 0;
+  margin-top: 0.125rem;
+}
+
+.profile-bio-edit:hover .edit-icon {
+  color: #667eea;
+}
+
+.profile-bio-input {
+  font-size: 0.9375rem;
+  color: #374151;
+  line-height: 1.6;
+  padding: 0.5rem;
+  border: 2px solid #667eea;
+  border-radius: 0.5rem;
+  width: 100%;
+  outline: none;
+  background: white;
+  font-family: inherit;
+  resize: vertical;
+  min-height: 80px;
+}
+
+.profile-bio-input:focus {
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* フォーム */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group:last-child {
+  margin-bottom: 0;
+}
+
+.form-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  color: #111827;
+  background: white;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.form-hint {
+  font-size: 0.8125rem;
+  color: #9ca3af;
+  margin: 0.5rem 0 0 0;
+}
+
+/* その他のリンク */
+.other-links-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.other-link-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.other-link-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.other-link-actions {
+  display: flex;
+  align-items: center;
+}
+
+.link-remove-button {
+  padding: 0.5rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border: none;
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 1rem;
+}
+
+.link-remove-button:hover {
+  background: #fecaca;
+}
+
+.add-link-button {
+  width: 100%;
+  padding: 0.75rem 1.5rem;
+  background: white;
+  color: #667eea;
+  border: 2px dashed #667eea;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.add-link-button:hover {
+  background: #f5f3ff;
+}
+
+.add-link-button span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+/* ブロックエディター */
+.block-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  min-height: 200px;
+}
+
+/* フォーマットツールバー */
+.format-toolbar {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.format-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.625rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 32px;
+}
+
+.format-button:hover {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.format-button.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+.format-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.color-picker-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.color-picker-button {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.625rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.color-picker-button:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.color-preview {
+  width: 16px;
+  height: 16px;
+  border-radius: 0.125rem;
+  border: 1px solid #d1d5db;
+}
+
+.color-picker-input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.block-item {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  transition: all 0.2s;
+}
+
+.block-item:hover {
+  border-color: #667eea;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.1);
+}
+
+.block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.block-type-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #667eea;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.block-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.block-action-button {
+  padding: 0.25rem;
+  background: none;
+  border: none;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.block-action-button:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.block-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.block-input,
+.block-textarea,
+.block-select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #111827;
+  background: white;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.block-input:focus,
+.block-textarea:focus,
+.block-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.block-textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* リッチテキスト編集可能エリア */
+.block-editable {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  color: #111827;
+  background: white;
+  transition: all 0.2s;
+  font-family: inherit;
+  min-height: 40px;
+  line-height: 1.5;
+}
+
+.block-editable:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.block-editable:empty::before {
+  content: attr(data-placeholder);
+  color: #9ca3af;
+}
+
+.block-editable strong {
+  font-weight: 700;
+}
+
+.block-editable-multiline {
+  min-height: 80px;
+}
+
+.block-list-items {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.block-list-item {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.block-list-item input {
+  flex: 1;
+}
+
+.block-list-item-remove {
+  padding: 0.375rem;
+  background: #fef2f2;
+  color: #dc2626;
+  border: none;
+  border-radius: 0.25rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+  transition: all 0.2s;
+}
+
+.block-list-item-remove:hover {
+  background: #fecaca;
+}
+
+.block-list-add {
+  margin-top: 0.5rem;
+  padding: 0.5rem;
+  background: #f9fafb;
+  border: 1px dashed #d1d5db;
+  border-radius: 0.375rem;
+  color: #667eea;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.block-list-add:hover {
+  background: #f5f3ff;
+  border-color: #667eea;
+}
+
+.block-add-menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 1rem;
+  background: #f9fafb;
+  border-radius: 0.5rem;
+  border: 1px solid #e5e7eb;
+}
+
+.block-add-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  background: white;
+  border: 1px solid #d1d5db;
+  border-radius: 0.375rem;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.block-add-button:hover {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+}
+
+.block-add-button svg {
+  flex-shrink: 0;
+}
+
+/* エディター */
+.editor-tabs {
+  display: flex;
+  gap: 0.5rem;
+  border-bottom: 2px solid #e5e7eb;
+  margin-bottom: 1rem;
+}
+
+.editor-tab {
+  padding: 0.75rem 1rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.editor-tab:hover {
+  color: #111827;
+}
+
+.editor-tab.active {
+  color: #667eea;
+  border-bottom-color: #667eea;
+}
+
+.editor-tab-content {
+  display: none;
+}
+
+.editor-tab-content.active {
+  display: block;
+}
+
+.profile-detail-editor {
+  width: 100%;
+  min-height: 300px;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  color: #111827;
+  background: #f9fafb;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.profile-detail-editor:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  background: white;
+}
+
+.profile-detail-preview {
+  min-height: 300px;
+  padding: 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  color: #111827;
+  line-height: 1.6;
+}
+
+.profile-detail-preview:empty::before {
+  content: 'プレビューがここに表示されます';
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* プレビュー内のスタイル */
+.profile-detail-preview h1,
+.profile-detail-preview h2,
+.profile-detail-preview h3 {
+  font-weight: 700;
+  margin: 1rem 0 0.5rem 0;
+}
+
+.profile-detail-preview h1:first-child,
+.profile-detail-preview h2:first-child,
+.profile-detail-preview h3:first-child {
+  margin-top: 0;
+}
+
+.profile-detail-preview h1 {
+  font-size: 1.5rem;
+  color: #111827;
+}
+
+.profile-detail-preview h2 {
+  font-size: 1.25rem;
+  color: #111827;
+}
+
+.profile-detail-preview h3 {
+  font-size: 1.125rem;
+  color: #111827;
+}
+
+.profile-detail-preview p {
+  margin: 0.5rem 0;
+}
+
+.profile-detail-preview a {
+  color: #667eea;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.profile-detail-preview a:hover {
+  color: #5568d3;
+  text-decoration: underline;
+}
+
+.profile-detail-preview ul,
+.profile-detail-preview ol {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+
+.profile-detail-preview li {
+  margin: 0.25rem 0;
+}
+
+.profile-detail-preview img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  margin: 0.5rem 0;
+}
+
+.profile-detail-preview blockquote {
+  margin: 1rem 0;
+  padding-left: 1rem;
+  border-left: 4px solid #667eea;
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* 保存セクション */
+.save-section {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.save-button {
+  padding: 0.875rem 2rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.save-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* モーダル */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal {
+  background: white;
+  border-radius: 1rem;
+  max-width: 450px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: modalSlideIn 0.2s ease-out;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: 1.5rem 1.5rem 1rem;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #9ca3af;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.375rem;
+  transition: all 0.2s;
+}
+
+.modal-close:hover {
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-message {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem 1.5rem;
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.modal-button {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modal-button-secondary {
+  background: white;
+  color: #6b7280;
+  border: 1px solid #d1d5db;
+}
+
+.modal-button-secondary:hover {
+  background: #f9fafb;
+  border-color: #9ca3af;
+}
+
+.modal-button-danger {
+  background: #ef4444;
+  color: white;
+}
+
+.modal-button-danger:hover {
+  background: #dc2626;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+/* レスポンシブ */
+@media (max-width: 768px) {
+  .profile-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .other-link-item {
+    flex-direction: column;
+  }
+
+  .other-link-actions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-banner-edit {
+    height: 120px;
+  }
+
+  .profile-avatar-edit {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5rem;
+  }
+
+  .profile-avatar-section {
+    margin-top: -30px;
+  }
+
+  .profile-name-display {
+    font-size: 1.25rem;
+  }
+
+  .save-section {
+    justify-content: stretch;
+  }
+
+  .save-button {
+    width: 100%;
+  }
+}

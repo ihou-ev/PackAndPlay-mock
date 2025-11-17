@@ -104,13 +104,20 @@
 
       <!-- タブ -->
       <div class="creator-tabs">
-        <button type="button" class="creator-tab active" id="homeTab" onclick="switchTab('home')">ホーム</button>
+        <button type="button" class="creator-tab active" id="homeTab" onclick="switchTab('home')">プロフィール</button>
         <button type="button" class="creator-tab" id="packsTab" onclick="switchTab('packs')">パック</button>
-        <button type="button" class="creator-tab" id="aboutTab" onclick="switchTab('about')">について</button>
       </div>
 
       <!-- タブコンテンツ -->
       <div class="tab-content active" id="homeContent">
+        <!-- 外部リンク -->
+        <div class="activity-section" id="externalLinksSection">
+          <h2 class="section-title">リンク</h2>
+          <div class="external-links" id="externalLinks">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
         <!-- 自己紹介 -->
         <div class="activity-section">
           <h2 class="section-title">自己紹介</h2>
@@ -139,15 +146,6 @@
       <div class="tab-content" id="packsContent">
         <div class="packs-section">
           <div class="packs-grid" id="packsGridFull">
-            <!-- JavaScriptで動的に生成 -->
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-content" id="aboutContent">
-        <div class="about-section">
-          <h2 class="section-title">ストリーマーについて</h2>
-          <div class="about-text" id="aboutText">
             <!-- JavaScriptで動的に生成 -->
           </div>
         </div>

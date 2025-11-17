@@ -316,6 +316,7 @@ const cards = [
     requiresApproval: false,
     flavor: '「そのボタン、押すなって言ったのに！」',
     description: '配信中のゲームを強制終了してください。泣いても止められません。',
+    imageUrl: 'image/ALT4.png',
     effectData: { animation: 'game-close', sound: 'shutdown.mp3' }
   },
   {
@@ -346,6 +347,7 @@ const cards = [
     requiresApproval: false,
     flavor: '「それ、捨てといたから。」',
     description: '現在装備している武器またはアイテムをその場で捨ててください。',
+    imageUrl: 'image/inventoryburn.png',
     effectData: { animation: 'inventory-drop' }
   },
   {
@@ -407,6 +409,17 @@ const cards = [
     flavor: '「見ちゃダメ！」',
     description: '10秒間、目を閉じてプレイを続けてください。全力で信じて。',
     effectData: { animation: 'blind', duration: 10 }
+  },
+  {
+    id: 11,
+    name: '延長５分コール',
+    rarity: 'SR',
+    type: 'action',
+    requiresApproval: false,
+    flavor: '「まだ終わらせないからな？」',
+    description: 'このカードが使われたら、配信時間を５分延長してください。同じ配信中に使える回数（例：最大３枚まで）などは、事前に配信者のルールとして決めておきましょう。',
+    imageUrl: 'image/extendtime.png',
+    effectData: { animation: 'extend-stream', duration: 300 }
   }
 ];
 
@@ -496,6 +509,15 @@ const ownedCards = [
   {
     id: 10,
     cardId: 10,
+    userId: 1,
+    packId: 1,
+    creatorName: '田中太郎',
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
+  },
+  {
+    id: 11,
+    cardId: 11,
     userId: 1,
     packId: 1,
     creatorName: '田中太郎',

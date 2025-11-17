@@ -1,177 +1,231 @@
-// ストリーマーロールチェック
-requireCreatorRole();
+// dashboard/redemptions.html専用スクリプト
 
-// 承認待ちデータ（ローカルストレージから取得）
-let redemptions = loadFromStorage('redemptions', redeemQueue);
-
-let currentFilter = 'pending';
-let rejectingId = null;
-
-function renderRedemptions(redemptionsToRender) {
-  const list = document.getElementById('redemptionsList');
-  const emptyState = document.getElementById('emptyState');
-
-  if (redemptionsToRender.length === 0) {
-    list.innerHTML = '';
-    emptyState.classList.remove('hidden');
+// DOMが読み込まれてから実行
+document.addEventListener('DOMContentLoaded', function() {
+  // ログインチェック
+  if (!requireLogin()) {
     return;
   }
 
-  emptyState.classList.add('hidden');
+  // 配信者権限チェック
+  if (!requireCreatorRole()) {
+    return;
+  }
 
-  list.innerHTML = redemptionsToRender.map(redemption => {
-    const stateClass = redemption.state === 'approved' ? 'approved' : redemption.state === 'rejected' ? 'rejected' : '';
-    const timeAgo = formatTimeAgo(redemption.createdAt);
+  // サイドバーのナビゲーションを生成
+  renderSidebarNav('dashboard-redemptions');
 
-    return `
-      <div class="redemption-card ${stateClass} fade-in">
-        <div class="flex-between mb-3">
-          <div class="flex gap-2" style="align-items: center;">
-            <div style="font-size: 2rem;">🎴</div>
-            <div>
-              <div style="font-size: 1.125rem; font-weight: 700;">${redemption.cardName}</div>
-              <div style="color: var(--text-light); font-size: 0.875rem;">
-                ${redemption.viewerName} • ${timeAgo}
-              </div>
+  let selectedRedemption = null;
+
+  // デモ用の承認待ちデータ
+  const redemptions = [
+    {
+      id: 1,
+      cardName: 'Alt+F4',
+      cardRarity: 'UR',
+      viewerName: 'デモユーザー1',
+      requestTime: new Date(Date.now() - 5 * 60 * 1000).toISOString(),
+      flavor: '「そのボタン、押すなって言ったのに！」',
+      description: '配信中のゲームを強制終了してください。泣いても止められません。'
+    },
+    {
+      id: 2,
+      cardName: 'サイレントタイム',
+      cardRarity: 'R',
+      viewerName: 'デモユーザー2',
+      requestTime: new Date(Date.now() - 15 * 60 * 1000).toISOString(),
+      flavor: '「今のうちに全部コメント読めるかな？」',
+      description: 'マイクを15秒間ミュートしてください。リアクション禁止！'
+    },
+    {
+      id: 3,
+      cardName: '延長５分コール',
+      cardRarity: 'SR',
+      viewerName: 'デモユーザー3',
+      requestTime: new Date(Date.now() - 30 * 60 * 1000).toISOString(),
+      flavor: '「まだ終わらせないからな？」',
+      description: 'このカードが使われたら、配信時間を５分延長してください。'
+    }
+  ];
+
+  // 統計情報を更新
+  function updateStats() {
+    const pending = redemptions.length;
+    const approvedToday = 5; // デモ用
+    const rejectedToday = 2; // デモ用
+
+    document.getElementById('pendingCount').textContent = pending;
+    document.getElementById('approvedToday').textContent = approvedToday;
+    document.getElementById('rejectedToday').textContent = rejectedToday;
+  }
+
+  // 承認待ちリストを表示
+  function renderPendingList() {
+    const pendingList = document.getElementById('pendingList');
+    const pendingEmpty = document.getElementById('pendingEmpty');
+
+    if (redemptions.length === 0) {
+      pendingList.innerHTML = '';
+      pendingEmpty.classList.remove('hidden');
+      return;
+    }
+
+    pendingEmpty.classList.add('hidden');
+
+    pendingList.innerHTML = redemptions.map(redemption => {
+      const timeAgo = formatTimeAgo(redemption.requestTime);
+      const rarityClass = `badge-${redemption.cardRarity}`;
+
+      return `
+        <div class="redemption-item" data-redemption-id="${redemption.id}">
+          <div class="redemption-info">
+            <div class="redemption-header">
+              <h3 class="redemption-card-name">${redemption.cardName}</h3>
+              <span class="redemption-badge ${rarityClass}">${redemption.cardRarity}</span>
+            </div>
+            <div class="redemption-meta">
+              <span class="redemption-meta-item">👤 ${redemption.viewerName}</span>
+              <span class="redemption-meta-item">🕐 ${timeAgo}</span>
             </div>
           </div>
-          <span class="badge badge-rarity-${redemption.cardRarity.toLowerCase()}">${redemption.cardRarity}</span>
-        </div>
-
-        ${redemption.viewerMessage ? `
-          <div style="background: #f9fafb; padding: 1rem; border-radius: var(--radius-md); margin-bottom: 1rem; border-left: 4px solid var(--primary);">
-            <div style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 0.25rem;">メッセージ:</div>
-            <div>${redemption.viewerMessage}</div>
+          <div class="redemption-actions">
+            <button class="redemption-button redemption-button-detail" onclick="showDetail(${redemption.id})">詳細</button>
+            <button class="redemption-button redemption-button-reject" onclick="rejectRedemption(${redemption.id})">拒否</button>
+            <button class="redemption-button redemption-button-approve" onclick="approveRedemption(${redemption.id})">承認</button>
           </div>
-        ` : ''}
-
-        <div style="display: flex; gap: 0.5rem; justify-content: flex-end;">
-          ${redemption.state === 'pending' ? `
-            <button class="btn btn-success btn-sm" onclick="approveRedemption(${redemption.id})">
-              ✅ 承認
-            </button>
-            <button class="btn btn-danger btn-sm" onclick="openRejectModal(${redemption.id})">
-              ❌ 却下
-            </button>
-          ` : `
-            <span class="status status-${redemption.state}">
-              ${redemption.state === 'approved' ? '承認済み' : '却下'}
-            </span>
-          `}
         </div>
-      </div>
-    `;
-  }).join('');
-
-  updatePendingCount();
-}
-
-function formatTimeAgo(dateString) {
-  const now = new Date();
-  const date = new Date(dateString);
-  const diffMs = now - date;
-  const diffMins = Math.floor(diffMs / 60000);
-
-  if (diffMins < 1) return 'たった今';
-  if (diffMins < 60) return `${diffMins}分前`;
-  const diffHours = Math.floor(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}時間前`;
-  const diffDays = Math.floor(diffHours / 24);
-  return `${diffDays}日前`;
-}
-
-function filterRedemptions(filter) {
-  currentFilter = filter;
-
-  let filtered = redemptions;
-
-  if (filter === 'pending') {
-    filtered = filtered.filter(r => r.state === 'pending');
-  } else if (filter === 'approved') {
-    filtered = filtered.filter(r => r.state === 'approved');
-  } else if (filter === 'rejected') {
-    filtered = filtered.filter(r => r.state === 'rejected');
+      `;
+    }).join('');
   }
 
-  renderRedemptions(filtered);
-}
+  // 時間経過表示
+  function formatTimeAgo(dateString) {
+    const now = new Date();
+    const date = new Date(dateString);
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
 
-function approveRedemption(redemptionId) {
-  const index = redemptions.findIndex(r => r.id === redemptionId);
-  if (index === -1) return;
+    if (diffMins < 1) return 'たった今';
+    if (diffMins < 60) return `${diffMins}分前`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours}時間前`;
+    const diffDays = Math.floor(diffHours / 24);
+    return `${diffDays}日前`;
+  }
 
-  showLoading();
+  // カード詳細を表示
+  window.showDetail = function(redemptionId) {
+    const redemption = redemptions.find(r => r.id === redemptionId);
+    if (!redemption) return;
 
-  setTimeout(() => {
-    redemptions[index].state = 'approved';
-    saveToStorage('redemptions', redemptions);
+    selectedRedemption = redemption;
 
-    hideLoading();
-    showToast('カード使用を承認しました。オーバーレイに表示されます。', 'success');
+    document.getElementById('modalCardName').textContent = redemption.cardName;
+    document.getElementById('modalCardFlavor').textContent = redemption.flavor || '';
+    document.getElementById('modalCardDescription').textContent = redemption.description;
+    document.getElementById('modalViewerName').textContent = redemption.viewerName;
+    document.getElementById('modalCardRarity').textContent = redemption.cardRarity;
+    document.getElementById('modalRequestTime').textContent = formatTimeAgo(redemption.requestTime);
 
-    filterRedemptions(currentFilter);
-  }, 800);
-}
+    openCardDetailModal();
+  };
 
-function openRejectModal(redemptionId) {
-  rejectingId = redemptionId;
-  openModal('rejectModal');
-}
+  // 承認
+  window.approveRedemption = function(redemptionId) {
+    const index = redemptions.findIndex(r => r.id === redemptionId);
+    if (index === -1) return;
 
-function submitReject() {
-  const reason = document.getElementById('rejectReason').value;
-  const index = redemptions.findIndex(r => r.id === rejectingId);
+    if (confirm(`「${redemptions[index].cardName}」を承認しますか？`)) {
+      // オーバーレイに送信するデータ
+      const overlayData = {
+        cardName: redemptions[index].cardName,
+        cardRarity: redemptions[index].cardRarity,
+        viewerName: redemptions[index].viewerName,
+        timestamp: Date.now()
+      };
 
-  if (index === -1) return;
+      // localStorageのoverlayEventに書き込み
+      saveToStorage('overlayEvent', overlayData);
 
-  showLoading();
-
-  setTimeout(() => {
-    redemptions[index].state = 'rejected';
-    redemptions[index].rejectReason = reason;
-    saveToStorage('redemptions', redemptions);
-
-    hideLoading();
-    closeModal('rejectModal');
-    showToast('カード使用を却下しました', 'info');
-
-    filterRedemptions(currentFilter);
-
-    // フォームリセット
-    document.getElementById('rejectReason').value = '';
-  }, 800);
-}
-
-function updatePendingCount() {
-  const pendingCount = redemptions.filter(r => r.state === 'pending').length;
-  document.getElementById('pendingCount').textContent = pendingCount;
-}
-
-// 初期表示
-filterRedemptions('pending');
-
-// リアルタイム更新をシミュレート（デモ用）
-setInterval(() => {
-  // 新しい承認待ちを時々追加（デモ用）
-  if (Math.random() > 0.95) {
-    const newRedemption = {
-      id: Date.now(),
-      cardName: 'サンプルカード',
-      cardRarity: 'N',
-      viewerName: '視聴者' + Math.floor(Math.random() * 100),
-      viewerMessage: Math.random() > 0.5 ? 'いつも見てます！' : null,
-      state: 'pending',
-      createdAt: new Date().toISOString()
-    };
-
-    redemptions.push(newRedemption);
-    saveToStorage('redemptions', redemptions);
-
-    if (currentFilter === 'pending' || currentFilter === 'all') {
-      filterRedemptions(currentFilter);
-    } else {
-      updatePendingCount();
+      redemptions.splice(index, 1);
+      showToast(`カードを承認しました。オーバーレイに表示されます。`, 'success');
+      updateStats();
+      renderPendingList();
     }
+  };
+
+  // 拒否
+  window.rejectRedemption = function(redemptionId) {
+    const index = redemptions.findIndex(r => r.id === redemptionId);
+    if (index === -1) return;
+
+    if (confirm(`「${redemptions[index].cardName}」を拒否しますか？`)) {
+      redemptions.splice(index, 1);
+      showToast('カード使用リクエストを拒否しました', 'info');
+      updateStats();
+      renderPendingList();
+    }
+  };
+
+  // モーダルから承認
+  window.approveFromModal = function() {
+    if (!selectedRedemption) return;
+    closeCardDetailModal();
+    approveRedemption(selectedRedemption.id);
+  };
+
+  // モーダルから拒否
+  window.rejectFromModal = function() {
+    if (!selectedRedemption) return;
+    closeCardDetailModal();
+    rejectRedemption(selectedRedemption.id);
+  };
+
+  // カード詳細モーダルを開く
+  function openCardDetailModal() {
+    const modal = document.getElementById('cardDetailModal');
+    modal.style.display = '';
+    modal.classList.add('active');
   }
-}, 10000); // 10秒ごと
-  </script>
+
+  // カード詳細モーダルを閉じる
+  window.closeCardDetailModal = function() {
+    const modal = document.getElementById('cardDetailModal');
+    modal.classList.remove('active');
+    selectedRedemption = null;
+  };
+
+  // モバイルメニュー
+  window.toggleMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.toggle('mobile-active');
+    overlay.classList.toggle('active');
+  };
+
+  window.closeMobileMenu = function() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('mobileMenuOverlay');
+    sidebar.classList.remove('mobile-active');
+    overlay.classList.remove('active');
+  };
+
+  // モーダル外クリックで閉じる
+  const cardDetailModal = document.getElementById('cardDetailModal');
+  if (cardDetailModal) {
+    const modalContent = cardDetailModal.querySelector('.modal');
+    if (modalContent) {
+      modalContent.addEventListener('click', function(e) {
+        e.stopPropagation();
+      });
+    }
+
+    cardDetailModal.addEventListener('click', function(e) {
+      closeCardDetailModal();
+    });
+  }
+
+  // 初期表示
+  updateStats();
+  renderPendingList();
+});

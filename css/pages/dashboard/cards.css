@@ -1,4 +1,4 @@
-/* dashboard/redemptions.html専用スタイル */
+/* dashboard/cards.html専用スタイル */
 
 body {
   overflow-x: hidden;
@@ -16,7 +16,7 @@ body {
 }
 
 /* メインコンテンツエリア */
-.redemptions-content {
+.cards-content {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -24,35 +24,66 @@ body {
 }
 
 /* ヘッダー */
-.redemptions-header {
+.cards-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 2rem;
+  gap: 1rem;
 }
 
-.redemptions-title {
+.cards-title {
   font-size: 1.5rem;
   font-weight: 800;
   color: #2d1b3d;
   margin: 0 0 0.5rem 0;
 }
 
-.redemptions-description {
+.cards-description {
   font-size: 0.9375rem;
   color: #6b7280;
   margin: 0;
 }
 
+.create-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.create-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.create-button span {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
 /* 統計グリッド */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(5, 1fr);
   gap: 0.5rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .stat-card {
   background: white;
   border-radius: 0.5rem;
-  padding: 1rem;
+  padding: 0.75rem;
   display: flex;
   flex-direction: column;
   gap: 0.25rem;
@@ -65,7 +96,7 @@ body {
 }
 
 .stat-label {
-  font-size: 0.75rem;
+  font-size: 0.625rem;
   color: #6b7280;
   font-weight: 600;
   margin-bottom: 0.25rem;
@@ -74,82 +105,104 @@ body {
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
   line-height: 1;
-}
-
-.stat-value-warning {
-  color: #f59e0b;
 }
 
 .stat-value-success {
   color: #059669;
 }
 
-.stat-value-muted {
-  color: #9ca3af;
-}
-
-/* セクション */
-.section {
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 1rem 0;
-}
-
-/* 承認待ちリスト */
-.redemption-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.redemption-item {
+/* フィルターセクション */
+.filters-section {
   background: white;
   border-radius: 0.75rem;
-  padding: 1.25rem;
+  padding: 1rem;
+  margin-bottom: 1.25rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  transition: all 0.2s;
-  -webkit-tap-highlight-color: transparent;
 }
 
-.redemption-item:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.15);
-}
-
-.redemption-info {
-  flex: 1;
+.filters-row {
   display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.redemption-header {
-  display: flex;
-  align-items: center;
+  flex-direction: row;
   gap: 0.75rem;
 }
 
-.redemption-card-name {
+.filter-select {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: #f9fafb;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+}
+
+/* カードグリッド */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+/* 個別カード */
+.card-item {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  transition: all 0.2s;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.card-item:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.15);
+}
+
+.card-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.card-item-name {
   font-size: 1rem;
   font-weight: 700;
   color: #111827;
   margin: 0;
 }
 
-.redemption-badge {
+.card-item-badges {
+  display: flex;
+  gap: 0.375rem;
+}
+
+.card-badge {
   padding: 0.25rem 0.5rem;
   border-radius: 0.25rem;
   font-size: 0.6875rem;
@@ -178,62 +231,66 @@ body {
   color: #d97706;
 }
 
-.redemption-meta {
-  display: flex;
-  gap: 1rem;
-  font-size: 0.8125rem;
-  color: #6b7280;
-}
-
-.redemption-meta-item {
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-}
-
-.redemption-actions {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.redemption-button {
-  padding: 0.625rem 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.redemption-button-detail {
-  background: #f3f4f6;
-  color: #374151;
-}
-
-.redemption-button-detail:hover {
-  background: #e5e7eb;
-}
-
-.redemption-button-reject {
-  background: #fef2f2;
+.badge-action {
+  background: #fee2e2;
   color: #dc2626;
 }
 
-.redemption-button-reject:hover {
-  background: #fecaca;
+.badge-visual {
+  background: #e0e7ff;
+  color: #4f46e5;
 }
 
-.redemption-button-approve {
-  background: #667eea;
-  color: white;
+.badge-message {
+  background: #dcfce7;
+  color: #16a34a;
 }
 
-.redemption-button-approve:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.card-item-flavor {
+  font-size: 0.8125rem;
+  font-style: italic;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+.card-item-description {
+  font-size: 0.875rem;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.card-item-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: auto;
+}
+
+.card-action-button {
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.card-action-button:hover {
+  background: #f9fafb;
+  border-color: #667eea;
+  color: #667eea;
+}
+
+.card-action-button.delete {
+  color: #dc2626;
+}
+
+.card-action-button.delete:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
 }
 
 /* 空状態 */
@@ -242,7 +299,7 @@ body {
   padding: 4rem 2rem;
   background: white;
   border: 2px dashed #d1d5db;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .empty-state.hidden {
@@ -250,15 +307,33 @@ body {
 }
 
 .empty-state-text {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
   margin-bottom: 0.5rem;
 }
 
 .empty-state-subtext {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.empty-state-button {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty-state-button:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
 }
 
 /* モーダル */
@@ -290,7 +365,7 @@ body {
   background: white;
   border-radius: 1rem;
   width: 100%;
-  max-width: 480px;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -336,60 +411,63 @@ body {
   font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
 }
 
-.modal-card-info {
+/* フォーム */
+.card-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
-.modal-card-flavor {
-  font-size: 0.9375rem;
-  color: #6b7280;
-  font-style: italic;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.modal-card-description {
-  font-size: 0.9375rem;
-  color: #111827;
-  line-height: 1.6;
-  margin: 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.modal-info-item {
+.form-group {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.modal-info-item:last-child {
-  border-bottom: none;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.modal-info-label {
+.form-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #374151;
 }
 
-.modal-info-value {
-  font-size: 0.875rem;
-  font-weight: 500;
+.form-input,
+.form-textarea,
+.form-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
   color: #111827;
+  background: white;
+  transition: all 0.2s;
 }
 
-.modal-actions {
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
   display: flex;
   gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .button {
@@ -422,15 +500,6 @@ body {
   background: #f9fafb;
 }
 
-.button-danger {
-  background: #dc2626;
-  color: white;
-}
-
-.button-danger:hover {
-  background: #b91c1c;
-}
-
 .hidden {
   display: none;
 }
@@ -438,35 +507,33 @@ body {
 /* レスポンシブ */
 @media (max-width: 768px) {
   .stats-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .card-grid {
     grid-template-columns: 1fr;
   }
 
-  .redemption-item {
+  .cards-header {
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .redemption-actions {
+  .create-button {
     width: 100%;
-    flex-wrap: wrap;
-  }
-
-  .redemption-button {
-    flex: 1;
+    justify-content: center;
   }
 }
 
 @media (max-width: 480px) {
-  .redemptions-content {
-    padding: 1.5rem 1rem;
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
 
-  .redemption-meta {
-    flex-direction: column;
-    gap: 0.5rem;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 
-  .modal-actions {
+  .filters-row {
     flex-direction: column;
   }
 }

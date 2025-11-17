@@ -1,4 +1,4 @@
-/* dashboard/redemptions.html専用スタイル */
+/* dashboard/packs.html専用スタイル */
 
 body {
   overflow-x: hidden;
@@ -16,7 +16,7 @@ body {
 }
 
 /* メインコンテンツエリア */
-.redemptions-content {
+.packs-content {
   max-width: 1000px;
   margin: 0 auto;
   padding: 2rem 1rem;
@@ -24,21 +24,52 @@ body {
 }
 
 /* ヘッダー */
-.redemptions-header {
+.packs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 2rem;
+  gap: 1rem;
 }
 
-.redemptions-title {
+.packs-title {
   font-size: 1.5rem;
   font-weight: 800;
   color: #2d1b3d;
   margin: 0 0 0.5rem 0;
 }
 
-.redemptions-description {
+.packs-description {
   font-size: 0.9375rem;
   color: #6b7280;
   margin: 0;
+}
+
+.create-button {
+  background: #667eea;
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.create-button:hover {
+  background: #5568d3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.create-button span {
+  font-size: 1.25rem;
+  line-height: 1;
 }
 
 /* 統計グリッド */
@@ -80,160 +111,121 @@ body {
   line-height: 1;
 }
 
-.stat-value-warning {
-  color: #f59e0b;
-}
-
 .stat-value-success {
   color: #059669;
 }
 
-.stat-value-muted {
-  color: #9ca3af;
-}
-
-/* セクション */
-.section {
-  margin-bottom: 2rem;
-}
-
-.section-title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: #111827;
-  margin: 0 0 1rem 0;
-}
-
-/* 承認待ちリスト */
-.redemption-list {
+/* パックリスト */
+.pack-list {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
 
-.redemption-item {
+.pack-item {
   background: white;
   border-radius: 0.75rem;
-  padding: 1.25rem;
+  padding: 1.5rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   transition: all 0.2s;
   -webkit-tap-highlight-color: transparent;
 }
 
-.redemption-item:hover {
+.pack-item:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 16px rgba(102, 126, 234, 0.15);
 }
 
-.redemption-info {
+.pack-image {
+  width: 120px;
+  height: 120px;
+  border-radius: 0.5rem;
+  object-fit: cover;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  flex-shrink: 0;
+}
+
+.pack-info {
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
 }
 
-.redemption-header {
+.pack-header {
   display: flex;
-  align-items: center;
-  gap: 0.75rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
-.redemption-card-name {
-  font-size: 1rem;
+.pack-name {
+  font-size: 1.125rem;
   font-weight: 700;
   color: #111827;
   margin: 0;
 }
 
-.redemption-badge {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.25rem;
-  font-size: 0.6875rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+.pack-price {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #667eea;
+  white-space: nowrap;
 }
 
-.badge-N {
-  background: #f3f4f6;
+.pack-description {
+  font-size: 0.875rem;
   color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
 }
 
-.badge-R {
-  background: #dbeafe;
-  color: #2563eb;
-}
-
-.badge-SR {
-  background: #ede9fe;
-  color: #7c3aed;
-}
-
-.badge-UR {
-  background: #fef3c7;
-  color: #d97706;
-}
-
-.redemption-meta {
+.pack-meta {
   display: flex;
   gap: 1rem;
   font-size: 0.8125rem;
-  color: #6b7280;
+  color: #9ca3af;
 }
 
-.redemption-meta-item {
+.pack-meta-item {
   display: flex;
   align-items: center;
   gap: 0.25rem;
 }
 
-.redemption-actions {
+.pack-actions {
   display: flex;
   gap: 0.5rem;
+  margin-top: auto;
 }
 
-.redemption-button {
-  padding: 0.625rem 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
+.pack-action-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  background: white;
+  border-radius: 0.375rem;
+  font-size: 0.8125rem;
   font-weight: 600;
+  color: #374151;
   cursor: pointer;
   transition: all 0.2s;
-  white-space: nowrap;
 }
 
-.redemption-button-detail {
-  background: #f3f4f6;
-  color: #374151;
+.pack-action-button:hover {
+  background: #f9fafb;
+  border-color: #667eea;
+  color: #667eea;
 }
 
-.redemption-button-detail:hover {
-  background: #e5e7eb;
-}
-
-.redemption-button-reject {
-  background: #fef2f2;
+.pack-action-button.delete {
   color: #dc2626;
 }
 
-.redemption-button-reject:hover {
-  background: #fecaca;
-}
-
-.redemption-button-approve {
-  background: #667eea;
-  color: white;
-}
-
-.redemption-button-approve:hover {
-  background: #5568d3;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+.pack-action-button.delete:hover {
+  background: #fef2f2;
+  border-color: #dc2626;
 }
 
 /* 空状態 */
@@ -242,7 +234,7 @@ body {
   padding: 4rem 2rem;
   background: white;
   border: 2px dashed #d1d5db;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
 }
 
 .empty-state.hidden {
@@ -250,15 +242,33 @@ body {
 }
 
 .empty-state-text {
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
   margin-bottom: 0.5rem;
 }
 
 .empty-state-subtext {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: #6b7280;
+  margin-bottom: 2rem;
+}
+
+.empty-state-button {
+  padding: 0.75rem 1.5rem;
+  background: #667eea;
+  color: white;
+  border: none;
+  border-radius: 0.375rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.empty-state-button:hover {
+  background: #5568d3;
+  transform: translateY(-1px);
 }
 
 /* モーダル */
@@ -290,7 +300,7 @@ body {
   background: white;
   border-radius: 1rem;
   width: 100%;
-  max-width: 480px;
+  max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -336,60 +346,63 @@ body {
   font-size: 1.25rem;
   font-weight: 700;
   color: #111827;
-  margin: 0 0 1rem 0;
+  margin: 0 0 1.5rem 0;
 }
 
-.modal-card-info {
+/* フォーム */
+.pack-form {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-bottom: 1.5rem;
 }
 
-.modal-card-flavor {
-  font-size: 0.9375rem;
-  color: #6b7280;
-  font-style: italic;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.modal-card-description {
-  font-size: 0.9375rem;
-  color: #111827;
-  line-height: 1.6;
-  margin: 0;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid #e5e7eb;
-}
-
-.modal-info-item {
+.form-group {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #f3f4f6;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.modal-info-item:last-child {
-  border-bottom: none;
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
-.modal-info-label {
+.form-label {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #6b7280;
+  color: #374151;
 }
 
-.modal-info-value {
-  font-size: 0.875rem;
-  font-weight: 500;
+.form-input,
+.form-textarea,
+.form-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 0.9375rem;
   color: #111827;
+  background: white;
+  transition: all 0.2s;
 }
 
-.modal-actions {
+.form-input:focus,
+.form-textarea:focus,
+.form-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-actions {
   display: flex;
   gap: 0.75rem;
+  margin-top: 0.5rem;
 }
 
 .button {
@@ -422,15 +435,6 @@ body {
   background: #f9fafb;
 }
 
-.button-danger {
-  background: #dc2626;
-  color: white;
-}
-
-.button-danger:hover {
-  background: #b91c1c;
-}
-
 .hidden {
   display: none;
 }
@@ -441,32 +445,35 @@ body {
     grid-template-columns: 1fr;
   }
 
-  .redemption-item {
+  .packs-header {
     flex-direction: column;
-    align-items: flex-start;
   }
 
-  .redemption-actions {
+  .create-button {
     width: 100%;
-    flex-wrap: wrap;
+    justify-content: center;
   }
 
-  .redemption-button {
-    flex: 1;
+  .pack-item {
+    flex-direction: column;
+  }
+
+  .pack-image {
+    width: 100%;
+    height: 200px;
   }
 }
 
 @media (max-width: 480px) {
-  .redemptions-content {
-    padding: 1.5rem 1rem;
+  .form-row {
+    grid-template-columns: 1fr;
   }
 
-  .redemption-meta {
+  .pack-actions {
     flex-direction: column;
-    gap: 0.5rem;
   }
 
-  .modal-actions {
-    flex-direction: column;
+  .pack-action-button {
+    width: 100%;
   }
 }

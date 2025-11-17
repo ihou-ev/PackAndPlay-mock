@@ -11,105 +11,138 @@
   <title>パック管理 - Pack&Play</title>
   <!-- コンポーネントベースCSS -->
   <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/pages/dashboard/packs.css">
   <link rel="manifest" href="../manifest.json">
   <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
   <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
 </head>
 <body>
-  <!-- ヘッダー -->
-  <header>
-    <nav class="navbar container">
-      <a href="../index.html" class="logo">
-        🎴 Pack&Play
-      </a>
-      <ul class="nav-links">
-        <!-- JavaScriptで動的に生成 -->
-      </ul>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 19l-7-7 7-7"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="../profile.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
     </nav>
-  </header>
+
+    <!-- サイドバーフッター -->
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/commerce.html" class="sidebar-footer-link">特商法表記</a>
+        <a href="../legal/scta.html" class="sidebar-footer-link">資金決済法</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
 
   <!-- メインコンテンツ -->
-  <main>
-    <section class="page-header">
-      <div class="container">
-        <div class="flex-between">
-          <div>
-            <h1 class="page-title">パック管理</h1>
-            <p class="page-description">カードパックの作成と管理を行います</p>
+  <div class="main-wrapper">
+    <div class="packs-content">
+      <!-- ヘッダー -->
+      <div class="packs-header">
+        <div>
+          <h1 class="packs-title">パック管理</h1>
+          <p class="packs-description">販売中のパックの一覧です</p>
+        </div>
+        <button class="create-button" onclick="openCreateModal()">
+          <span>+</span> 新規作成
+        </button>
+      </div>
+
+      <!-- 統計カード -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">総パック数</div>
+            <div class="stat-value" id="totalPacks">0</div>
           </div>
-          <button class="btn btn-primary" data-open-modal="createPackModal">
-            ＋ 新しいパックを作成
-          </button>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">総売上</div>
+            <div class="stat-value stat-value-success" id="totalSales">¥0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">平均価格</div>
+            <div class="stat-value" id="averagePrice">¥0</div>
+          </div>
         </div>
       </div>
-    </section>
 
-    <section style="padding: 3rem 0;">
-      <div class="container">
-        <!-- パックリスト -->
-        <div class="grid grid-3" id="packGrid">
-          <!-- JavaScriptで動的に生成 -->
-        </div>
+      <!-- パックリスト -->
+      <div id="packList" class="pack-list">
+        <!-- JavaScriptで動的に生成 -->
       </div>
-    </section>
-  </main>
 
-  <!-- パック作成モーダル -->
-  <div id="createPackModal" class="modal-overlay" style="display: none;">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 class="modal-title">新しいパックを作成</h2>
-      </div>
-      <div class="modal-body">
-        <form id="createPackForm">
-          <div class="form-group">
-            <label class="form-label">パック名 *</label>
-            <input type="text" class="form-input" id="packName" required placeholder="例: 初心者応援パック">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">説明</label>
-            <textarea class="form-textarea" id="packDescription" placeholder="パックの説明を入力..."></textarea>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">価格（円） *</label>
-            <input type="number" class="form-input" id="packPrice" required placeholder="500" min="100" step="100">
-          </div>
-
-          <div class="form-group">
-            <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
-              <input type="checkbox" id="isPublished" checked>
-              <span>公開する</span>
-            </label>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="btn btn-outline" data-close-modal="createPackModal">キャンセル</button>
-        <button class="btn btn-primary" onclick="createPack()">作成</button>
+      <!-- 空状態 -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-text">パックがありません</div>
+        <div class="empty-state-subtext">新規作成ボタンからパックを作成しましょう</div>
+        <button class="empty-state-button" onclick="openCreateModal()">新規作成</button>
       </div>
     </div>
   </div>
 
-  <!-- フッター -->
-  <footer style="background: var(--surface); border-top: 1px solid var(--border); padding: 2rem 0; margin-top: 4rem;">
-    <div class="container">
-      <div class="flex-between">
-        <div>
-          <div class="logo mb-2">🎴 Pack&Play</div>
-          <p style="color: var(--text-light); font-size: 0.875rem;">
-            © 2025 Pack&Play. All rights reserved.
-          </p>
-        </div>
-        <div class="flex gap-3">
-          <a href="#" style="color: var(--text-light); text-decoration: none;">利用規約</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">プライバシーポリシー</a>
-          <a href="#" style="color: var(--text-light); text-decoration: none;">特商法表記</a>
-        </div>
+  <!-- パック作成/編集モーダル -->
+  <div class="modal-overlay" id="packModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closePackModal()">&times;</button>
+      <div class="modal-body">
+        <h3 class="modal-title" id="modalTitle">新規パック作成</h3>
+        <form id="packForm" class="pack-form">
+          <div class="form-group">
+            <label class="form-label">パック名</label>
+            <input type="text" id="packName" class="form-input" placeholder="例: スターターパック" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">説明</label>
+            <textarea id="packDescription" class="form-textarea" placeholder="パックの説明を入力" rows="3"></textarea>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">価格（円）</label>
+              <input type="number" id="packPrice" class="form-input" placeholder="300" min="0" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">カード枚数</label>
+              <input type="number" id="packCardCount" class="form-input" placeholder="1" min="1" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">画像URL（任意）</label>
+            <input type="text" id="packImage" class="form-input" placeholder="image/pack.png">
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="button button-secondary" onclick="closePackModal()">キャンセル</button>
+            <button type="submit" class="button button-primary">保存</button>
+          </div>
+        </form>
       </div>
     </div>
-  </footer>
+  </div>
 
   <!-- コンポーネントベースJavaScript -->
   <script src="../js/services/storage.js"></script>
@@ -118,97 +151,6 @@
   <script src="../js/components/toast.js"></script>
   <script src="../js/mock-data.js"></script>
   <script src="../js/main.js"></script>
-  <script>
-    // ストリーマーロールチェック
-    requireCreatorRole();
-
-    // パックデータ（ローカルストレージから取得）
-    let creatorPacks = loadFromStorage('creatorPacks', packs);
-
-    function renderPacks() {
-      const grid = document.getElementById('packGrid');
-
-      grid.innerHTML = creatorPacks.map(pack => `
-        <div class="card pack-card">
-          <div class="pack-card-image">
-            📦
-          </div>
-          <div class="card-body">
-            <div class="flex-between mb-2">
-              <div class="pack-card-title">${pack.name}</div>
-              ${pack.isPublished ? '<span class="badge badge-live">公開中</span>' : '<span class="badge" style="background: #6b7280;">非公開</span>'}
-            </div>
-            <p style="color: var(--text-light); font-size: 0.875rem; margin-bottom: 1rem;">
-              ${pack.description}
-            </p>
-            <div class="pack-card-price mb-3">${formatPrice(pack.price)}</div>
-            <div class="flex gap-1">
-              <button class="btn btn-sm btn-outline" style="flex: 1;" onclick="editPack(${pack.id})">編集</button>
-              <button class="btn btn-sm ${pack.isPublished ? 'btn-secondary' : 'btn-primary'}" onclick="togglePublish(${pack.id})">
-                ${pack.isPublished ? '非公開' : '公開'}
-              </button>
-            </div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function createPack() {
-      const name = document.getElementById('packName').value;
-      const description = document.getElementById('packDescription').value;
-      const price = parseInt(document.getElementById('packPrice').value);
-      const isPublished = document.getElementById('isPublished').checked;
-
-      if (!name || !price) {
-        showToast('必須項目を入力してください', 'error');
-        return;
-      }
-
-      if (price < 100) {
-        showToast('価格は100円以上にしてください', 'error');
-        return;
-      }
-
-      const newPack = {
-        id: Date.now(),
-        creatorId: 1,
-        creatorSlug: 'tanaka',
-        name,
-        description,
-        price,
-        isPublished,
-        cards: []
-      };
-
-      creatorPacks.push(newPack);
-      saveToStorage('creatorPacks', creatorPacks);
-
-      closeModal('createPackModal');
-      showToast('パックを作成しました', 'success');
-      renderPacks();
-
-      // フォームをリセット
-      document.getElementById('createPackForm').reset();
-    }
-
-    function editPack(packId) {
-      showToast('編集機能は近日実装予定です', 'info');
-    }
-
-    function togglePublish(packId) {
-      const index = creatorPacks.findIndex(p => p.id === packId);
-      if (index === -1) return;
-
-      creatorPacks[index].isPublished = !creatorPacks[index].isPublished;
-      saveToStorage('creatorPacks', creatorPacks);
-
-      const status = creatorPacks[index].isPublished ? '公開' : '非公開';
-      showToast(`パックを${status}にしました`, 'success');
-      renderPacks();
-    }
-
-    // 初期表示
-    renderPacks();
-  </script>
+  <script src="../js/pages/dashboard/packs.js"></script>
 </body>
 </html>

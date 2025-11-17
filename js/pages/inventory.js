@@ -114,6 +114,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
             <div class="card-text-area">
               <div class="card-name">${card.name}</div>
+              ${card.flavor ? `<div class="card-flavor">${card.flavor}</div>` : ''}
+              <div class="card-description">${card.effect}</div>
             </div>
           </div>
         </div>
@@ -237,6 +239,7 @@ document.addEventListener('DOMContentLoaded', function() {
         type: cardDetails.type,
         flavor: cardDetails.flavor || '',
         effect: effect,
+        imageUrl: cardDetails.imageUrl || '',
         creatorName: ownedCard.creatorName,
         creatorId: ownedCard.creatorId || 1,
         packId: ownedCard.packId,
