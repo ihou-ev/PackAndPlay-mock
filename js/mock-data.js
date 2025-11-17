@@ -310,38 +310,6 @@ const packs = [
 const cards = [
   {
     id: 1,
-    name: 'こんにちは',
-    rarity: 'N',
-    type: 'message',
-    requiresApproval: true,
-    effectData: { message: 'こんにちは！' }
-  },
-  {
-    id: 2,
-    name: 'いいね！',
-    rarity: 'R',
-    type: 'action',
-    requiresApproval: false,
-    effectData: { animation: 'thumbs-up', sound: 'like.mp3' }
-  },
-  {
-    id: 3,
-    name: 'きらきら',
-    rarity: 'SR',
-    type: 'visual',
-    requiresApproval: false,
-    effectData: { animation: 'sparkle', duration: 5 }
-  },
-  {
-    id: 4,
-    name: '激レアカード',
-    rarity: 'UR',
-    type: 'action',
-    requiresApproval: false,
-    effectData: { animation: 'epic-effect', sound: 'epic.mp3' }
-  },
-  {
-    id: 5,
     name: 'Alt+F4',
     rarity: 'UR',
     type: 'action',
@@ -351,7 +319,7 @@ const cards = [
     effectData: { animation: 'game-close', sound: 'shutdown.mp3' }
   },
   {
-    id: 6,
+    id: 2,
     name: 'サイレントタイム',
     rarity: 'R',
     type: 'action',
@@ -361,7 +329,7 @@ const cards = [
     effectData: { animation: 'mute', duration: 15 }
   },
   {
-    id: 7,
+    id: 3,
     name: 'ハンズアップ！',
     rarity: 'R',
     type: 'action',
@@ -371,7 +339,7 @@ const cards = [
     effectData: { animation: 'freeze', duration: 10 }
   },
   {
-    id: 8,
+    id: 4,
     name: 'インベントリ破壊',
     rarity: 'SR',
     type: 'action',
@@ -381,7 +349,7 @@ const cards = [
     effectData: { animation: 'inventory-drop' }
   },
   {
-    id: 9,
+    id: 5,
     name: 'ノックノック',
     rarity: 'R',
     type: 'visual',
@@ -391,7 +359,7 @@ const cards = [
     effectData: { sound: 'knock.mp3' }
   },
   {
-    id: 10,
+    id: 6,
     name: 'ジャンプスケアサプライズ',
     rarity: 'SR',
     type: 'visual',
@@ -401,7 +369,7 @@ const cards = [
     effectData: { animation: 'jumpscare', sound: 'scream.mp3' }
   },
   {
-    id: 11,
+    id: 7,
     name: 'お茶どうぞ',
     rarity: 'N',
     type: 'action',
@@ -411,7 +379,7 @@ const cards = [
     effectData: { animation: 'drink-water' }
   },
   {
-    id: 12,
+    id: 8,
     name: '姿勢を正そう',
     rarity: 'N',
     type: 'action',
@@ -421,7 +389,7 @@ const cards = [
     effectData: { animation: 'posture-check', duration: 10 }
   },
   {
-    id: 13,
+    id: 9,
     name: 'スクワットタイム',
     rarity: 'R',
     type: 'action',
@@ -431,7 +399,7 @@ const cards = [
     effectData: { animation: 'squat', count: 10 }
   },
   {
-    id: 14,
+    id: 10,
     name: 'ブラインドチャレンジ',
     rarity: 'SR',
     type: 'action',
@@ -451,7 +419,7 @@ const ownedCards = [
     packId: 1,
     creatorName: '田中太郎',
     isUsed: false,
-    acquiredAt: '2025-11-01T10:30:00Z'
+    acquiredAt: '2025-11-03T16:00:00Z'
   },
   {
     id: 2,
@@ -460,7 +428,7 @@ const ownedCards = [
     packId: 1,
     creatorName: '田中太郎',
     isUsed: false,
-    acquiredAt: '2025-11-01T10:30:00Z'
+    acquiredAt: '2025-11-03T16:00:00Z'
   },
   {
     id: 3,
@@ -468,8 +436,8 @@ const ownedCards = [
     userId: 1,
     packId: 1,
     creatorName: '田中太郎',
-    isUsed: true,
-    acquiredAt: '2025-11-01T10:30:00Z'
+    isUsed: false,
+    acquiredAt: '2025-11-03T16:00:00Z'
   },
   {
     id: 4,
@@ -478,7 +446,7 @@ const ownedCards = [
     packId: 1,
     creatorName: '田中太郎',
     isUsed: false,
-    acquiredAt: '2025-11-02T14:20:00Z'
+    acquiredAt: '2025-11-03T16:00:00Z'
   },
   {
     id: 5,
@@ -528,42 +496,6 @@ const ownedCards = [
   {
     id: 10,
     cardId: 10,
-    userId: 1,
-    packId: 1,
-    creatorName: '田中太郎',
-    isUsed: false,
-    acquiredAt: '2025-11-03T16:00:00Z'
-  },
-  {
-    id: 11,
-    cardId: 11,
-    userId: 1,
-    packId: 1,
-    creatorName: '田中太郎',
-    isUsed: false,
-    acquiredAt: '2025-11-03T16:00:00Z'
-  },
-  {
-    id: 12,
-    cardId: 12,
-    userId: 1,
-    packId: 1,
-    creatorName: '田中太郎',
-    isUsed: false,
-    acquiredAt: '2025-11-03T16:00:00Z'
-  },
-  {
-    id: 13,
-    cardId: 13,
-    userId: 1,
-    packId: 1,
-    creatorName: '田中太郎',
-    isUsed: false,
-    acquiredAt: '2025-11-03T16:00:00Z'
-  },
-  {
-    id: 14,
-    cardId: 14,
     userId: 1,
     packId: 1,
     creatorName: '田中太郎',
