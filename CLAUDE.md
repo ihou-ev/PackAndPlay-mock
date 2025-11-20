@@ -106,6 +106,8 @@ When the user selects the "ストリーマー" (Creator) role, the X login butto
 **Core JavaScript Files**:
 - `js/main.js` - Shared utilities (modals, toasts, session management, navbar)
 - `js/mock-data.js` - All mock data and helper functions
+- `js/services/storage.js` - localStorage wrappers
+- `js/app.js` - Application initialization
 - `sw.js` - Service Worker for PWA offline support
 
 **PWA Configuration**:
@@ -125,10 +127,14 @@ When the user selects the "ストリーマー" (Creator) role, the X login butto
 - `dashboard/*.html` - Creator management pages
 - `overlay/index.html` - OBS browser source overlay
 
-**CSS**:
-- `css/style.css` - Single global stylesheet with CSS custom properties
+**CSS Architecture**:
+- `css/app.css` - Main entry point that imports all component CSS
+- `css/base/` - CSS variables and reset styles
+- `css/layouts/` - Container and grid layouts
+- `css/components/` - Reusable UI components (buttons, cards, modals, etc.)
+- `css/pages/` - Page-specific styles organized by directory structure
 
-**Important**: The entry point is now a landing page (LP) with three sections:
+**Important**: The CSS architecture uses a component-based approach with `@import` statements. The entry point is now a landing page (LP) with three sections:
 1. **Hero Section**: Full-screen catchphrase with animated icon, quick login buttons, and scroll indicator
    - Two prominent CTA buttons: "👤 視聴者として始める" and "🎬 ストリーマーとして始める"
    - Clicking these buttons logs the user in immediately with YouTube (default)
@@ -169,6 +175,33 @@ function simulatePackOpening(packId) {
 
 Cards in packs have `dropRate` values that must sum to 100 for proper probability distribution.
 
+### Auto-Adjust Drop Rates by Rarity
+
+The pack editor includes an automatic drop rate adjustment feature based on card rarity. This helps creators quickly set realistic probabilities without manual calculation.
+
+**Rarity Weights** (`js/pages/dashboard/packs.js`):
+```javascript
+const rarityWeights = {
+  'N': 50,   // Normal: High probability
+  'R': 30,   // Rare: Medium probability
+  'SR': 15,  // Super Rare: Low probability
+  'UR': 5    // Ultra Rare: Very low probability
+};
+```
+
+**How It Works**:
+1. When a card is added to a pack, `autoAdjustDropRates()` automatically calculates drop rates
+2. Each card's weight is determined by its rarity
+3. Weights are normalized to ensure the total equals 100%
+4. Users can manually adjust rates after auto-adjustment
+5. The "レアリティで自動調整" button can reset rates to rarity-based defaults anytime
+
+**Example**: If a pack contains 1 N card, 1 R card, and 1 SR card:
+- Total weight: 50 + 30 + 15 = 95
+- N card: (50/95) × 100 = 52.6%
+- R card: (30/95) × 100 = 31.6%
+- SR card: (15/95) × 100 = 15.8%
+
 ### Card Types and Rarities
 
 **Card Types**:
@@ -189,12 +222,19 @@ Cards in packs have `dropRate` values that must sum to 100 for proper probabilit
 1. Copy an existing HTML template (e.g., `index.html`)
 2. Update `<title>` and main content
 3. Keep the header/footer structure with `nav-links` class for dynamic navbar
-4. Include both scripts at bottom:
+4. Include scripts at bottom in this order:
    ```html
+   <script src="[relative-path]/js/services/storage.js"></script>
    <script src="[relative-path]/js/mock-data.js"></script>
    <script src="[relative-path]/js/main.js"></script>
+   <script src="[relative-path]/js/pages/[page-name].js"></script>
    ```
-5. Add role checking if needed:
+5. Link component-based CSS:
+   ```html
+   <link rel="stylesheet" href="[relative-path]/css/app.css">
+   <link rel="stylesheet" href="[relative-path]/css/pages/[page-name].css">
+   ```
+6. Add role checking if needed:
    ```javascript
    if (!requireCreatorRole()) {
      // Handled by function
@@ -395,4 +435,4 @@ When using `file://` protocol:
 - Pack opening simulation should move to server-side to prevent client manipulation
 - OBS overlay will need WebSocket/Realtime connection instead of localStorage polling
 - All payment flows need Stripe integration
--景表法 (Japanese gaming law) compliance requires accurate drop rate display - this is shown in `pack-detail.html`
+- 景表法 (Japanese gaming law) compliance requires accurate drop rate display - this is shown in `pack-detail.html`

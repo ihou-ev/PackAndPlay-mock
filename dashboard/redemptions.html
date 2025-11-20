@@ -56,8 +56,16 @@
     <div class="redemptions-content">
       <!-- ヘッダー -->
       <div class="redemptions-header">
-        <h1 class="redemptions-title">カード承認</h1>
-        <p class="redemptions-description">視聴者からのカード使用リクエストを承認・拒否できます</p>
+        <div>
+          <h1 class="redemptions-title">カード承認</h1>
+          <p class="redemptions-description">視聴者からのカード使用リクエストを承認・拒否できます</p>
+        </div>
+        <button class="compact-mode-button" id="openCompactButton" onclick="openCompactMode()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          </svg>
+          コンパクトモードで開く
+        </button>
       </div>
 
       <!-- 統計カード -->

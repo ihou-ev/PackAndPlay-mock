@@ -1,21 +1,43 @@
 // dashboard/redemptions.html専用スクリプト
 
+// コンパクトモードで開く
+window.openCompactMode = function() {
+  const currentUrl = window.location.href.split('?')[0];
+  const compactUrl = currentUrl + '?compact=true';
+  window.open(compactUrl, 'CardApprovalCompact', 'width=450,height=700,resizable=yes,scrollbars=yes');
+};
+
 // DOMが読み込まれてから実行
 document.addEventListener('DOMContentLoaded', function() {
-  // ログインチェック
-  if (!requireLogin()) {
-    return;
-  }
+  // コンパクトモードチェック
+  const urlParams = new URLSearchParams(window.location.search);
+  const isCompactMode = urlParams.get('compact') === 'true';
 
-  // 配信者権限チェック
-  if (!requireCreatorRole()) {
-    return;
-  }
+  if (isCompactMode) {
+    document.body.classList.add('compact-mode');
+    // コンパクトモードではログインチェックのみ（権限チェックはスキップ）
+    if (!requireLogin()) {
+      return;
+    }
+  } else {
+    // 通常モード
+    // ログインチェック
+    if (!requireLogin()) {
+      return;
+    }
 
-  // サイドバーのナビゲーションを生成
-  renderSidebarNav('dashboard-redemptions');
+    // 配信者権限チェック
+    if (!requireCreatorRole()) {
+      return;
+    }
+
+    // サイドバーのナビゲーションを生成
+    renderSidebarNav('dashboard-redemptions');
+  }
 
   let selectedRedemption = null;
+  let selectedIndex = 0; // コンパクトモード用の選択インデックス
+  let selectedButtonIndex = 0; // コンパクトモード用のボタン選択（0=承認, 1=拒否, 2=詳細）
 
   // デモ用の承認待ちデータ
   const redemptions = [
@@ -67,17 +89,32 @@ document.addEventListener('DOMContentLoaded', function() {
     if (redemptions.length === 0) {
       pendingList.innerHTML = '';
       pendingEmpty.classList.remove('hidden');
+      selectedIndex = 0;
       return;
     }
 
     pendingEmpty.classList.add('hidden');
 
-    pendingList.innerHTML = redemptions.map(redemption => {
+    // 選択インデックスが範囲外になった場合は調整
+    if (selectedIndex >= redemptions.length) {
+      selectedIndex = redemptions.length - 1;
+    }
+    if (selectedIndex < 0) {
+      selectedIndex = 0;
+    }
+
+    pendingList.innerHTML = redemptions.map((redemption, index) => {
       const timeAgo = formatTimeAgo(redemption.requestTime);
       const rarityClass = `badge-${redemption.cardRarity}`;
+      const selectedClass = isCompactMode && index === selectedIndex ? ' selected' : '';
+
+      // コンパクトモードで選択中のカードの場合、選択中のボタンにfocusedクラスを追加
+      const approveClass = isCompactMode && index === selectedIndex && selectedButtonIndex === 0 ? ' focused' : '';
+      const rejectClass = isCompactMode && index === selectedIndex && selectedButtonIndex === 1 ? ' focused' : '';
+      const detailClass = isCompactMode && index === selectedIndex && selectedButtonIndex === 2 ? ' focused' : '';
 
       return `
-        <div class="redemption-item" data-redemption-id="${redemption.id}">
+        <div class="redemption-item${selectedClass}" data-redemption-id="${redemption.id}" data-index="${index}">
           <div class="redemption-info">
             <div class="redemption-header">
               <h3 class="redemption-card-name">${redemption.cardName}</h3>
@@ -89,13 +126,23 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
           </div>
           <div class="redemption-actions">
-            <button class="redemption-button redemption-button-detail" onclick="showDetail(${redemption.id})">詳細</button>
-            <button class="redemption-button redemption-button-reject" onclick="rejectRedemption(${redemption.id})">拒否</button>
-            <button class="redemption-button redemption-button-approve" onclick="approveRedemption(${redemption.id})">承認</button>
+            <button class="redemption-button redemption-button-approve${approveClass}" onclick="approveRedemption(${redemption.id})">承認</button>
+            <button class="redemption-button redemption-button-reject${rejectClass}" onclick="rejectRedemption(${redemption.id})">拒否</button>
+            <button class="redemption-button redemption-button-detail${detailClass}" onclick="showDetail(${redemption.id})">詳細</button>
           </div>
         </div>
       `;
     }).join('');
+
+    // コンパクトモードでは選択中のカードにスクロール
+    if (isCompactMode) {
+      setTimeout(() => {
+        const selectedItem = pendingList.querySelector('.redemption-item.selected');
+        if (selectedItem) {
+          selectedItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }, 100);
+    }
   }
 
   // 時間経過表示
@@ -223,6 +270,117 @@ document.addEventListener('DOMContentLoaded', function() {
     cardDetailModal.addEventListener('click', function(e) {
       closeCardDetailModal();
     });
+  }
+
+  // コンパクトモード用のキーボード操作
+  if (isCompactMode) {
+    document.addEventListener('keydown', function(e) {
+      // モーダルが開いている場合は無視
+      const modal = document.getElementById('cardDetailModal');
+      if (modal && modal.classList.contains('active')) {
+        return;
+      }
+
+      if (redemptions.length === 0) return;
+
+      switch(e.key) {
+        case 'ArrowUp':
+          e.preventDefault();
+          selectedIndex = Math.max(0, selectedIndex - 1);
+          selectedButtonIndex = 0; // カード変更時はボタン選択をリセット
+          renderPendingList();
+          break;
+
+        case 'ArrowDown':
+          e.preventDefault();
+          selectedIndex = Math.min(redemptions.length - 1, selectedIndex + 1);
+          selectedButtonIndex = 0; // カード変更時はボタン選択をリセット
+          renderPendingList();
+          break;
+
+        case 'ArrowLeft':
+          e.preventDefault();
+          selectedButtonIndex = Math.max(0, selectedButtonIndex - 1);
+          renderPendingList();
+          break;
+
+        case 'ArrowRight':
+          e.preventDefault();
+          selectedButtonIndex = Math.min(2, selectedButtonIndex + 1);
+          renderPendingList();
+          break;
+
+        case 'Enter':
+          e.preventDefault();
+          if (redemptions[selectedIndex]) {
+            const redemption = redemptions[selectedIndex];
+            switch(selectedButtonIndex) {
+              case 0: // 承認
+                approveRedemptionByIndex(selectedIndex);
+                break;
+              case 1: // 拒否
+                rejectRedemptionByIndex(selectedIndex);
+                break;
+              case 2: // 詳細
+                showDetail(redemption.id);
+                break;
+            }
+          }
+          break;
+      }
+    });
+  }
+
+  // インデックスで承認（コンパクトモード用）
+  function approveRedemptionByIndex(index) {
+    if (index < 0 || index >= redemptions.length) return;
+
+    const redemption = redemptions[index];
+
+    // オーバーレイに送信するデータ
+    const overlayData = {
+      cardName: redemption.cardName,
+      cardRarity: redemption.cardRarity,
+      viewerName: redemption.viewerName,
+      timestamp: Date.now()
+    };
+
+    // localStorageのoverlayEventに書き込み
+    saveToStorage('overlayEvent', overlayData);
+
+    redemptions.splice(index, 1);
+    showToast(`「${redemption.cardName}」を承認しました`, 'success');
+
+    // 選択インデックスを調整
+    if (selectedIndex >= redemptions.length && redemptions.length > 0) {
+      selectedIndex = redemptions.length - 1;
+    }
+
+    // ボタン選択をリセット
+    selectedButtonIndex = 0;
+
+    updateStats();
+    renderPendingList();
+  }
+
+  // インデックスで拒否（コンパクトモード用）
+  function rejectRedemptionByIndex(index) {
+    if (index < 0 || index >= redemptions.length) return;
+
+    const redemption = redemptions[index];
+    redemptions.splice(index, 1);
+    showToast(`「${redemption.cardName}」を拒否しました`, 'info');
+
+    // 選択インデックスを調整
+    if (selectedIndex >= redemptions.length && redemptions.length > 0) {
+      selectedIndex = redemptions.length - 1;
+    }
+
+    // ボタン選択をリセット
+    selectedButtonIndex = 0;
+
+    updateStats();
+    renderPendingList();
   }
 
   // 初期表示

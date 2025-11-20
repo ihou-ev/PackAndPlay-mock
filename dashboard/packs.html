@@ -114,6 +114,22 @@
           </div>
 
           <div class="form-group">
+            <label class="form-label">パック画像（任意）</label>
+            <div class="pack-image-upload" id="packImageUploadArea" onclick="document.getElementById('packImageInput').click()">
+              <div class="pack-image-preview" id="packImagePreview">
+                <div class="pack-image-placeholder-upload">
+                  <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                  </svg>
+                  <span>クリックして画像を選択</span>
+                </div>
+              </div>
+            </div>
+            <input type="file" id="packImageInput" accept="image/*" style="display: none;" onchange="handlePackImageUpload(event)">
+            <p class="form-help">JPG、PNG形式（最大5MB）</p>
+          </div>
+
+          <div class="form-group">
             <label class="form-label">説明</label>
             <textarea id="packDescription" class="form-textarea" placeholder="パックの説明を入力" rows="3"></textarea>
           </div>
@@ -126,13 +142,54 @@
 
             <div class="form-group">
               <label class="form-label">カード枚数</label>
-              <input type="number" id="packCardCount" class="form-input" placeholder="1" min="1" required>
+              <input type="number" id="packCardCount" class="form-input" placeholder="1" min="1" max="10" required>
+              <p class="form-help-inline">最大10枚</p>
             </div>
           </div>
 
           <div class="form-group">
-            <label class="form-label">画像URL（任意）</label>
-            <input type="text" id="packImage" class="form-input" placeholder="image/pack.png">
+            <label class="form-label">公開設定</label>
+            <div class="toggle-switch-wrapper">
+              <label class="toggle-switch">
+                <input type="checkbox" id="packIsPublished" checked>
+                <span class="toggle-slider"></span>
+              </label>
+              <span class="toggle-label" id="publishToggleLabel">公開する</span>
+            </div>
+            <p class="form-help">非公開にすると視聴者には表示されません</p>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">収録カード</label>
+            <p class="form-help">カードを追加して、排出率を設定してください（合計100%）<br>
+            レアリティに基づく自動調整: N(50) / R(30) / SR(15) / UR(5) の比率で配分されます</p>
+
+            <div class="card-action-buttons">
+              <button type="button" class="add-card-button" onclick="openCardSelectionModal()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                カードを追加
+              </button>
+              <button type="button" class="auto-adjust-button" onclick="autoAdjustDropRates()">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                </svg>
+                レアリティで自動調整
+              </button>
+            </div>
+
+            <!-- 選択済みカード一覧 -->
+            <div id="selectedCardsList" class="selected-cards-list">
+              <!-- JavaScriptで動的に生成 -->
+            </div>
+
+            <div class="drop-rate-summary">
+              <span>合計排出率: </span>
+              <span id="totalDropRate" class="drop-rate-total">0</span>
+              <span>%</span>
+              <span id="dropRateWarning" class="drop-rate-warning hidden">（100%にしてください）</span>
+            </div>
           </div>
 
           <div class="form-actions">
@@ -140,6 +197,47 @@
             <button type="submit" class="button button-primary">保存</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- カード選択モーダル -->
+  <div class="modal-overlay" id="cardSelectionModal">
+    <div class="modal modal-large">
+      <button class="modal-close" onclick="closeCardSelectionModal()">&times;</button>
+      <div class="modal-body">
+        <h3 class="modal-title">カードを追加</h3>
+        <p class="modal-subtitle">選択中: 0/10枚</p>
+
+        <!-- タブ切り替え -->
+        <div class="card-selection-tabs">
+          <button class="card-selection-tab active" data-tab="preset" onclick="switchCardTab('preset')">
+            プリセット
+          </button>
+          <button class="card-selection-tab" data-tab="original" onclick="switchCardTab('original')">
+            オリジナル
+          </button>
+        </div>
+
+        <!-- プリセットカードタブ -->
+        <div id="presetCardTab" class="card-tab-content active">
+          <p class="tab-description">よく使われる基本的なカードから選択</p>
+          <div id="presetCardGrid" class="visual-card-grid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <!-- オリジナルカードタブ -->
+        <div id="originalCardTab" class="card-tab-content">
+          <p class="tab-description">あなたが作成したカードから選択</p>
+          <div id="originalCardGrid" class="visual-card-grid">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="button button-secondary" onclick="closeCardSelectionModal()">閉じる</button>
+        </div>
       </div>
     </div>
   </div>

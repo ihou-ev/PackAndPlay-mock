@@ -236,45 +236,6 @@ function renderRecommendedVideos() {
   recommendedVideos.innerHTML = videosHTML;
 }
 
-// おすすめ記事の表示
-function renderRecommendedArticles() {
-  const recommendedArticles = document.getElementById('recommendedArticles');
-  if (!recommendedArticles) return;
-
-  const articles = [
-    {
-      id: 1,
-      title: 'Pack&Play活動開始から1年！振り返りと今後の展望',
-      date: '2025年10月15日',
-      url: '#'
-    },
-    {
-      id: 2,
-      title: 'ストリーマーが語る：視聴者参加型配信の楽しさと工夫',
-      date: '2025年9月20日',
-      url: '#'
-    },
-    {
-      id: 3,
-      title: '【インタビュー】Pack&Playで配信スタイルが変わった話',
-      date: '2025年8月10日',
-      url: '#'
-    }
-  ];
-
-  const articlesHTML = articles.map(article => `
-    <a href="${article.url}" class="article-card">
-      <div class="article-card-thumbnail"></div>
-      <div class="article-card-content">
-        <div class="article-card-title">${article.title}</div>
-        <div class="article-card-meta">${article.date}</div>
-      </div>
-    </a>
-  `).join('');
-
-  recommendedArticles.innerHTML = articlesHTML;
-}
-
 // 配信中サムネイルの表示
 function updateLiveBanner() {
   const liveStreamThumbnail = document.getElementById('liveStreamThumbnail');
@@ -327,7 +288,6 @@ function init() {
   renderExternalLinks();
   renderActivityIntro();
   renderRecommendedVideos();
-  renderRecommendedArticles();
   renderPacks();
   updateLiveBanner();
 }

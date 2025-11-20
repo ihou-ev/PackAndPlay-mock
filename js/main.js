@@ -554,6 +554,19 @@ function renderSidebarNav(currentPage = '') {
   }
 
   sidebarNav.innerHTML = navHTML;
+
+  // ロゴのリンク先を更新
+  const sidebarLogo = document.querySelector('.sidebar-logo');
+  if (sidebarLogo && isLoggedIn()) {
+    const session = getCurrentSession();
+    const role = session.role;
+
+    if (role === 'creator') {
+      sidebarLogo.href = getRelativePath('dashboard/index.html');
+    } else {
+      sidebarLogo.href = getRelativePath('profile.html');
+    }
+  }
 }
 
 // モバイルメニュー管理（共通関数）

@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
   renderSidebarNav('dashboard-cards');
 
   let editingCardId = null;
+  let currentCardImageData = null;
 
   // 統計情報を更新
   function updateStats() {
@@ -32,19 +33,45 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('ultraRareCards').textContent = urCards;
   }
 
+  // パックフィルターを生成
+  function populatePackFilter() {
+    const packFilter = document.getElementById('packFilter');
+    if (!packFilter) return;
+
+    // 現在のセッションからクリエイターのパックを取得
+    const session = getCurrentSession();
+    if (!session) return;
+
+    const creatorPacks = packs.filter(p => p.creatorSlug === session.creatorSlug);
+
+    creatorPacks.forEach(pack => {
+      const option = document.createElement('option');
+      option.value = pack.id;
+      option.textContent = pack.name;
+      packFilter.appendChild(option);
+    });
+  }
+
   // フィルター適用
   window.applyFilters = function() {
+    const packFilter = document.getElementById('packFilter').value;
     const rarityFilter = document.getElementById('rarityFilter').value;
-    const typeFilter = document.getElementById('typeFilter').value;
 
     let filtered = [...cards];
 
-    if (rarityFilter) {
-      filtered = filtered.filter(card => card.rarity === rarityFilter);
+    // パックでフィルター
+    if (packFilter) {
+      const selectedPack = packs.find(p => p.id === parseInt(packFilter));
+      if (selectedPack) {
+        // パックに含まれるカードIDのリストを取得
+        const packCardIds = selectedPack.cards.map(c => c.id);
+        filtered = filtered.filter(card => packCardIds.includes(card.id));
+      }
     }
 
-    if (typeFilter) {
-      filtered = filtered.filter(card => card.type === typeFilter);
+    // レアリティでフィルター
+    if (rarityFilter) {
+      filtered = filtered.filter(card => card.rarity === rarityFilter);
     }
 
     renderCards(filtered);
@@ -64,39 +91,110 @@ document.addEventListener('DOMContentLoaded', function() {
     emptyState.classList.add('hidden');
 
     cardGrid.innerHTML = cardsToRender.map(card => {
-      const rarityClass = `badge-${card.rarity}`;
-      const typeClass = `badge-${card.type}`;
-      const typeName = {
-        'action': 'アクション',
-        'visual': 'ビジュアル',
-        'message': 'メッセージ'
-      }[card.type] || card.type;
+      // 画像パスの調整（dashboard/からの相対パス）
+      let cardImage = card.imageUrl || '';
+      if (cardImage && !cardImage.startsWith('data:') && !cardImage.startsWith('http') && !cardImage.startsWith('../')) {
+        cardImage = '../' + cardImage;
+      }
 
       return `
-        <div class="card-item" data-card-id="${card.id}">
-          <div class="card-item-header">
-            <h3 class="card-item-name">${card.name}</h3>
-            <div class="card-item-badges">
-              <span class="card-badge ${rarityClass}">${card.rarity}</span>
-              <span class="card-badge ${typeClass}">${typeName}</span>
+        <div class="inventory-card creator-card" data-card-id="${card.id}">
+          <div class="card-frame">
+            <svg class="card-frame-svg" viewBox="0 0 200 280" xmlns="http://www.w3.org/2000/svg">
+              <!-- メインフレーム -->
+              <rect x="2" y="2" width="196" height="276" rx="8" fill="none" stroke="#000000" stroke-width="3"/>
+
+              <!-- コーナー装飾 左上 -->
+              <path d="M 8 8 L 20 8 L 8 20 Z" fill="#000000" opacity="0.5"/>
+              <!-- コーナー装飾 右上 -->
+              <path d="M 192 8 L 180 8 L 192 20 Z" fill="#000000" opacity="0.5"/>
+              <!-- コーナー装飾 左下 -->
+              <path d="M 8 272 L 20 272 L 8 260 Z" fill="#000000" opacity="0.5"/>
+              <!-- コーナー装飾 右下 -->
+              <path d="M 192 272 L 180 272 L 192 260 Z" fill="#000000" opacity="0.5"/>
+
+              <!-- 装飾ライン 上部 -->
+              <line x1="30" y1="8" x2="170" y2="8" stroke="#000000" stroke-width="1" opacity="0.3"/>
+              <!-- 装飾ライン 下部 -->
+              <line x1="30" y1="272" x2="170" y2="272" stroke="#000000" stroke-width="1" opacity="0.3"/>
+            </svg>
+          </div>
+          <div class="card-content">
+            <div class="card-image-area">
+              ${cardImage ? `<img src="${cardImage}" alt="${card.name}" class="card-image">` : '<div class="card-image-placeholder"></div>'}
+            </div>
+            <div class="card-text-area">
+              <div class="card-name">${card.name}</div>
+              ${card.flavor ? `<div class="card-flavor">${card.flavor}</div>` : ''}
+              <div class="card-description">${card.description || 'カードの説明がありません'}</div>
             </div>
           </div>
-          ${card.flavor ? `<p class="card-item-flavor">${card.flavor}</p>` : ''}
-          <p class="card-item-description">${card.description || 'カードの説明がありません'}</p>
-          <div class="card-item-actions">
-            <button class="card-action-button" onclick="editCard(${card.id})">編集</button>
-            <button class="card-action-button delete" onclick="deleteCard(${card.id})">削除</button>
+          <div class="card-actions">
+            <button class="card-action-btn card-edit-btn" onclick="editCard(${card.id}); event.stopPropagation();" title="編集">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+              </svg>
+            </button>
+            <button class="card-action-btn card-delete-btn" onclick="deleteCard(${card.id}); event.stopPropagation();" title="削除">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+              </svg>
+            </button>
           </div>
         </div>
       `;
     }).join('');
   }
 
+  // 画像アップロード処理
+  window.handleCardImageUpload = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    // ファイルサイズチェック（5MB以下）
+    if (file.size > 5 * 1024 * 1024) {
+      showToast('画像サイズは5MB以下にしてください', 'error');
+      return;
+    }
+
+    // 画像タイプチェック
+    if (!file.type.startsWith('image/')) {
+      showToast('画像ファイルを選択してください', 'error');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      currentCardImageData = e.target.result;
+
+      // プレビュー表示
+      const preview = document.getElementById('cardImagePreview');
+      preview.innerHTML = `<img src="${currentCardImageData}" alt="カード画像">`;
+    };
+    reader.readAsDataURL(file);
+  };
+
   // カード作成モーダルを開く
   window.openCreateModal = function() {
     editingCardId = null;
+    currentCardImageData = null;
     document.getElementById('modalTitle').textContent = '新規カード作成';
     document.getElementById('cardForm').reset();
+
+    // デフォルト値を設定
+    document.getElementById('cardApproval').value = 'auto';
+
+    // 画像プレビューをリセット
+    const preview = document.getElementById('cardImagePreview');
+    preview.innerHTML = `
+      <div class="card-image-placeholder-upload">
+        <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+        </svg>
+        <span>クリックして画像を選択</span>
+      </div>
+    `;
+
     openCardModal();
   };
 
@@ -106,13 +204,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (!card) return;
 
     editingCardId = cardId;
+    currentCardImageData = card.imageUrl || null;
     document.getElementById('modalTitle').textContent = 'カード編集';
     document.getElementById('cardName').value = card.name;
     document.getElementById('cardFlavor').value = card.flavor || '';
     document.getElementById('cardDescription').value = card.description || '';
     document.getElementById('cardRarity').value = card.rarity;
-    document.getElementById('cardType').value = card.type;
-    document.getElementById('cardImage').value = card.imageUrl || '';
+    document.getElementById('cardCooldown').value = card.cooldown || '1';
+    document.getElementById('cardApproval').value = card.requiresApproval ? 'manual' : 'auto';
+
+    // 画像プレビューを設定
+    const preview = document.getElementById('cardImagePreview');
+    if (card.imageUrl) {
+      preview.innerHTML = `<img src="${card.imageUrl}" alt="カード画像">`;
+    } else {
+      preview.innerHTML = `
+        <div class="card-image-placeholder-upload">
+          <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+          </svg>
+          <span>クリックして画像を選択</span>
+        </div>
+      `;
+    }
 
     openCardModal();
   };
@@ -145,20 +259,30 @@ document.addEventListener('DOMContentLoaded', function() {
     const modal = document.getElementById('cardModal');
     modal.classList.remove('active');
     editingCardId = null;
+    currentCardImageData = null;
+
+    // ファイル入力をリセット
+    const fileInput = document.getElementById('cardImageInput');
+    if (fileInput) {
+      fileInput.value = '';
+    }
   };
 
   // フォーム送信
   document.getElementById('cardForm').addEventListener('submit', function(e) {
     e.preventDefault();
 
+    const approvalValue = document.getElementById('cardApproval').value;
+
     const cardData = {
       name: document.getElementById('cardName').value,
       flavor: document.getElementById('cardFlavor').value,
       description: document.getElementById('cardDescription').value,
       rarity: document.getElementById('cardRarity').value,
-      type: document.getElementById('cardType').value,
-      imageUrl: document.getElementById('cardImage').value,
-      requiresApproval: document.getElementById('cardType').value === 'message',
+      cooldown: parseInt(document.getElementById('cardCooldown').value),
+      imageUrl: currentCardImageData || '',
+      type: 'action', // デフォルト値として保持（互換性のため）
+      requiresApproval: approvalValue === 'manual',
       effectData: {}
     };
 
@@ -215,6 +339,7 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 
   // 初期表示
+  populatePackFilter();
   updateStats();
   applyFilters();
 });
