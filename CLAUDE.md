@@ -351,7 +351,7 @@ Creators can embed their live stream player and chat in the settings page:
 - **YouTube Live**: Player + Chat iframe embedding
 - **Twitch**: Player + Chat iframe embedding
 - **ツイキャス (TwitCasting)**: Player only (chat not supported by platform)
-- **ニコニコ生放送 (Niconico Live)**: Player only (chat requires premium membership)
+- **ニコニコ生放送 (Niconico Live)**: Player supported if broadcaster enables external player (ブログパーツ) in stream settings; chat requires premium membership
 
 **URL Extraction Logic**:
 ```javascript
@@ -375,7 +375,14 @@ Creators can embed their live stream player and chat in the settings page:
 **Important Notes**:
 - iframe `parent` parameter must match current hostname for Twitch
 - YouTube live chat requires `embed_domain` parameter
-- TwitCasting and Niconico have limited chat embedding support
+- TwitCasting chat embedding is not supported by the platform
+- **Niconico Live embedding requirements**:
+  - Broadcaster must enable "外部プレイヤー（ブログパーツ）許可" in stream settings (［共有］→設定)
+  - Only works for streams where broadcaster has granted external player permission
+  - Chat display requires Niconico Premium membership
+  - HTTPS-compatible embed codes work in PWA
+  - Must not modify official embed code or hide logos/ads (terms compliance)
+  - If embedding fails, fallback link to watch on Niconico Live is provided
 - Preview shows actual iframe embeds (not mock data)
 
 ## OBS Overlay Integration

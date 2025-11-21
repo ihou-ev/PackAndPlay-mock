@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function() {
     youtube: 'YouTube Live配信のURL（例: https://www.youtube.com/watch?v=xxxxx）',
     twitch: 'Twitch配信のURL（例: https://www.twitch.tv/channelname）',
     twitcasting: 'ツイキャス配信のURL（例: https://twitcasting.tv/userid）',
-    nicolive: 'ニコニコ生放送のURL（例: https://live.nicovideo.jp/watch/lvxxxxx）'
+    nicolive: 'ニコニコ生放送のURL（例: https://live.nicovideo.jp/watch/lvxxxxx）※配信者が外部プレイヤーを許可している場合のみ再生可能'
   };
 
   // プラットフォーム選択時のヘルプ更新
@@ -164,21 +164,22 @@ document.addEventListener('DOMContentLoaded', function() {
 
       case 'nicolive':
         return {
-          player: `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#fff;background:#1a1a1a;gap:1rem;padding:2rem;">
-                     <svg width="64" height="64" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+          player: `<iframe src="https://live.nicovideo.jp/embed/${info.liveId}"
+                   allowfullscreen
+                   allow="autoplay; encrypted-media"
+                   style="border:0;"></iframe>`,
+          chat: `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#fff;background:#1a1a1a;gap:1rem;padding:1.5rem;text-align:center;">
+                   <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                   </svg>
+                   <p style="margin:0;font-size:0.875rem;line-height:1.6;">コメント表示には<br>配信者の外部プレイヤー許可と<br>プレミアム会員登録が必要です</p>
+                   <a href="https://live.nicovideo.jp/watch/${info.liveId}" target="_blank" rel="noopener noreferrer"
+                      style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.625rem 1rem;background:#667eea;color:white;text-decoration:none;border-radius:0.5rem;font-weight:600;font-size:0.875rem;margin-top:0.5rem;">
+                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
                      </svg>
-                     <p style="text-align:center;margin:0 0 1rem 0;">ニコニコ生放送は<br>iframe埋め込みに対応していません</p>
-                     <a href="https://live.nicovideo.jp/watch/${info.liveId}" target="_blank" rel="noopener noreferrer"
-                        style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.75rem 1.5rem;background:#667eea;color:white;text-decoration:none;border-radius:0.5rem;font-weight:600;">
-                       <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
-                       </svg>
-                       ニコニコ生放送で視聴
-                     </a>
-                   </div>`,
-          chat: `<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#fff;background:#1a1a1a;text-align:center;padding:1rem;">
-                   <p>ニコ生はチャット埋め込みに<br>対応していません</p>
+                     ニコニコ生放送で視聴
+                   </a>
                  </div>`
         };
 
