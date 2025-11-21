@@ -376,13 +376,21 @@ Creators can embed their live stream player and chat in the settings page:
 - iframe `parent` parameter must match current hostname for Twitch
 - YouTube live chat requires `embed_domain` parameter
 - TwitCasting chat embedding is not supported by the platform
-- **Niconico Live embedding requirements**:
-  - Broadcaster must enable "外部プレイヤー（ブログパーツ）許可" in stream settings (［共有］→設定)
-  - Only works for streams where broadcaster has granted external player permission
-  - Chat display requires Niconico Premium membership
-  - HTTPS-compatible embed codes work in PWA
-  - Must not modify official embed code or hide logos/ads (terms compliance)
-  - If embedding fails, fallback link to watch on Niconico Live is provided
+- **Niconico Live embedding requirements and limitations (2025)**:
+  - **Basic requirement**: Broadcaster must enable "外部プレイヤー（ブログパーツ）許可" in stream settings (［共有］→設定)
+  - **Common playback failures**:
+    - Third-party cookie blocking (especially iOS/Safari) prevents login state from being recognized in iframe
+    - 2025 live streaming server migration causing instability in some embeds
+    - X-Frame-Options/CSP settings may reject embedding
+  - **Practical solutions implemented**:
+    - "ログイン補助" button: Opens Niconico in new tab for login, then return to PWA for playback
+    - "公式ページで開く" button: Direct link to official stream page as failover
+    - Buttons overlaid on player with semi-transparent background
+  - **Technical notes**:
+    - Use official embed code from ［共有］menu without modification
+    - Avoid hand-written old embed/ paths
+    - HTTPS-only (http:// URLs will be blocked by Mixed Content policy)
+    - Chat display requires Niconico Premium membership
 - Preview shows actual iframe embeds (not mock data)
 
 ## OBS Overlay Integration
