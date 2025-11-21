@@ -164,10 +164,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
       case 'nicolive':
         return {
-          player: `<iframe src="https://live.nicovideo.jp/embed/${info.liveId}"
+          player: `<iframe width="100%" height="100%"
+                   src="https://live.nicovideo.jp/embed/${info.liveId}"
+                   scrolling="no"
+                   frameborder="0"
+                   loading="lazy"
                    allowfullscreen
-                   allow="autoplay; encrypted-media"
-                   style="border:0;"></iframe>`,
+                   allow="autoplay; encrypted-media"></iframe>`,
           chat: `<div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;color:#fff;background:#1a1a1a;gap:1rem;padding:1.5rem;text-align:center;">
                    <svg width="48" height="48" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
