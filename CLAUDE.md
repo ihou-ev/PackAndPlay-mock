@@ -125,6 +125,11 @@ When the user selects the "ストリーマー" (Creator) role, the X login butto
 - `creator/packs/pack-detail.html` - Pack details with drop rates
 - `creator/packs/pack-open.html` - Pack opening animation
 - `dashboard/*.html` - Creator management pages
+  - `dashboard/index.html` - Dashboard overview
+  - `dashboard/cards.html` - Card management
+  - `dashboard/packs.html` - Pack management
+  - `dashboard/redemptions.html` - Card approval queue
+  - `dashboard/settings.html` - Streaming settings (OBS overlay URL, platform connections)
 - `overlay/index.html` - OBS browser source overlay
 
 **CSS Architecture**:
@@ -329,12 +334,56 @@ All major HTML pages include PWA-required meta tags:
 3. Install app via browser's "Install" button
 4. Test offline by enabling "Offline" mode in DevTools > Network tab
 
+## Streaming Settings (`dashboard/settings.html`)
+
+The streaming settings page provides creators with tools to set up their broadcast integration:
+
+### OBS Overlay URL
+- **URL Generation**: Automatically generates creator-specific overlay URL with query parameters
+- **Copy to Clipboard**: One-click copy functionality with fallback for older browsers
+- **Setup Guide**: Step-by-step instructions for adding the browser source to OBS Studio
+- **Configuration**: Recommended settings (1920x1080, transparent background)
+
+### Stream Player Embedding
+Creators can embed their live stream player and chat in the settings page:
+
+**Supported Platforms**:
+- **YouTube Live**: Player + Chat iframe embedding
+- **Twitch**: Player + Chat iframe embedding
+- **ツイキャス (TwitCasting)**: Player only (chat not supported by platform)
+- **ニコニコ生放送 (Niconico Live)**: Player only (chat requires premium membership)
+
+**URL Extraction Logic**:
+```javascript
+// YouTube: Extract video ID from watch?v= or /live/
+// Twitch: Extract channel name from URL path
+// TwitCasting: Extract user ID from URL path
+// Niconico: Extract live ID from /watch/lv...
+```
+
+**Iframe Generation**:
+- YouTube: `youtube.com/embed/{videoId}` + `youtube.com/live_chat?v={videoId}`
+- Twitch: `player.twitch.tv/?channel={channel}&parent={host}` + chat embed
+- TwitCasting: `twitcasting.tv/{userId}/embeddedplayer/`
+- Niconico: `live.nicovideo.jp/embed/{liveId}`
+
+**Storage**:
+- Saved in `localStorage.streamSettings` with platform, URL, extracted info, and embed code
+- Settings persist across page reloads
+- Can be cleared with "クリア" button
+
+**Important Notes**:
+- iframe `parent` parameter must match current hostname for Twitch
+- YouTube live chat requires `embed_domain` parameter
+- TwitCasting and Niconico have limited chat embedding support
+- Preview shows actual iframe embeds (not mock data)
+
 ## OBS Overlay Integration
 
 The overlay at `overlay/index.html` is designed for OBS Browser Source:
 - **Dimensions**: 1920x1080 (hardcoded in CSS)
 - **Background**: Transparent
-- **URL Pattern**: `http://localhost:8000/overlay/index.html`
+- **URL Pattern**: `http://localhost:8000/overlay/index.html?creator={creatorSlug}`
 
 Test controls are visible in top-right for development. In production OBS, these can be ignored or removed by deleting the `.test-controls` div.
 
