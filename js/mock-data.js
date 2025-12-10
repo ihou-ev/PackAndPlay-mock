@@ -16,6 +16,8 @@ const creators = [
     packCount: 3,
     totalSales: 850000,
     followerCount: 75000,
+    avatarUrl: 'image/tanaka_avatar.png',
+    bannerUrl: 'image/tanaka_banner.png',
     sparksConsumed: {
       today: 4500,
       week: 30000,

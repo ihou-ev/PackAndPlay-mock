@@ -321,11 +321,11 @@ function renderLiveCreators() {
             <div class="${avatarClass}">
               ${avatarContent}
             </div>
-            <span class="following-live-signal"></span>
           </div>
           <div class="following-info">
             <div class="following-name-row">
               <span class="following-name">${creator.name}</span>
+              <span class="live-badge-inline">LIVE</span>
               <span class="following-id">@${creator.slug}</span>
             </div>
             <div class="following-bio">${creator.bio || ''}</div>

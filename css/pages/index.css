@@ -188,6 +188,213 @@ body {
   font-size: 2rem;
 }
 
+/* ランキングセクション */
+.ranking-section {
+  background: linear-gradient(135deg, #2d1b3d 0%, #1a1025 100%);
+  padding: 4rem 1.5rem;
+}
+
+.ranking-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.ranking-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: white;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.ranking-subtitle {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.ranking-scroll-wrapper {
+  position: relative;
+  margin: 0 -1.5rem;
+  padding: 0 1.5rem;
+}
+
+.ranking-scroll {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 1rem;
+}
+
+.ranking-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.ranking-card {
+  flex: 0 0 280px;
+  scroll-snap-align: start;
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  text-decoration: none;
+  color: white;
+  transition: all 0.3s;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ranking-card:hover {
+  transform: translateY(-4px);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.ranking-card-header {
+  position: relative;
+  height: 80px;
+  background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 40px;
+}
+
+.ranking-card-rank {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.875rem;
+}
+
+.ranking-card-rank.rank-1 {
+  background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+  color: #2d1b3d;
+}
+
+.ranking-card-rank.rank-2 {
+  background: linear-gradient(135deg, #c0c0c0 0%, #a8a8a8 100%);
+  color: #2d1b3d;
+}
+
+.ranking-card-rank.rank-3 {
+  background: linear-gradient(135deg, #cd7f32 0%, #b87333 100%);
+  color: white;
+}
+
+.ranking-card-rank.rank-other {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.ranking-card-avatar {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #3d2a4d;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  position: absolute;
+  bottom: -36px;
+  overflow: hidden;
+}
+
+.ranking-card-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ranking-card-body {
+  padding: 48px 16px 16px;
+  text-align: center;
+}
+
+.ranking-card-name {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-card-bio {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 0.75rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-card-stats {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ranking-card-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.ranking-card-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #ef4444;
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  margin-left: 0.5rem;
+}
+
+.ranking-card-live-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+.ranking-more-link {
+  display: block;
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--primary);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.ranking-more-link:hover {
+  color: var(--accent);
+}
+
 /* 説明セクション */
 .description-section {
   background: white;

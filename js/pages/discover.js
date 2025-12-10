@@ -71,12 +71,11 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="${avatarClass}">
                 ${avatarContent}
               </div>
-              ${creator.isLive ? '<span class="live-signal"></span>' : ''}
             </div>
           </div>
           <div class="creator-card-info">
             <div class="creator-card-text">
-              <div class="creator-card-name">${creator.name}</div>
+              <div class="creator-card-name">${creator.name}${creator.isLive ? '<span class="live-badge-inline">LIVE</span>' : ''}</div>
               <div class="creator-card-id">@${creator.slug}</div>
               ${creator.bio ? `<div class="creator-card-bio">${creator.bio}</div>` : ''}
             </div>

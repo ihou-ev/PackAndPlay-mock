@@ -13,16 +13,45 @@
 .badge-live {
   background: var(--live-badge);
   color: white;
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  animation: badge-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 
-@keyframes pulse {
+@keyframes badge-pulse {
   0%, 100% {
     opacity: 1;
   }
   50% {
     opacity: 0.7;
   }
+}
+
+/* 共通LIVEバッジ（赤背景 + 白ドット） */
+.live-badge-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  background: #ef4444;
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 9999px;
+  margin-left: 0.375rem;
+  vertical-align: middle;
+}
+
+.live-badge-inline::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: white;
+  border-radius: 50%;
+  animation: live-dot-pulse 1.5s infinite;
+}
+
+@keyframes live-dot-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
 }
 
 .badge-rarity-n {

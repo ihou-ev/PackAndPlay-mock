@@ -52,10 +52,9 @@ document.addEventListener('DOMContentLoaded', function() {
               <div class="${avatarClass}">
                 ${avatarContent}
               </div>
-              ${creator.isLive ? '<span class="following-live-signal"></span>' : ''}
             </div>
             <div class="following-info">
-              <div class="following-name">${creator.name}</div>
+              <div class="following-name">${creator.name}${creator.isLive ? '<span class="live-badge-inline">LIVE</span>' : ''}</div>
               <div class="following-bio">${creator.bio || ''}</div>
             </div>
           </a>
