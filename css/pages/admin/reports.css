@@ -5,6 +5,32 @@ body {
   min-height: 100vh;
 }
 
+/* サイドバーを常に表示（デスクトップ） */
+@media (min-width: 769px) {
+  .sidebar {
+    transform: translateX(0);
+  }
+
+  .main-wrapper {
+    margin-left: 260px;
+  }
+
+  .mobile-menu-button {
+    display: none;
+  }
+}
+
+/* モバイル時はサイドバーを非表示、メニューボタンで開く */
+@media (max-width: 768px) {
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .mobile-menu-button {
+    display: flex;
+  }
+}
+
 /* サイドバーロゴのADMINバッジ */
 .sidebar-logo {
   position: relative;

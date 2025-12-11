@@ -51,7 +51,7 @@ function renderAdminSidebarNav() {
   navContainer.innerHTML = navItems.map(item => {
     const isActive = currentPath.includes(item.href);
     return `
-      <a href="${item.href}" class="sidebar-nav-item ${isActive ? 'active' : ''}">
+      <a href="${item.href}" class="sidebar-nav-link ${isActive ? 'active' : ''}">
         <span class="sidebar-nav-icon">${item.icon}</span>
         <span class="sidebar-nav-label">${item.label}</span>
       </a>
