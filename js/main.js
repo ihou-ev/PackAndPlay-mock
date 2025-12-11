@@ -302,6 +302,27 @@ function requireCreatorRole() {
   return true;
 }
 
+function requireAdminRole() {
+  if (!isLoggedIn()) {
+    showToast('ログインが必要です', 'error');
+    setTimeout(() => {
+      window.location.href = getRelativePath('index.html');
+    }, 1000);
+    return false;
+  }
+
+  const session = getCurrentSession();
+  if (session.role !== 'admin') {
+    showToast('管理者のみアクセス可能です', 'error');
+    setTimeout(() => {
+      window.location.href = getRelativePath('discover.html');
+    }, 1000);
+    return false;
+  }
+
+  return true;
+}
+
 function logout() {
   confirmAction('ログアウトしますか？', () => {
     localStorage.removeItem('session');

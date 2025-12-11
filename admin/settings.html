@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Pack&Play システム設定">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play Admin">
+  <title>システム設定 - Pack&Play Admin</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/pages/admin/settings.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+      <span class="admin-badge">ADMIN</span>
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <div class="main-wrapper">
+    <div class="admin-content">
+      <!-- ヘッダー -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">システム設定</h1>
+          <p class="admin-description">プラットフォーム全体の設定を管理</p>
+        </div>
+      </div>
+
+      <!-- 基本設定 -->
+      <div class="settings-section">
+        <h2 class="section-title">基本設定</h2>
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">サイト名</div>
+              <div class="setting-description">プラットフォームの表示名</div>
+            </div>
+            <input type="text" class="setting-input" id="siteName" value="Pack&Play">
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">メンテナンスモード</div>
+              <div class="setting-description">有効にすると一般ユーザーはアクセスできなくなります</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="maintenanceMode">
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">新規登録の許可</div>
+              <div class="setting-description">新規ユーザー登録を受け付けるかどうか</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="allowRegistration" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 手数料設定 -->
+      <div class="settings-section">
+        <h2 class="section-title">手数料設定</h2>
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">プラットフォーム手数料</div>
+              <div class="setting-description">パック販売時のプラットフォーム手数料率</div>
+            </div>
+            <div class="setting-input-group">
+              <input type="number" class="setting-input setting-input-small" id="platformFee" value="10" min="0" max="50">
+              <span class="setting-input-suffix">%</span>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">最低出金額</div>
+              <div class="setting-description">ストリーマーが出金可能な最低金額</div>
+            </div>
+            <div class="setting-input-group">
+              <span class="setting-input-prefix">¥</span>
+              <input type="number" class="setting-input setting-input-small" id="minWithdrawal" value="1000" min="100" step="100">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- パック設定 -->
+      <div class="settings-section">
+        <h2 class="section-title">パック設定</h2>
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">最低パック価格</div>
+              <div class="setting-description">パックの最低販売価格</div>
+            </div>
+            <div class="setting-input-group">
+              <span class="setting-input-prefix">¥</span>
+              <input type="number" class="setting-input setting-input-small" id="minPackPrice" value="100" min="100" step="100">
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">最高パック価格</div>
+              <div class="setting-description">パックの最高販売価格</div>
+            </div>
+            <div class="setting-input-group">
+              <span class="setting-input-prefix">¥</span>
+              <input type="number" class="setting-input setting-input-small" id="maxPackPrice" value="10000" min="100" step="100">
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">パックあたりの最大カード数</div>
+              <div class="setting-description">1パックに含められる最大カード数</div>
+            </div>
+            <input type="number" class="setting-input setting-input-small" id="maxCardsPerPack" value="10" min="1" max="20">
+          </div>
+        </div>
+      </div>
+
+      <!-- カード設定 -->
+      <div class="settings-section">
+        <h2 class="section-title">カード設定</h2>
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">カードクールダウン（N）</div>
+              <div class="setting-description">Normalカードの再使用可能までの時間（分）</div>
+            </div>
+            <div class="setting-input-group">
+              <input type="number" class="setting-input setting-input-small" id="cooldownN" value="1" min="1">
+              <span class="setting-input-suffix">分</span>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">カードクールダウン（R）</div>
+              <div class="setting-description">Rareカードの再使用可能までの時間（分）</div>
+            </div>
+            <div class="setting-input-group">
+              <input type="number" class="setting-input setting-input-small" id="cooldownR" value="5" min="1">
+              <span class="setting-input-suffix">分</span>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">カードクールダウン（SR）</div>
+              <div class="setting-description">Super Rareカードの再使用可能までの時間（分）</div>
+            </div>
+            <div class="setting-input-group">
+              <input type="number" class="setting-input setting-input-small" id="cooldownSR" value="10" min="1">
+              <span class="setting-input-suffix">分</span>
+            </div>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">カードクールダウン（UR）</div>
+              <div class="setting-description">Ultra Rareカードの再使用可能までの時間（分）</div>
+            </div>
+            <div class="setting-input-group">
+              <input type="number" class="setting-input setting-input-small" id="cooldownUR" value="30" min="1">
+              <span class="setting-input-suffix">分</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 通知設定 -->
+      <div class="settings-section">
+        <h2 class="section-title">通知設定</h2>
+        <div class="settings-card">
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">管理者メール通知</div>
+              <div class="setting-description">重要なイベント時にメール通知を受け取る</div>
+            </div>
+            <label class="toggle-switch">
+              <input type="checkbox" id="adminEmailNotify" checked>
+              <span class="toggle-slider"></span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <div class="setting-info">
+              <div class="setting-label">通知先メールアドレス</div>
+              <div class="setting-description">管理者通知の送信先</div>
+            </div>
+            <input type="email" class="setting-input" id="adminEmail" value="admin@packandplay.com">
+          </div>
+        </div>
+      </div>
+
+      <!-- 保存ボタン -->
+      <div class="settings-actions">
+        <button type="button" class="button button-secondary" onclick="resetSettings()">リセット</button>
+        <button type="button" class="button button-primary" onclick="saveSettings()">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+          </svg>
+          設定を保存
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト -->
+  <script src="../js/services/storage.js"></script>
+  <script src="../js/core/utils.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/pages/admin/settings.js"></script>
+</body>
+</html>

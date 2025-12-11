@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Pack&Play レポート・分析">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play Admin">
+  <title>レポート - Pack&Play Admin</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/pages/admin/reports.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+      <span class="admin-badge">ADMIN</span>
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <div class="main-wrapper">
+    <div class="admin-content">
+      <!-- ヘッダー -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">レポート</h1>
+          <p class="admin-description">売上・利用状況の分析</p>
+        </div>
+        <div class="header-actions">
+          <select id="periodFilter" class="filter-select" onchange="changePeriod()">
+            <option value="today">今日</option>
+            <option value="week" selected>今週</option>
+            <option value="month">今月</option>
+            <option value="year">今年</option>
+            <option value="all">全期間</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- サマリーカード -->
+      <div class="summary-grid">
+        <div class="summary-card summary-card-primary">
+          <div class="summary-icon">
+            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+          </div>
+          <div class="summary-content">
+            <div class="summary-label">総売上</div>
+            <div class="summary-value" id="totalRevenue">¥0</div>
+            <div class="summary-change positive" id="revenueChange">+0%</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+            </svg>
+          </div>
+          <div class="summary-content">
+            <div class="summary-label">パック販売数</div>
+            <div class="summary-value" id="totalPacksSold">0</div>
+            <div class="summary-change positive" id="packsSoldChange">+0%</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+          </div>
+          <div class="summary-content">
+            <div class="summary-label">新規ユーザー</div>
+            <div class="summary-value" id="newUsers">0</div>
+            <div class="summary-change positive" id="newUsersChange">+0%</div>
+          </div>
+        </div>
+        <div class="summary-card">
+          <div class="summary-icon">
+            <svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
+            </svg>
+          </div>
+          <div class="summary-content">
+            <div class="summary-label">アクティブ配信者</div>
+            <div class="summary-value" id="activeStreamers">0</div>
+            <div class="summary-change" id="streamersChange">+0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- グラフセクション -->
+      <div class="section">
+        <h2 class="section-title">売上推移</h2>
+        <div class="chart-container">
+          <div class="chart-placeholder" id="revenueChart">
+            <!-- モックチャート -->
+            <div class="mock-chart">
+              <div class="mock-chart-bars">
+                <div class="mock-chart-bar" style="height: 60%"><span>月</span></div>
+                <div class="mock-chart-bar" style="height: 75%"><span>火</span></div>
+                <div class="mock-chart-bar" style="height: 45%"><span>水</span></div>
+                <div class="mock-chart-bar" style="height: 90%"><span>木</span></div>
+                <div class="mock-chart-bar" style="height: 65%"><span>金</span></div>
+                <div class="mock-chart-bar" style="height: 80%"><span>土</span></div>
+                <div class="mock-chart-bar active" style="height: 70%"><span>日</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ランキングセクション -->
+      <div class="rankings-grid">
+        <div class="section">
+          <h2 class="section-title">売上トップ ストリーマー</h2>
+          <div class="ranking-list" id="topCreatorsList">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+        <div class="section">
+          <h2 class="section-title">人気パック</h2>
+          <div class="ranking-list" id="topPacksList">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+      </div>
+
+      <!-- 詳細統計 -->
+      <div class="section">
+        <h2 class="section-title">詳細統計</h2>
+        <div class="detail-stats-grid">
+          <div class="detail-stat-card">
+            <div class="detail-stat-header">
+              <span class="detail-stat-title">プラットフォーム手数料</span>
+            </div>
+            <div class="detail-stat-value" id="platformFee">¥0</div>
+            <div class="detail-stat-description">総売上の10%</div>
+          </div>
+          <div class="detail-stat-card">
+            <div class="detail-stat-header">
+              <span class="detail-stat-title">ストリーマー収益</span>
+            </div>
+            <div class="detail-stat-value" id="creatorRevenue">¥0</div>
+            <div class="detail-stat-description">総売上の90%</div>
+          </div>
+          <div class="detail-stat-card">
+            <div class="detail-stat-header">
+              <span class="detail-stat-title">平均購入額</span>
+            </div>
+            <div class="detail-stat-value" id="avgPurchase">¥0</div>
+            <div class="detail-stat-description">1回あたりの購入額</div>
+          </div>
+          <div class="detail-stat-card">
+            <div class="detail-stat-header">
+              <span class="detail-stat-title">カード使用率</span>
+            </div>
+            <div class="detail-stat-value" id="cardUsageRate">0%</div>
+            <div class="detail-stat-description">取得カードの使用割合</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト -->
+  <script src="../js/services/storage.js"></script>
+  <script src="../js/core/utils.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/pages/admin/reports.js"></script>
+</body>
+</html>

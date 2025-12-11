@@ -1,0 +1,547 @@
+/* admin/reports.html専用スタイル */
+
+body {
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+/* サイドバーロゴのADMINバッジ */
+.sidebar-logo {
+  position: relative;
+}
+
+.admin-badge {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+  color: white;
+  font-size: 0.625rem;
+  font-weight: 700;
+  padding: 0.125rem 0.5rem;
+  border-radius: 0.25rem;
+  letter-spacing: 0.05em;
+}
+
+/* メインコンテンツ */
+.admin-content {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 1.5rem 1rem 3rem;
+}
+
+/* ヘッダー */
+.admin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.admin-header-info {
+  flex: 1;
+}
+
+.admin-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #2d1b3d;
+  margin: 0 0 0.5rem 0;
+}
+
+.admin-description {
+  font-size: 0.9375rem;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* 期間選択 */
+.period-selector {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.period-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.period-button:hover {
+  border-color: #d1d5db;
+  color: #374151;
+}
+
+.period-button.active {
+  background: #667eea;
+  border-color: #667eea;
+  color: white;
+}
+
+/* KPIグリッド */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.kpi-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.kpi-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+}
+
+.kpi-icon-sales {
+  background: #dcfce7;
+}
+
+.kpi-icon-transactions {
+  background: #dbeafe;
+}
+
+.kpi-icon-users {
+  background: #fef3c7;
+}
+
+.kpi-icon-creators {
+  background: #fce7f3;
+}
+
+.kpi-label {
+  font-size: 0.8125rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.kpi-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 0.25rem;
+}
+
+.kpi-change {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.125rem 0.375rem;
+  border-radius: 0.25rem;
+}
+
+.kpi-change-positive {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.kpi-change-negative {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.kpi-change-neutral {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+/* チャートセクション */
+.chart-section {
+  margin-bottom: 2rem;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2d1b3d;
+  margin: 0 0 1rem 0;
+}
+
+.chart-card {
+  background: white;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* チャートプレースホルダー */
+.chart-placeholder {
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border-radius: 0.5rem;
+  padding: 3rem;
+  text-align: center;
+  color: #6b7280;
+}
+
+.chart-placeholder-icon {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.chart-placeholder-text {
+  font-size: 0.875rem;
+}
+
+/* 簡易棒グラフ */
+.bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.bar-label {
+  width: 80px;
+  font-size: 0.8125rem;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.bar-wrapper {
+  flex: 1;
+  height: 24px;
+  background: #f3f4f6;
+  border-radius: 0.25rem;
+  overflow: hidden;
+}
+
+.bar {
+  height: 100%;
+  border-radius: 0.25rem;
+  transition: width 0.5s ease-out;
+}
+
+.bar-sales {
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+}
+
+.bar-transactions {
+  background: linear-gradient(90deg, #3b82f6 0%, #2563eb 100%);
+}
+
+.bar-value {
+  width: 80px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #374151;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ランキングセクション */
+.rankings-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ranking-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.ranking-card-header {
+  padding: 1rem;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.ranking-card-title {
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: #2d1b3d;
+  margin: 0;
+}
+
+.ranking-list {
+  padding: 0.5rem 0;
+}
+
+.ranking-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 1rem;
+}
+
+.ranking-position {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.ranking-position-1 {
+  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  color: white;
+}
+
+.ranking-position-2 {
+  background: linear-gradient(135deg, #9ca3af 0%, #6b7280 100%);
+  color: white;
+}
+
+.ranking-position-3 {
+  background: linear-gradient(135deg, #d97706 0%, #b45309 100%);
+  color: white;
+}
+
+.ranking-position-default {
+  background: #f3f4f6;
+  color: #6b7280;
+}
+
+.ranking-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.75rem;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.ranking-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ranking-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.ranking-name {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ranking-value {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #667eea;
+  flex-shrink: 0;
+}
+
+/* 最近の取引 */
+.transactions-section {
+  margin-bottom: 2rem;
+}
+
+.transactions-card {
+  background: white;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.transactions-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transactions-table th {
+  padding: 0.875rem 1rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: #6b7280;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.transactions-table td {
+  padding: 0.75rem 1rem;
+  font-size: 0.8125rem;
+  color: #374151;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.transactions-table tr:last-child td {
+  border-bottom: none;
+}
+
+.transaction-type {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+}
+
+.transaction-type-purchase {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.transaction-type-withdrawal {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.transaction-type-refund {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.transaction-amount {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.transaction-amount-positive {
+  color: #166534;
+}
+
+.transaction-amount-negative {
+  color: #991b1b;
+}
+
+/* エクスポートボタン */
+.export-actions {
+  display: flex;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.export-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  background: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.export-button:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.export-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* レスポンシブ */
+@media (min-width: 640px) {
+  .kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-header {
+    flex-direction: column;
+  }
+
+  .period-selector {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .rankings-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .transactions-card {
+    overflow-x: auto;
+  }
+
+  .transactions-table {
+    min-width: 500px;
+  }
+
+  .export-actions {
+    flex-direction: column;
+  }
+
+  .export-button {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content {
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .kpi-grid {
+    gap: 0.5rem;
+  }
+
+  .kpi-card {
+    padding: 1rem;
+  }
+
+  .kpi-value {
+    font-size: 1.5rem;
+  }
+
+  .period-selector {
+    flex-wrap: wrap;
+  }
+
+  .period-button {
+    flex: 1;
+    min-width: calc(50% - 0.25rem);
+    text-align: center;
+  }
+}

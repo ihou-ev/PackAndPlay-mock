@@ -96,6 +96,7 @@
       <div class="action-panel">
         <div class="action-tabs">
           <button type="button" class="action-tab active" id="overviewTab" onclick="switchActionTab('overview')">概要</button>
+          <button type="button" class="action-tab" id="chatTab" onclick="switchActionTab('chat')" style="display: none;">チャット</button>
           <button type="button" class="action-tab" onclick="switchActionTab('cards')">カード</button>
           <button type="button" class="action-tab" onclick="switchActionTab('splash')">スプラッシュ</button>
           <button type="button" class="action-tab" onclick="switchActionTab('packs')">パック</button>
@@ -103,20 +104,27 @@
 
         <!-- 概要タブ -->
         <div class="action-content active" id="overviewContent">
-          <div class="stream-description-wrapper">
-            <div class="stream-description-content collapsed" id="streamDescription">
-              <!-- JavaScriptで動的に生成 -->
-            </div>
-            <div class="stream-description-fade" id="streamDescriptionFade"></div>
+          <div class="stream-description-content" id="streamDescription">
+            <!-- JavaScriptで動的に生成 -->
           </div>
-          <button type="button" class="stream-description-toggle" id="streamDescriptionToggle" onclick="toggleDescription()" style="display: none;">
-            <span id="toggleText">もっと見る</span>
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
           <div class="stream-description-empty" id="streamDescriptionEmpty" style="display: none;">
             配信概要はありません
+          </div>
+        </div>
+
+        <!-- チャットタブ（YouTube/Twitch対応時のみ表示） -->
+        <div class="action-content" id="chatContent">
+          <div class="chat-embed-wrapper" id="chatEmbedWrapper">
+            <iframe
+              id="streamChat"
+              class="chat-embed-frame"
+              src=""
+              allowfullscreen>
+            </iframe>
+          </div>
+          <div class="chat-unavailable" id="chatUnavailable" style="display: none;">
+            <div class="chat-unavailable-icon">💬</div>
+            <div class="chat-unavailable-text">このプラットフォームはチャット埋め込みに対応していません</div>
           </div>
         </div>
 
@@ -211,8 +219,9 @@
   <div class="use-card-modal" id="useCardModal">
     <div class="use-card-modal-content">
       <div class="use-card-modal-header">
-        <div class="use-card-modal-icon">🎴</div>
-        <div class="use-card-modal-title">カード使用の確認</div>
+        <div class="use-card-modal-icon" id="useCardModalIcon">🎴</div>
+        <div class="use-card-modal-title" id="useCardModalTitle">カード使用の確認</div>
+        <div class="badge" id="useCardModalBadge"></div>
       </div>
       <div class="use-card-modal-message" id="useCardModalMessage"></div>
       <div class="use-card-modal-buttons">

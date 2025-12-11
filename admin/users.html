@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Pack&Play ユーザー管理">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play Admin">
+  <title>ユーザー管理 - Pack&Play Admin</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/pages/admin/users.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+      <span class="admin-badge">ADMIN</span>
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <div class="main-wrapper">
+    <div class="admin-content">
+      <!-- ヘッダー -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">ユーザー管理</h1>
+          <p class="admin-description">登録ユーザーの管理と監視</p>
+        </div>
+      </div>
+
+      <!-- 統計カード -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">総ユーザー</div>
+            <div class="stat-value" id="totalUsers">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">アクティブ</div>
+            <div class="stat-value stat-value-success" id="activeUsers">0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">停止中</div>
+            <div class="stat-value stat-value-warning" id="suspendedUsers">0</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- フィルター -->
+      <div class="filters-section">
+        <div class="search-box">
+          <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="名前・メールで検索..." oninput="applyFilters()">
+        </div>
+        <div class="filters-row">
+          <select id="roleFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべてのロール</option>
+            <option value="viewer">視聴者</option>
+            <option value="creator">ストリーマー</option>
+          </select>
+          <select id="statusFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべてのステータス</option>
+            <option value="active">アクティブ</option>
+            <option value="suspended">停止中</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- ユーザーリスト -->
+      <div class="user-list" id="userList">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
+
+      <!-- 空状態 -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">👤</div>
+        <div class="empty-state-text">ユーザーが見つかりません</div>
+        <div class="empty-state-subtext">検索条件を変更してください</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ユーザー詳細モーダル -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeUserModal()">&times;</button>
+      <div class="modal-body">
+        <div class="user-detail-header">
+          <div class="user-detail-avatar" id="modalUserAvatar">U</div>
+          <div class="user-detail-info">
+            <h3 class="user-detail-name" id="modalUserName">ユーザー名</h3>
+            <div class="user-detail-email" id="modalUserEmail">email@example.com</div>
+            <div class="user-detail-badges">
+              <span class="badge" id="modalUserRole">視聴者</span>
+              <span class="badge" id="modalUserStatus">アクティブ</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-detail-section">
+          <h4 class="user-detail-section-title">アカウント情報</h4>
+          <div class="user-detail-grid">
+            <div class="user-detail-item">
+              <div class="user-detail-label">登録日</div>
+              <div class="user-detail-value" id="modalUserRegistered">-</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">最終ログイン</div>
+              <div class="user-detail-value" id="modalUserLastLogin">-</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">ログイン方法</div>
+              <div class="user-detail-value" id="modalUserLoginMethod">-</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">所持コイン</div>
+              <div class="user-detail-value" id="modalUserCoins">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="user-detail-section">
+          <h4 class="user-detail-section-title">利用統計</h4>
+          <div class="user-detail-grid">
+            <div class="user-detail-item">
+              <div class="user-detail-label">購入パック数</div>
+              <div class="user-detail-value" id="modalUserPacks">0</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">所持カード数</div>
+              <div class="user-detail-value" id="modalUserCards">0</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">総購入額</div>
+              <div class="user-detail-value" id="modalUserSpent">¥0</div>
+            </div>
+            <div class="user-detail-item">
+              <div class="user-detail-label">フォロー数</div>
+              <div class="user-detail-value" id="modalUserFollowing">0</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="button button-secondary" onclick="closeUserModal()">閉じる</button>
+          <button type="button" class="button button-warning" id="modalSuspendBtn" onclick="toggleUserSuspend()">アカウント停止</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 確認モーダル -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal modal-small">
+      <div class="modal-body">
+        <div class="confirm-icon" id="confirmIcon">⚠️</div>
+        <h3 class="confirm-title" id="confirmTitle">確認</h3>
+        <p class="confirm-message" id="confirmMessage">この操作を実行しますか？</p>
+        <div class="modal-actions">
+          <button type="button" class="button button-secondary" onclick="closeConfirmModal()">キャンセル</button>
+          <button type="button" class="button button-danger" id="confirmBtn">実行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト -->
+  <script src="../js/services/storage.js"></script>
+  <script src="../js/core/utils.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/pages/admin/users.js"></script>
+</body>
+</html>

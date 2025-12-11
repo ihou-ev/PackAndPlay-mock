@@ -3,12 +3,17 @@ const urlParams = new URLSearchParams(window.location.search);
 const role = urlParams.get('role') || 'viewer';
 
 // ロールに応じた表示を設定
-const roleText = role === 'creator' ? 'ストリーマー' : '視聴者';
+const roleTextMap = {
+  'creator': 'ストリーマー',
+  'admin': '管理者',
+  'viewer': '視聴者'
+};
+const roleText = roleTextMap[role] || '視聴者';
 
 document.getElementById('loginTitle').textContent = `${roleText}としてログイン`;
 
-// ストリーマーの場合はXボタンを非表示
-if (role === 'creator') {
+// ストリーマーまたは管理者の場合はXボタンを非表示
+if (role === 'creator' || role === 'admin') {
   document.getElementById('xPlatformBtn').style.display = 'none';
 }
 
@@ -53,7 +58,9 @@ function selectPlatform(platform) {
 
     // リダイレクト
     setTimeout(() => {
-      if (role === 'creator') {
+      if (role === 'admin') {
+        window.location.href = 'admin/index.html';
+      } else if (role === 'creator') {
         window.location.href = 'dashboard/index.html';
       } else {
         window.location.href = 'profile.html';
@@ -67,7 +74,9 @@ const session = loadFromStorage('session');
 if (session && session.isLoggedIn) {
   showToast('既にログインしています', 'info');
   setTimeout(() => {
-    if (session.role === 'creator') {
+    if (session.role === 'admin') {
+      window.location.href = 'admin/index.html';
+    } else if (session.role === 'creator') {
       window.location.href = 'dashboard/index.html';
     } else {
       window.location.href = 'profile.html';

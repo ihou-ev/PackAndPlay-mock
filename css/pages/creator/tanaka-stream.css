@@ -139,6 +139,43 @@ body {
   font-weight: 700;
 }
 
+/* チャットタブ埋め込み */
+.chat-embed-wrapper {
+  width: 100%;
+  height: 350px;
+  background: #1a1a1a;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.chat-embed-frame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #1a1a1a;
+}
+
+.chat-unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  color: #9ca3af;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.chat-unavailable-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.chat-unavailable-text {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
 /* 配信情報バー（モバイル） */
 .stream-info-bar {
   background: white;
@@ -223,65 +260,6 @@ body {
   line-height: 1.6;
   white-space: pre-wrap;
   word-wrap: break-word;
-  position: relative;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  padding-bottom: 0.5rem;
-}
-
-.stream-description-content.collapsed {
-  max-height: 4.8rem; /* 約3行分 */
-}
-
-.stream-description-content.expanded {
-  max-height: none;
-}
-
-.stream-description-wrapper {
-  position: relative;
-}
-
-.stream-description-fade {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2rem;
-  background: linear-gradient(to bottom, transparent, white);
-  pointer-events: none;
-}
-
-.stream-description-content.expanded + .stream-description-fade {
-  display: none;
-}
-
-.stream-description-toggle {
-  margin-top: 0.5rem;
-  background: transparent;
-  border: none;
-  color: #FF1B8D;
-  font-weight: 600;
-  font-size: 0.875rem;
-  cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  gap: 0.25rem;
-  transition: opacity 0.2s;
-}
-
-.stream-description-toggle:hover {
-  opacity: 0.8;
-}
-
-.stream-description-toggle svg {
-  width: 16px;
-  height: 16px;
-  transition: transform 0.3s ease;
-}
-
-.stream-description-toggle.expanded svg {
-  transform: rotate(180deg);
 }
 
 .stream-description-empty {

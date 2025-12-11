@@ -92,7 +92,9 @@ const session = loadFromStorage('session');
 if (session && session.isLoggedIn) {
   showToast('既にログインしています', 'info');
   setTimeout(() => {
-    if (session.role === 'creator') {
+    if (session.role === 'admin') {
+      window.location.href = 'admin/index.html';
+    } else if (session.role === 'creator') {
       window.location.href = 'dashboard/index.html';
     } else {
       window.location.href = 'profile.html';

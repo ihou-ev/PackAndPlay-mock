@@ -351,21 +351,18 @@ Creators can embed their live stream player and chat in the settings page:
 - **YouTube Live**: Player + Chat iframe embedding
 - **Twitch**: Player + Chat iframe embedding
 - **ツイキャス (TwitCasting)**: Player only (chat not supported by platform)
-- **ニコニコ生放送 (Niconico Live)**: Player supported if broadcaster enables external player (ブログパーツ) in stream settings; chat requires premium membership
 
 **URL Extraction Logic**:
 ```javascript
 // YouTube: Extract video ID from watch?v= or /live/
 // Twitch: Extract channel name from URL path
 // TwitCasting: Extract user ID from URL path
-// Niconico: Extract live ID from /watch/lv...
 ```
 
 **Iframe Generation**:
 - YouTube: `youtube.com/embed/{videoId}` + `youtube.com/live_chat?v={videoId}`
 - Twitch: `player.twitch.tv/?channel={channel}&parent={host}` + chat embed
 - TwitCasting: `twitcasting.tv/{userId}/embeddedplayer/`
-- Niconico: `live.nicovideo.jp/embed/{liveId}`
 
 **Storage**:
 - Saved in `localStorage.streamSettings` with platform, URL, extracted info, and embed code
@@ -376,21 +373,6 @@ Creators can embed their live stream player and chat in the settings page:
 - iframe `parent` parameter must match current hostname for Twitch
 - YouTube live chat requires `embed_domain` parameter
 - TwitCasting chat embedding is not supported by the platform
-- **Niconico Live embedding requirements and limitations (2025)**:
-  - **Basic requirement**: Broadcaster must enable "外部プレイヤー（ブログパーツ）許可" in stream settings (［共有］→設定)
-  - **Common playback failures**:
-    - Third-party cookie blocking (especially iOS/Safari) prevents login state from being recognized in iframe
-    - 2025 live streaming server migration causing instability in some embeds
-    - X-Frame-Options/CSP settings may reject embedding
-  - **Practical solutions implemented**:
-    - "ログイン補助" button: Opens Niconico in new tab for login, then return to PWA for playback
-    - "公式ページで開く" button: Direct link to official stream page as failover
-    - Buttons overlaid on player with semi-transparent background
-  - **Technical notes**:
-    - Use official embed code from ［共有］menu without modification
-    - Avoid hand-written old embed/ paths
-    - HTTPS-only (http:// URLs will be blocked by Mixed Content policy)
-    - Chat display requires Niconico Premium membership
 - Preview shows actual iframe embeds (not mock data)
 
 ## OBS Overlay Integration

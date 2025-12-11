@@ -219,11 +219,64 @@ function initFollowButton() {
   }
 }
 
+// 配信プラットフォームとチャットURLを検出
+function detectStreamPlatform(streamUrl) {
+  if (!streamUrl) return { platform: null, chatUrl: null };
+
+  const host = window.location.hostname;
+
+  // YouTube embed URL
+  if (streamUrl.includes('youtube.com/embed/')) {
+    const match = streamUrl.match(/youtube\.com\/embed\/([^?&]+)/);
+    if (match) {
+      const videoId = match[1];
+      // live_streamの場合はチャンネルIDがあるのでスキップ
+      if (videoId === 'live_stream') {
+        const channelMatch = streamUrl.match(/channel=([^&]+)/);
+        if (channelMatch) {
+          // チャンネルライブストリームの場合、チャットURL生成が難しいのでスキップ
+          return { platform: 'youtube', chatUrl: null };
+        }
+      }
+      return {
+        platform: 'youtube',
+        chatUrl: `https://www.youtube.com/live_chat?v=${videoId}&embed_domain=${host}`
+      };
+    }
+  }
+
+  // Twitch player URL
+  if (streamUrl.includes('player.twitch.tv')) {
+    const match = streamUrl.match(/channel=([^&]+)/);
+    if (match) {
+      const channel = match[1];
+      return {
+        platform: 'twitch',
+        chatUrl: `https://www.twitch.tv/embed/${channel}/chat?parent=${host}&darkpopout`
+      };
+    }
+  }
+
+  // TwitCasting - チャット非対応
+  if (streamUrl.includes('twitcasting.tv')) {
+    return { platform: 'twitcasting', chatUrl: null };
+  }
+
+  return { platform: null, chatUrl: null };
+}
+
+// チャット対応状態を保持
+let chatSupported = false;
+
 // 配信プレイヤーの設定
 function setupStreamPlayer() {
   const player = document.getElementById('streamPlayer');
   const offline = document.getElementById('streamOffline');
   const liveSignal = document.getElementById('liveSignal');
+  const chatTab = document.getElementById('chatTab');
+  const chatFrame = document.getElementById('streamChat');
+  const chatWrapper = document.getElementById('chatEmbedWrapper');
+  const chatUnavailable = document.getElementById('chatUnavailable');
 
   console.log('Creator:', creator);
   console.log('isLive:', creator.isLive);
@@ -243,6 +296,25 @@ function setupStreamPlayer() {
       console.error('liveSignal element not found');
     }
 
+    // チャット埋め込みの設定
+    const { platform, chatUrl } = detectStreamPlatform(creator.streamUrl);
+    console.log('Stream platform:', platform, 'Chat URL:', chatUrl);
+
+    if (chatUrl) {
+      // チャット対応プラットフォーム（YouTube/Twitch）
+      chatSupported = true;
+      chatTab.style.display = 'block';
+      chatFrame.src = chatUrl;
+      chatWrapper.style.display = 'block';
+      chatUnavailable.style.display = 'none';
+    } else {
+      // チャット非対応（TwitCasting等）
+      chatSupported = false;
+      chatTab.style.display = 'none';
+      chatWrapper.style.display = 'none';
+      chatUnavailable.style.display = 'flex';
+    }
+
     // 配信概要を設定
     if (creator.streamDescription) {
       setupStreamDescription(creator.streamDescription);
@@ -253,6 +325,7 @@ function setupStreamPlayer() {
     // 配信していない場合
     player.style.display = 'none';
     offline.style.display = 'flex';
+    chatTab.style.display = 'none';
 
     // LIVE信号を非表示
     if (liveSignal) {
@@ -273,63 +346,17 @@ function updateFollowerCount() {
 // 空の概要表示
 function showEmptyDescription() {
   document.getElementById('streamDescription').style.display = 'none';
-  document.getElementById('streamDescriptionToggle').style.display = 'none';
-  document.getElementById('streamDescriptionFade').style.display = 'none';
   document.getElementById('streamDescriptionEmpty').style.display = 'block';
 }
 
 // 配信概要のセットアップ
 function setupStreamDescription(description) {
   const descriptionElement = document.getElementById('streamDescription');
-  const toggleButton = document.getElementById('streamDescriptionToggle');
-  const fade = document.getElementById('streamDescriptionFade');
   const emptyElement = document.getElementById('streamDescriptionEmpty');
 
   descriptionElement.textContent = description;
   descriptionElement.style.display = 'block';
   emptyElement.style.display = 'none';
-
-  // 高さをチェックして、3行を超える場合はトグルボタンを表示
-  setTimeout(() => {
-    const lineHeight = parseFloat(getComputedStyle(descriptionElement).lineHeight);
-    const maxHeight = lineHeight * 3;
-
-    if (descriptionElement.scrollHeight > maxHeight) {
-      toggleButton.style.display = 'flex';
-      fade.style.display = 'block';
-    } else {
-      toggleButton.style.display = 'none';
-      fade.style.display = 'none';
-      descriptionElement.classList.remove('collapsed');
-      descriptionElement.classList.add('expanded');
-    }
-  }, 0);
-}
-
-// 配信概要の展開/折りたたみ
-function toggleDescription() {
-  const descriptionElement = document.getElementById('streamDescription');
-  const toggleButton = document.getElementById('streamDescriptionToggle');
-  const toggleText = document.getElementById('toggleText');
-  const fade = document.getElementById('streamDescriptionFade');
-
-  const isExpanded = descriptionElement.classList.contains('expanded');
-
-  if (isExpanded) {
-    // 折りたたむ
-    descriptionElement.classList.remove('expanded');
-    descriptionElement.classList.add('collapsed');
-    toggleButton.classList.remove('expanded');
-    toggleText.textContent = 'もっと見る';
-    fade.style.display = 'block';
-  } else {
-    // 展開する
-    descriptionElement.classList.remove('collapsed');
-    descriptionElement.classList.add('expanded');
-    toggleButton.classList.add('expanded');
-    toggleText.textContent = '閉じる';
-    fade.style.display = 'none';
-  }
 }
 
 
@@ -698,6 +725,8 @@ function switchActionTab(tab) {
 
   if (tab === 'overview') {
     document.getElementById('overviewContent').classList.add('active');
+  } else if (tab === 'chat') {
+    document.getElementById('chatContent').classList.add('active');
   } else if (tab === 'cards') {
     document.getElementById('cardsContent').classList.add('active');
   } else if (tab === 'splash') {
