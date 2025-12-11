@@ -4,21 +4,20 @@
 
 // モックユーザーデータ
 const mockUsers = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-15', purchases: 5 },
-  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-20', purchases: 12 },
-  { id: 3, name: '佐藤健太', email: 'sato@example.com', role: 'creator', status: 'active', joinedAt: '2025-01-10', purchases: 0 },
-  { id: 4, name: '山田美咲', email: 'yamada@example.com', role: 'viewer', status: 'suspended', joinedAt: '2025-03-05', purchases: 2 },
-  { id: 5, name: '伊藤翔', email: 'ito@example.com', role: 'viewer', status: 'active', joinedAt: '2025-03-10', purchases: 8 },
-  { id: 6, name: '渡辺真理', email: 'watanabe@example.com', role: 'creator', status: 'active', joinedAt: '2025-02-01', purchases: 0 },
-  { id: 7, name: '高橋悠', email: 'takahashi@example.com', role: 'viewer', status: 'pending', joinedAt: '2025-03-18', purchases: 0 },
-  { id: 8, name: '小林愛', email: 'kobayashi@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-25', purchases: 15 },
-  { id: 9, name: '加藤大輔', email: 'kato@example.com', role: 'admin', status: 'active', joinedAt: '2025-01-01', purchases: 0 },
-  { id: 10, name: '吉田麻衣', email: 'yoshida@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-28', purchases: 3 }
+  { id: 1, name: '田中太郎', email: 'tanaka@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-15', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 1500, packs: 5, cards: 23, spent: 2500, following: 8 },
+  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-20', lastLogin: '2025-03-19', loginMethod: 'Twitch', coins: 800, packs: 12, cards: 45, spent: 6000, following: 15 },
+  { id: 3, name: '佐藤健太', email: 'sato@example.com', role: 'creator', status: 'active', joinedAt: '2025-01-10', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 3 },
+  { id: 4, name: '山田美咲', email: 'yamada@example.com', role: 'viewer', status: 'suspended', joinedAt: '2025-03-05', lastLogin: '2025-03-10', loginMethod: 'YouTube', coins: 200, packs: 2, cards: 8, spent: 1000, following: 5 },
+  { id: 5, name: '伊藤翔', email: 'ito@example.com', role: 'viewer', status: 'active', joinedAt: '2025-03-10', lastLogin: '2025-03-18', loginMethod: 'Twitch', coins: 2000, packs: 8, cards: 32, spent: 4000, following: 12 },
+  { id: 6, name: '渡辺真理', email: 'watanabe@example.com', role: 'creator', status: 'active', joinedAt: '2025-02-01', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 7 },
+  { id: 7, name: '高橋悠', email: 'takahashi@example.com', role: 'viewer', status: 'active', joinedAt: '2025-03-18', lastLogin: '2025-03-19', loginMethod: 'X', coins: 500, packs: 1, cards: 4, spent: 500, following: 2 },
+  { id: 8, name: '小林愛', email: 'kobayashi@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-25', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 3000, packs: 15, cards: 67, spent: 7500, following: 20 },
+  { id: 9, name: '加藤大輔', email: 'kato@example.com', role: 'admin', status: 'active', joinedAt: '2025-01-01', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 0 },
+  { id: 10, name: '吉田麻衣', email: 'yoshida@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-28', lastLogin: '2025-03-17', loginMethod: 'Twitch', coins: 1200, packs: 3, cards: 12, spent: 1500, following: 6 }
 ];
 
 let filteredUsers = [...mockUsers];
-let currentPage = 1;
-const perPage = 10;
+let currentUserId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // ログイン・管理者権限チェック
@@ -32,10 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   updateStatsSummary();
 
   // ユーザー一覧を表示
-  renderUsers();
-
-  // イベントリスナーを設定
-  setupEventListeners();
+  renderUserList();
 });
 
 /**
@@ -71,44 +67,17 @@ function renderAdminSidebarNav() {
 function updateStatsSummary() {
   const totalUsers = mockUsers.length;
   const activeUsers = mockUsers.filter(u => u.status === 'active').length;
-  const viewerCount = mockUsers.filter(u => u.role === 'viewer').length;
-  const creatorCount = mockUsers.filter(u => u.role === 'creator').length;
+  const suspendedUsers = mockUsers.filter(u => u.status === 'suspended').length;
 
   document.getElementById('totalUsers').textContent = totalUsers;
   document.getElementById('activeUsers').textContent = activeUsers;
-  document.getElementById('viewerCount').textContent = viewerCount;
-  document.getElementById('creatorCount').textContent = creatorCount;
+  document.getElementById('suspendedUsers').textContent = suspendedUsers;
 }
 
 /**
- * イベントリスナーを設定
+ * フィルターを適用
  */
-function setupEventListeners() {
-  // 検索入力
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', debounce(() => {
-      filterUsers();
-    }, 300));
-  }
-
-  // ロールフィルタ
-  const roleFilter = document.getElementById('roleFilter');
-  if (roleFilter) {
-    roleFilter.addEventListener('change', filterUsers);
-  }
-
-  // ステータスフィルタ
-  const statusFilter = document.getElementById('statusFilter');
-  if (statusFilter) {
-    statusFilter.addEventListener('change', filterUsers);
-  }
-}
-
-/**
- * ユーザーをフィルタリング
- */
-function filterUsers() {
+function applyFilters() {
   const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
   const roleFilter = document.getElementById('roleFilter')?.value || '';
   const statusFilter = document.getElementById('statusFilter')?.value || '';
@@ -124,174 +93,46 @@ function filterUsers() {
     return matchesSearch && matchesRole && matchesStatus;
   });
 
-  currentPage = 1;
-  renderUsers();
+  renderUserList();
 }
 
 /**
  * ユーザー一覧を表示
  */
-function renderUsers() {
-  renderUsersTable();
-  renderUsersCards();
-  renderPagination();
-}
-
-/**
- * テーブル形式でユーザーを表示
- */
-function renderUsersTable() {
-  const tbody = document.getElementById('usersTableBody');
+function renderUserList() {
+  const container = document.getElementById('userList');
   const emptyState = document.getElementById('emptyState');
 
-  if (!tbody) return;
-
-  const start = (currentPage - 1) * perPage;
-  const end = start + perPage;
-  const pageUsers = filteredUsers.slice(start, end);
+  if (!container) return;
 
   if (filteredUsers.length === 0) {
-    tbody.innerHTML = '';
+    container.innerHTML = '';
     emptyState?.classList.remove('hidden');
     return;
   }
 
   emptyState?.classList.add('hidden');
 
-  tbody.innerHTML = pageUsers.map(user => `
-    <tr>
-      <td>
-        <div class="user-info">
-          <div class="user-avatar">${user.name.charAt(0)}</div>
-          <div>
-            <div class="user-name">${user.name}</div>
-            <div class="user-email">${user.email}</div>
-          </div>
-        </div>
-      </td>
-      <td>
-        <span class="role-badge role-badge-${user.role}">${getRoleLabel(user.role)}</span>
-      </td>
-      <td>
-        <span class="status-badge status-badge-${user.status}">${getStatusLabel(user.status)}</span>
-      </td>
-      <td>${formatDate(user.joinedAt)}</td>
-      <td>${user.purchases}</td>
-      <td class="actions-cell">
-        <button class="action-button action-button-view" onclick="viewUser(${user.id})">詳細</button>
-        <button class="action-button action-button-edit" onclick="editUser(${user.id})">編集</button>
-        ${user.status === 'active'
-          ? `<button class="action-button action-button-suspend" onclick="suspendUser(${user.id})">停止</button>`
-          : `<button class="action-button action-button-edit" onclick="activateUser(${user.id})">有効化</button>`
-        }
-      </td>
-    </tr>
-  `).join('');
-}
-
-/**
- * カード形式でユーザーを表示（モバイル用）
- */
-function renderUsersCards() {
-  const container = document.getElementById('usersCards');
-
-  if (!container) return;
-
-  const start = (currentPage - 1) * perPage;
-  const end = start + perPage;
-  const pageUsers = filteredUsers.slice(start, end);
-
-  if (filteredUsers.length === 0) {
-    container.innerHTML = '';
-    return;
-  }
-
-  container.innerHTML = pageUsers.map(user => `
-    <div class="user-card">
-      <div class="user-card-header">
+  container.innerHTML = filteredUsers.map(user => `
+    <div class="user-card" onclick="openUserModal(${user.id})">
+      <div class="user-card-main">
         <div class="user-avatar">${user.name.charAt(0)}</div>
         <div class="user-card-info">
           <div class="user-card-name">${user.name}</div>
           <div class="user-card-email">${user.email}</div>
         </div>
-        <span class="status-badge status-badge-${user.status}">${getStatusLabel(user.status)}</span>
-      </div>
-      <div class="user-card-details">
-        <div class="user-card-detail">
-          <span class="user-card-detail-label">ロール: </span>
-          <span class="role-badge role-badge-${user.role}">${getRoleLabel(user.role)}</span>
-        </div>
-        <div class="user-card-detail">
-          <span class="user-card-detail-label">登録日: </span>${formatDate(user.joinedAt)}
-        </div>
-        <div class="user-card-detail">
-          <span class="user-card-detail-label">購入数: </span>${user.purchases}
+        <div class="user-card-badges">
+          <span class="badge badge-${user.role}">${getRoleLabel(user.role)}</span>
+          <span class="badge badge-status-${user.status}">${getStatusLabel(user.status)}</span>
         </div>
       </div>
-      <div class="user-card-actions">
-        <button class="action-button action-button-view" onclick="viewUser(${user.id})">詳細</button>
-        <button class="action-button action-button-edit" onclick="editUser(${user.id})">編集</button>
-        ${user.status === 'active'
-          ? `<button class="action-button action-button-suspend" onclick="suspendUser(${user.id})">停止</button>`
-          : `<button class="action-button action-button-edit" onclick="activateUser(${user.id})">有効化</button>`
-        }
+      <div class="user-card-meta">
+        <span>登録: ${formatDate(user.joinedAt)}</span>
+        <span>購入: ${user.packs}パック</span>
+        <span>¥${user.spent.toLocaleString()}</span>
       </div>
     </div>
   `).join('');
-}
-
-/**
- * ページネーションを表示
- */
-function renderPagination() {
-  const paginationInfo = document.getElementById('paginationInfo');
-  const paginationButtons = document.getElementById('paginationButtons');
-
-  if (!paginationInfo || !paginationButtons) return;
-
-  const totalPages = Math.ceil(filteredUsers.length / perPage);
-  const start = (currentPage - 1) * perPage + 1;
-  const end = Math.min(currentPage * perPage, filteredUsers.length);
-
-  paginationInfo.textContent = `${start}-${end} / ${filteredUsers.length}件`;
-
-  let buttonsHtml = `
-    <button class="pagination-button" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-      前へ
-    </button>
-  `;
-
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-      buttonsHtml += `
-        <button class="pagination-button ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
-          ${i}
-        </button>
-      `;
-    } else if (i === currentPage - 2 || i === currentPage + 2) {
-      buttonsHtml += `<span style="padding: 0 0.5rem;">...</span>`;
-    }
-  }
-
-  buttonsHtml += `
-    <button class="pagination-button" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-      次へ
-    </button>
-  `;
-
-  paginationButtons.innerHTML = buttonsHtml;
-}
-
-/**
- * ページを移動
- */
-function goToPage(page) {
-  const totalPages = Math.ceil(filteredUsers.length / perPage);
-  if (page < 1 || page > totalPages) return;
-
-  currentPage = page;
-  renderUsers();
-  window.scrollTo(0, 0);
 }
 
 /**
@@ -311,7 +152,7 @@ function getRoleLabel(role) {
  */
 function getStatusLabel(status) {
   const labels = {
-    active: '有効',
+    active: 'アクティブ',
     suspended: '停止中',
     pending: '保留中'
   };
@@ -319,49 +160,117 @@ function getStatusLabel(status) {
 }
 
 /**
- * ユーザー詳細を表示
+ * ユーザーモーダルを開く
  */
-function viewUser(userId) {
+function openUserModal(userId) {
   const user = mockUsers.find(u => u.id === userId);
-  if (user) {
-    showToast(`${user.name}の詳細を表示（モック）`, 'info');
+  if (!user) return;
+
+  currentUserId = userId;
+
+  // モーダルの内容を更新
+  document.getElementById('modalUserAvatar').textContent = user.name.charAt(0);
+  document.getElementById('modalUserName').textContent = user.name;
+  document.getElementById('modalUserEmail').textContent = user.email;
+
+  // バッジ
+  const roleBadge = document.getElementById('modalUserRole');
+  roleBadge.textContent = getRoleLabel(user.role);
+  roleBadge.className = `badge badge-${user.role}`;
+
+  const statusBadge = document.getElementById('modalUserStatus');
+  statusBadge.textContent = getStatusLabel(user.status);
+  statusBadge.className = `badge badge-status-${user.status}`;
+
+  // アカウント情報
+  document.getElementById('modalUserRegistered').textContent = formatDate(user.joinedAt);
+  document.getElementById('modalUserLastLogin').textContent = formatDate(user.lastLogin);
+  document.getElementById('modalUserLoginMethod').textContent = user.loginMethod;
+  document.getElementById('modalUserCoins').textContent = user.coins.toLocaleString();
+
+  // 利用統計
+  document.getElementById('modalUserPacks').textContent = user.packs;
+  document.getElementById('modalUserCards').textContent = user.cards;
+  document.getElementById('modalUserSpent').textContent = `¥${user.spent.toLocaleString()}`;
+  document.getElementById('modalUserFollowing').textContent = user.following;
+
+  // 停止/有効化ボタン
+  const suspendBtn = document.getElementById('modalSuspendBtn');
+  if (user.status === 'suspended') {
+    suspendBtn.textContent = 'アカウント有効化';
+    suspendBtn.className = 'button button-success';
+  } else {
+    suspendBtn.textContent = 'アカウント停止';
+    suspendBtn.className = 'button button-warning';
   }
+
+  // モーダル表示
+  document.getElementById('userModal').classList.add('active');
 }
 
 /**
- * ユーザーを編集
+ * ユーザーモーダルを閉じる
  */
-function editUser(userId) {
-  const user = mockUsers.find(u => u.id === userId);
-  if (user) {
-    showToast(`${user.name}を編集（モック）`, 'info');
-  }
+function closeUserModal() {
+  document.getElementById('userModal').classList.remove('active');
+  currentUserId = null;
 }
 
 /**
- * ユーザーを停止
+ * ユーザーの停止/有効化を切り替え
  */
-function suspendUser(userId) {
-  const user = mockUsers.find(u => u.id === userId);
-  if (user) {
-    if (confirm(`${user.name}を停止しますか？`)) {
-      user.status = 'suspended';
-      renderUsers();
-      updateStatsSummary();
-      showToast(`${user.name}を停止しました`, 'success');
-    }
-  }
-}
+function toggleUserSuspend() {
+  if (!currentUserId) return;
 
-/**
- * ユーザーを有効化
- */
-function activateUser(userId) {
-  const user = mockUsers.find(u => u.id === userId);
-  if (user) {
+  const user = mockUsers.find(u => u.id === currentUserId);
+  if (!user) return;
+
+  if (user.status === 'suspended') {
+    // 有効化
     user.status = 'active';
-    renderUsers();
-    updateStatsSummary();
     showToast(`${user.name}を有効化しました`, 'success');
+  } else {
+    // 停止確認
+    showConfirmModal(
+      '⚠️',
+      'アカウント停止',
+      `${user.name}のアカウントを停止しますか？`,
+      () => {
+        user.status = 'suspended';
+        updateStatsSummary();
+        renderUserList();
+        closeUserModal();
+        showToast(`${user.name}を停止しました`, 'success');
+      }
+    );
+    return;
   }
+
+  updateStatsSummary();
+  renderUserList();
+  closeUserModal();
+}
+
+/**
+ * 確認モーダルを表示
+ */
+function showConfirmModal(icon, title, message, onConfirm) {
+  document.getElementById('confirmIcon').textContent = icon;
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn.onclick = () => {
+    onConfirm();
+    closeConfirmModal();
+  };
+
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+/**
+ * 確認モーダルを閉じる
+ */
+function closeConfirmModal() {
+  document.getElementById('confirmModal').classList.remove('active');
 }

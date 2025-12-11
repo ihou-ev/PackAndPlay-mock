@@ -3,8 +3,8 @@
  */
 
 let filteredCreators = [...creators];
-let currentPage = 1;
-const perPage = 10;
+let currentCreatorSlug = null;
+let currentTab = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
   // ログイン・管理者権限チェック
@@ -17,11 +17,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // 統計サマリーを更新
   updateStatsSummary();
 
-  // クリエイター一覧を表示
-  renderCreators();
-
-  // イベントリスナーを設定
-  setupEventListeners();
+  // ストリーマー一覧を表示
+  renderCreatorList();
 });
 
 /**
@@ -56,293 +53,286 @@ function renderAdminSidebarNav() {
  */
 function updateStatsSummary() {
   const totalCreators = creators.length;
-  const liveCount = creators.filter(c => c.isLive).length;
-  const totalSales = creators.reduce((sum, c) => sum + (c.totalSales || 0), 0);
-  const totalPacks = creators.reduce((sum, c) => sum + (c.packCount || 0), 0);
+  const liveCreators = creators.filter(c => c.isLive).length;
+  const pendingCreators = 2; // モック値
 
   document.getElementById('totalCreators').textContent = totalCreators;
-  document.getElementById('liveCount').textContent = liveCount;
-  document.getElementById('totalSales').textContent = `¥${totalSales.toLocaleString()}`;
-  document.getElementById('totalPacks').textContent = totalPacks;
+  document.getElementById('liveCreators').textContent = liveCreators;
+  document.getElementById('pendingCreators').textContent = pendingCreators;
 }
 
 /**
- * イベントリスナーを設定
+ * タブを切り替え
  */
-function setupEventListeners() {
-  // 検索入力
-  const searchInput = document.getElementById('searchInput');
-  if (searchInput) {
-    searchInput.addEventListener('input', debounce(() => {
-      filterCreators();
-    }, 300));
-  }
+function switchTab(tab) {
+  currentTab = tab;
 
-  // ステータスフィルタ
-  const statusFilter = document.getElementById('statusFilter');
-  if (statusFilter) {
-    statusFilter.addEventListener('change', filterCreators);
-  }
+  // タブのアクティブ状態を更新
+  document.querySelectorAll('.tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
 
-  // ソート
-  const sortFilter = document.getElementById('sortFilter');
-  if (sortFilter) {
-    sortFilter.addEventListener('change', filterCreators);
-  }
+  applyFilters();
 }
 
 /**
- * クリエイターをフィルタリング
+ * フィルターを適用
  */
-function filterCreators() {
+function applyFilters() {
   const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
-  const statusFilter = document.getElementById('statusFilter')?.value || '';
-  const sortFilter = document.getElementById('sortFilter')?.value || 'sales';
+  const sortFilter = document.getElementById('sortFilter')?.value || 'followers';
 
+  // タブでフィルタ
   filteredCreators = creators.filter(creator => {
+    // 検索フィルタ
     const matchesSearch = !searchQuery ||
       creator.name.toLowerCase().includes(searchQuery) ||
       creator.displayName.toLowerCase().includes(searchQuery) ||
       creator.slug.toLowerCase().includes(searchQuery);
 
-    const matchesStatus = !statusFilter ||
-      (statusFilter === 'live' && creator.isLive) ||
-      (statusFilter === 'offline' && !creator.isLive);
+    // タブフィルタ
+    let matchesTab = true;
+    if (currentTab === 'live') {
+      matchesTab = creator.isLive;
+    } else if (currentTab === 'pending') {
+      matchesTab = creator.status === 'pending';
+    } else if (currentTab === 'suspended') {
+      matchesTab = creator.status === 'suspended';
+    }
 
-    return matchesSearch && matchesStatus;
+    return matchesSearch && matchesTab;
   });
 
   // ソート
   switch (sortFilter) {
-    case 'sales':
-      filteredCreators.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0));
-      break;
     case 'followers':
       filteredCreators.sort((a, b) => (b.followerCount || 0) - (a.followerCount || 0));
       break;
-    case 'packs':
-      filteredCreators.sort((a, b) => (b.packCount || 0) - (a.packCount || 0));
+    case 'sales':
+      filteredCreators.sort((a, b) => (b.totalSales || 0) - (a.totalSales || 0));
       break;
-    case 'name':
-      filteredCreators.sort((a, b) => a.name.localeCompare(b.name, 'ja'));
+    case 'newest':
+      filteredCreators.sort((a, b) => b.id - a.id);
+      break;
+    case 'oldest':
+      filteredCreators.sort((a, b) => a.id - b.id);
       break;
   }
 
-  currentPage = 1;
-  renderCreators();
+  renderCreatorList();
 }
 
 /**
- * クリエイター一覧を表示
+ * ストリーマー一覧を表示
  */
-function renderCreators() {
-  renderCreatorsTable();
-  renderCreatorsCards();
-  renderPagination();
-}
-
-/**
- * テーブル形式でクリエイターを表示
- */
-function renderCreatorsTable() {
-  const tbody = document.getElementById('creatorsTableBody');
+function renderCreatorList() {
+  const container = document.getElementById('creatorList');
   const emptyState = document.getElementById('emptyState');
 
-  if (!tbody) return;
-
-  const start = (currentPage - 1) * perPage;
-  const end = start + perPage;
-  const pageCreators = filteredCreators.slice(start, end);
+  if (!container) return;
 
   if (filteredCreators.length === 0) {
-    tbody.innerHTML = '';
+    container.innerHTML = '';
     emptyState?.classList.remove('hidden');
     return;
   }
 
   emptyState?.classList.add('hidden');
 
-  tbody.innerHTML = pageCreators.map(creator => `
-    <tr>
-      <td>
-        <div class="creator-info">
+  container.innerHTML = filteredCreators.map(creator => `
+    <div class="creator-card" onclick="openCreatorModal('${creator.slug}')">
+      <div class="creator-card-banner" style="${creator.bannerUrl ? `background-image: url('${creator.bannerUrl}')` : ''}"></div>
+      <div class="creator-card-content">
+        <div class="creator-card-main">
           <div class="creator-avatar">
             ${creator.avatarUrl
               ? `<img src="${creator.avatarUrl}" alt="${creator.name}">`
               : creator.name.charAt(0)
             }
           </div>
-          <div>
-            <div class="creator-name">${creator.displayName}</div>
-            <div class="creator-slug">@${creator.slug}</div>
+          <div class="creator-card-info">
+            <div class="creator-card-name">
+              ${creator.displayName}
+              ${creator.isLive ? '<span class="live-badge">LIVE</span>' : ''}
+            </div>
+            <div class="creator-card-channel">@${creator.slug}</div>
+          </div>
+          <div class="creator-card-badges">
+            <span class="badge badge-status-${creator.status || 'active'}">${getStatusLabel(creator.status || 'active')}</span>
           </div>
         </div>
-      </td>
-      <td>
-        ${creator.isLive
-          ? '<span class="live-indicator">LIVE</span>'
-          : '<span class="offline-indicator">オフライン</span>'
-        }
-      </td>
-      <td class="numeric-cell">${(creator.followerCount || 0).toLocaleString()}</td>
-      <td class="numeric-cell">${creator.packCount || 0}</td>
-      <td class="numeric-cell">¥${(creator.totalSales || 0).toLocaleString()}</td>
-      <td class="actions-cell">
-        <button class="action-button action-button-view" onclick="viewCreator('${creator.slug}')">詳細</button>
-        <button class="action-button action-button-edit" onclick="editCreator('${creator.slug}')">編集</button>
-        <button class="action-button action-button-suspend" onclick="suspendCreator('${creator.slug}')">停止</button>
-      </td>
-    </tr>
-  `).join('');
-}
-
-/**
- * カード形式でクリエイターを表示（モバイル用）
- */
-function renderCreatorsCards() {
-  const container = document.getElementById('creatorsCards');
-
-  if (!container) return;
-
-  const start = (currentPage - 1) * perPage;
-  const end = start + perPage;
-  const pageCreators = filteredCreators.slice(start, end);
-
-  if (filteredCreators.length === 0) {
-    container.innerHTML = '';
-    return;
-  }
-
-  container.innerHTML = pageCreators.map(creator => `
-    <div class="creator-card">
-      <div class="creator-card-header">
-        <div class="creator-avatar">
-          ${creator.avatarUrl
-            ? `<img src="${creator.avatarUrl}" alt="${creator.name}">`
-            : creator.name.charAt(0)
-          }
+        <div class="creator-card-stats">
+          <div class="creator-card-stat">
+            <div class="creator-card-stat-value">${(creator.followerCount || 0).toLocaleString()}</div>
+            <div class="creator-card-stat-label">フォロワー</div>
+          </div>
+          <div class="creator-card-stat">
+            <div class="creator-card-stat-value">¥${(creator.totalSales || 0).toLocaleString()}</div>
+            <div class="creator-card-stat-label">売上</div>
+          </div>
+          <div class="creator-card-stat">
+            <div class="creator-card-stat-value">${creator.packCount || 0}</div>
+            <div class="creator-card-stat-label">パック</div>
+          </div>
         </div>
-        <div class="creator-card-info">
-          <div class="creator-card-name">${creator.displayName}</div>
-          <div class="creator-card-slug">@${creator.slug}</div>
-        </div>
-        ${creator.isLive
-          ? '<span class="live-indicator">LIVE</span>'
-          : '<span class="offline-indicator">オフライン</span>'
-        }
-      </div>
-      <div class="creator-card-details">
-        <div class="creator-card-detail">
-          <span class="creator-card-detail-label">フォロワー: </span>${(creator.followerCount || 0).toLocaleString()}
-        </div>
-        <div class="creator-card-detail">
-          <span class="creator-card-detail-label">パック数: </span>${creator.packCount || 0}
-        </div>
-        <div class="creator-card-detail">
-          <span class="creator-card-detail-label">総売上: </span>¥${(creator.totalSales || 0).toLocaleString()}
-        </div>
-      </div>
-      <div class="creator-card-actions">
-        <button class="action-button action-button-view" onclick="viewCreator('${creator.slug}')">詳細</button>
-        <button class="action-button action-button-edit" onclick="editCreator('${creator.slug}')">編集</button>
-        <button class="action-button action-button-suspend" onclick="suspendCreator('${creator.slug}')">停止</button>
       </div>
     </div>
   `).join('');
 }
 
 /**
- * ページネーションを表示
+ * ステータスラベルを取得
  */
-function renderPagination() {
-  const paginationInfo = document.getElementById('paginationInfo');
-  const paginationButtons = document.getElementById('paginationButtons');
-
-  if (!paginationInfo || !paginationButtons) return;
-
-  const totalPages = Math.ceil(filteredCreators.length / perPage);
-  const start = (currentPage - 1) * perPage + 1;
-  const end = Math.min(currentPage * perPage, filteredCreators.length);
-
-  paginationInfo.textContent = `${start}-${end} / ${filteredCreators.length}件`;
-
-  if (totalPages <= 1) {
-    paginationButtons.innerHTML = '';
-    return;
-  }
-
-  let buttonsHtml = `
-    <button class="pagination-button" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
-      前へ
-    </button>
-  `;
-
-  for (let i = 1; i <= totalPages; i++) {
-    if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
-      buttonsHtml += `
-        <button class="pagination-button ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">
-          ${i}
-        </button>
-      `;
-    } else if (i === currentPage - 2 || i === currentPage + 2) {
-      buttonsHtml += `<span style="padding: 0 0.5rem;">...</span>`;
-    }
-  }
-
-  buttonsHtml += `
-    <button class="pagination-button" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
-      次へ
-    </button>
-  `;
-
-  paginationButtons.innerHTML = buttonsHtml;
+function getStatusLabel(status) {
+  const labels = {
+    active: 'アクティブ',
+    suspended: '停止中',
+    pending: '審査待ち'
+  };
+  return labels[status] || status;
 }
 
 /**
- * ページを移動
+ * ストリーマーモーダルを開く
  */
-function goToPage(page) {
-  const totalPages = Math.ceil(filteredCreators.length / perPage);
-  if (page < 1 || page > totalPages) return;
-
-  currentPage = page;
-  renderCreators();
-  window.scrollTo(0, 0);
-}
-
-/**
- * クリエイター詳細を表示
- */
-function viewCreator(slug) {
+function openCreatorModal(slug) {
   const creator = creators.find(c => c.slug === slug);
-  if (creator) {
-    // tanakaの場合は実際のページへ遷移
-    if (slug === 'tanaka') {
-      window.location.href = '../creator/tanaka.html';
-    } else {
-      showToast(`${creator.displayName}の詳細を表示（モック）`, 'info');
-    }
+  if (!creator) return;
+
+  currentCreatorSlug = slug;
+
+  // バナー
+  const bannerEl = document.getElementById('modalCreatorBanner');
+  if (creator.bannerUrl) {
+    bannerEl.style.backgroundImage = `url('${creator.bannerUrl}')`;
+  } else {
+    bannerEl.style.backgroundImage = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)';
+  }
+
+  // アバター
+  const avatarEl = document.getElementById('modalCreatorAvatar');
+  if (creator.avatarUrl) {
+    avatarEl.innerHTML = `<img src="${creator.avatarUrl}" alt="${creator.name}">`;
+  } else {
+    avatarEl.innerHTML = creator.name.charAt(0);
+  }
+
+  // 基本情報
+  document.getElementById('modalCreatorName').textContent = creator.displayName;
+  document.getElementById('modalCreatorChannel').textContent = `@${creator.slug}`;
+
+  // ステータスバッジ
+  const statusBadge = document.getElementById('modalCreatorStatus');
+  statusBadge.textContent = getStatusLabel(creator.status || 'active');
+  statusBadge.className = `badge badge-status-${creator.status || 'active'}`;
+
+  // LIVEバッジ
+  const liveBadge = document.getElementById('modalCreatorLive');
+  liveBadge.classList.toggle('hidden', !creator.isLive);
+
+  // 統計
+  document.getElementById('modalCreatorFollowers').textContent = (creator.followerCount || 0).toLocaleString();
+  document.getElementById('modalCreatorSales').textContent = `¥${(creator.totalSales || 0).toLocaleString()}`;
+  document.getElementById('modalCreatorPacks').textContent = creator.packCount || 0;
+  document.getElementById('modalCreatorCards').textContent = (creator.packCount || 0) * 5; // モック計算
+
+  // プロフィール
+  document.getElementById('modalCreatorBio').textContent = creator.bio || '未設定';
+
+  // アカウント情報
+  document.getElementById('modalCreatorRegistered').textContent = '2025年1月10日'; // モック
+  document.getElementById('modalCreatorPlatform').textContent = 'YouTube';
+  document.getElementById('modalCreatorFeeRate').textContent = '10%';
+  document.getElementById('modalCreatorBank').textContent = creator.id === 1 ? '設定済み' : '未設定';
+
+  // 停止/有効化ボタン
+  const suspendBtn = document.getElementById('modalSuspendBtn');
+  if (creator.status === 'suspended') {
+    suspendBtn.textContent = 'アカウント有効化';
+    suspendBtn.className = 'button button-success';
+  } else {
+    suspendBtn.textContent = 'アカウント停止';
+    suspendBtn.className = 'button button-warning';
+  }
+
+  // モーダル表示
+  document.getElementById('creatorModal').classList.add('active');
+}
+
+/**
+ * ストリーマーモーダルを閉じる
+ */
+function closeCreatorModal() {
+  document.getElementById('creatorModal').classList.remove('active');
+  currentCreatorSlug = null;
+}
+
+/**
+ * クリエイターページを開く
+ */
+function viewCreatorPage() {
+  if (!currentCreatorSlug) return;
+
+  if (currentCreatorSlug === 'tanaka') {
+    window.open('../creator/tanaka.html', '_blank');
+  } else {
+    showToast('このストリーマーのページはモックでは利用できません', 'info');
   }
 }
 
 /**
- * クリエイターを編集
+ * ストリーマーの停止/有効化を切り替え
  */
-function editCreator(slug) {
-  const creator = creators.find(c => c.slug === slug);
-  if (creator) {
-    showToast(`${creator.displayName}を編集（モック）`, 'info');
+function toggleCreatorSuspend() {
+  if (!currentCreatorSlug) return;
+
+  const creator = creators.find(c => c.slug === currentCreatorSlug);
+  if (!creator) return;
+
+  if (creator.status === 'suspended') {
+    // 有効化
+    creator.status = 'active';
+    updateStatsSummary();
+    renderCreatorList();
+    closeCreatorModal();
+    showToast(`${creator.displayName}を有効化しました`, 'success');
+  } else {
+    // 停止確認
+    showConfirmModal(
+      '⚠️',
+      'アカウント停止',
+      `${creator.displayName}のアカウントを停止しますか？\n配信中のパック販売も停止されます。`,
+      () => {
+        creator.status = 'suspended';
+        updateStatsSummary();
+        renderCreatorList();
+        closeCreatorModal();
+        showToast(`${creator.displayName}を停止しました`, 'success');
+      }
+    );
   }
 }
 
 /**
- * クリエイターを停止
+ * 確認モーダルを表示
  */
-function suspendCreator(slug) {
-  const creator = creators.find(c => c.slug === slug);
-  if (creator) {
-    if (confirm(`${creator.displayName}を停止しますか？`)) {
-      showToast(`${creator.displayName}を停止しました（モック）`, 'success');
-    }
-  }
+function showConfirmModal(icon, title, message, onConfirm) {
+  document.getElementById('confirmIcon').textContent = icon;
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmMessage').textContent = message;
+
+  const confirmBtn = document.getElementById('confirmBtn');
+  confirmBtn.onclick = () => {
+    onConfirm();
+    closeConfirmModal();
+  };
+
+  document.getElementById('confirmModal').classList.add('active');
+}
+
+/**
+ * 確認モーダルを閉じる
+ */
+function closeConfirmModal() {
+  document.getElementById('confirmModal').classList.remove('active');
 }
