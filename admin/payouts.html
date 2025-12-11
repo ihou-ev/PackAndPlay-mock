@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#667eea">
+  <meta name="description" content="Pack&Play 売上精算">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Pack&Play Admin">
+  <title>売上精算 - Pack&Play Admin</title>
+  <link rel="stylesheet" href="../css/app.css">
+  <link rel="stylesheet" href="../css/pages/admin/payouts.css">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="../assets/images/icon-192.png">
+  <link rel="apple-touch-icon" href="../assets/images/icon-192.png">
+</head>
+<body>
+  <!-- モバイルメニューボタン -->
+  <button class="mobile-menu-button" id="mobileMenuButton" onclick="toggleMobileMenu()">
+    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+    </svg>
+  </button>
+
+  <!-- モバイルメニューオーバーレイ -->
+  <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+  <!-- サイドバー -->
+  <aside class="sidebar" id="sidebar">
+    <a href="index.html" class="sidebar-logo">
+      <img src="../image/logo.png" alt="Pack&Play" class="sidebar-logo-img">
+      <span class="admin-badge">ADMIN</span>
+    </a>
+    <nav class="sidebar-nav" id="sidebarNav">
+      <!-- JavaScriptで動的に生成 -->
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="sidebar-footer-links">
+        <a href="../legal/terms.html" class="sidebar-footer-link">利用規約</a>
+        <a href="../legal/privacy.html" class="sidebar-footer-link">プライバシー</a>
+        <a href="../legal/contact.html" class="sidebar-footer-link">お問い合わせ</a>
+      </div>
+      <div class="sidebar-footer-copyright">
+        © 2025 Pack&Play
+      </div>
+    </div>
+  </aside>
+
+  <!-- メインコンテンツ -->
+  <div class="main-wrapper">
+    <div class="admin-content">
+      <!-- ヘッダー -->
+      <div class="admin-header">
+        <div>
+          <h1 class="admin-title">売上精算</h1>
+          <p class="admin-description">ストリーマーへの売上振込管理</p>
+        </div>
+        <div class="header-actions">
+          <button class="button button-primary" onclick="openBatchPayoutModal()">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            一括振込処理
+          </button>
+        </div>
+      </div>
+
+      <!-- 統計カード -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">未精算総額</div>
+            <div class="stat-value stat-value-warning" id="unpaidTotal">¥0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">今月振込額</div>
+            <div class="stat-value stat-value-success" id="monthlyPaid">¥0</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">振込待ち</div>
+            <div class="stat-value" id="pendingCount">0件</div>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-info">
+            <div class="stat-label">次回精算日</div>
+            <div class="stat-value stat-value-info" id="nextPayoutDate">-</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 精算サイクル説明 -->
+      <div class="payout-cycle-info">
+        <div class="payout-cycle-icon">📅</div>
+        <div class="payout-cycle-content">
+          <div class="payout-cycle-title">精算サイクル</div>
+          <div class="payout-cycle-description">
+            毎月1日〜末日の売上を翌月15日に振込。最低振込額は¥1,000、手数料10%控除後の金額を振込。
+          </div>
+        </div>
+      </div>
+
+      <!-- タブ -->
+      <div class="tabs">
+        <button class="tab active" data-tab="pending" onclick="switchTab('pending')">振込待ち</button>
+        <button class="tab" data-tab="processing" onclick="switchTab('processing')">処理中</button>
+        <button class="tab" data-tab="completed" onclick="switchTab('completed')">振込完了</button>
+        <button class="tab" data-tab="all" onclick="switchTab('all')">すべて</button>
+      </div>
+
+      <!-- フィルター -->
+      <div class="filters-section">
+        <div class="search-box">
+          <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+          </svg>
+          <input type="text" id="searchInput" class="search-input" placeholder="ストリーマー名で検索..." oninput="applyFilters()">
+        </div>
+        <div class="filters-row">
+          <select id="periodFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">すべての期間</option>
+            <option value="2025-03">2025年3月</option>
+            <option value="2025-02">2025年2月</option>
+            <option value="2025-01">2025年1月</option>
+          </select>
+          <select id="sortFilter" class="filter-select" onchange="applyFilters()">
+            <option value="amount-desc">金額順（高い順）</option>
+            <option value="amount-asc">金額順（低い順）</option>
+            <option value="name">名前順</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 精算リスト -->
+      <div class="payout-list" id="payoutList">
+        <!-- JavaScriptで動的に生成 -->
+      </div>
+
+      <!-- 空状態 -->
+      <div id="emptyState" class="empty-state hidden">
+        <div class="empty-state-icon">💰</div>
+        <div class="empty-state-text">精算データがありません</div>
+        <div class="empty-state-subtext">条件に一致する精算がありません</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 精算詳細モーダル -->
+  <div class="modal-overlay" id="payoutModal">
+    <div class="modal modal-large">
+      <button class="modal-close" onclick="closePayoutModal()">&times;</button>
+      <div class="modal-body">
+        <div class="payout-detail-header">
+          <div class="payout-detail-avatar" id="modalCreatorAvatar">S</div>
+          <div class="payout-detail-info">
+            <h3 class="payout-detail-name" id="modalCreatorName">ストリーマー名</h3>
+            <div class="payout-detail-channel" id="modalCreatorChannel">@channel</div>
+            <div class="payout-detail-badges">
+              <span class="badge" id="modalPayoutStatus">振込待ち</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="payout-detail-section">
+          <h4 class="payout-detail-section-title">精算期間</h4>
+          <div class="payout-period-display" id="modalPayoutPeriod">2025年2月1日 〜 2025年2月28日</div>
+        </div>
+
+        <div class="payout-detail-section">
+          <h4 class="payout-detail-section-title">売上明細</h4>
+          <div class="payout-breakdown">
+            <div class="payout-breakdown-row">
+              <span class="payout-breakdown-label">総売上</span>
+              <span class="payout-breakdown-value" id="modalGrossSales">¥0</span>
+            </div>
+            <div class="payout-breakdown-row">
+              <span class="payout-breakdown-label">プラットフォーム手数料 (10%)</span>
+              <span class="payout-breakdown-value payout-breakdown-deduction" id="modalPlatformFee">-¥0</span>
+            </div>
+            <div class="payout-breakdown-row payout-breakdown-total">
+              <span class="payout-breakdown-label">振込金額</span>
+              <span class="payout-breakdown-value" id="modalNetAmount">¥0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="payout-detail-section">
+          <h4 class="payout-detail-section-title">振込先情報</h4>
+          <div class="payout-bank-info">
+            <div class="payout-bank-row">
+              <span class="payout-bank-label">銀行名</span>
+              <span class="payout-bank-value" id="modalBankName">-</span>
+            </div>
+            <div class="payout-bank-row">
+              <span class="payout-bank-label">支店名</span>
+              <span class="payout-bank-value" id="modalBranchName">-</span>
+            </div>
+            <div class="payout-bank-row">
+              <span class="payout-bank-label">口座種別</span>
+              <span class="payout-bank-value" id="modalAccountType">-</span>
+            </div>
+            <div class="payout-bank-row">
+              <span class="payout-bank-label">口座番号</span>
+              <span class="payout-bank-value" id="modalAccountNumber">-</span>
+            </div>
+            <div class="payout-bank-row">
+              <span class="payout-bank-label">口座名義</span>
+              <span class="payout-bank-value" id="modalAccountHolder">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="payout-detail-section" id="modalHistorySection">
+          <h4 class="payout-detail-section-title">処理履歴</h4>
+          <div class="payout-history" id="modalHistory">
+            <!-- JavaScriptで動的に生成 -->
+          </div>
+        </div>
+
+        <div class="modal-actions" id="modalActions">
+          <button type="button" class="button button-secondary" onclick="closePayoutModal()">閉じる</button>
+          <button type="button" class="button button-primary" id="modalProcessBtn" onclick="processPayout()">振込処理</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 一括振込モーダル -->
+  <div class="modal-overlay" id="batchPayoutModal">
+    <div class="modal">
+      <button class="modal-close" onclick="closeBatchPayoutModal()">&times;</button>
+      <div class="modal-body" style="padding: 1.5rem;">
+        <h3 class="batch-modal-title">一括振込処理</h3>
+        <p class="batch-modal-description">
+          振込待ちの全ストリーマーに対して一括で振込処理を実行します。
+        </p>
+
+        <div class="batch-summary">
+          <div class="batch-summary-row">
+            <span>対象ストリーマー数</span>
+            <span id="batchCreatorCount">0名</span>
+          </div>
+          <div class="batch-summary-row">
+            <span>合計振込金額</span>
+            <span id="batchTotalAmount">¥0</span>
+          </div>
+        </div>
+
+        <div class="batch-warning">
+          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+          <span>この操作は取り消せません。振込データを確認してください。</span>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="button button-secondary" onclick="closeBatchPayoutModal()">キャンセル</button>
+          <button type="button" class="button button-primary" onclick="executeBatchPayout()">一括振込を実行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 確認モーダル -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal modal-small">
+      <div class="modal-body" style="padding: 1.5rem;">
+        <div class="confirm-icon" id="confirmIcon">⚠️</div>
+        <h3 class="confirm-title" id="confirmTitle">確認</h3>
+        <p class="confirm-message" id="confirmMessage">この操作を実行しますか？</p>
+        <div class="modal-actions">
+          <button type="button" class="button button-secondary" onclick="closeConfirmModal()">キャンセル</button>
+          <button type="button" class="button button-primary" id="confirmBtn">実行</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト -->
+  <script src="../js/services/storage.js"></script>
+  <script src="../js/core/utils.js"></script>
+  <script src="../js/components/modal.js"></script>
+  <script src="../js/components/toast.js"></script>
+  <script src="../js/mock-data.js"></script>
+  <script src="../js/main.js"></script>
+  <script src="../js/pages/admin/payouts.js"></script>
+</body>
+</html>
