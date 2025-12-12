@@ -1,23 +1,23 @@
 /**
- * ユーザー管理ページ
+ * 視聴者管理ページ
  */
 
-// モックユーザーデータ
-const mockUsers = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-15', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 1500, packs: 5, cards: 23, spent: 2500, following: 8 },
-  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-20', lastLogin: '2025-03-19', loginMethod: 'Twitch', coins: 800, packs: 12, cards: 45, spent: 6000, following: 15 },
-  { id: 3, name: '佐藤健太', email: 'sato@example.com', role: 'creator', status: 'active', joinedAt: '2025-01-10', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 3 },
-  { id: 4, name: '山田美咲', email: 'yamada@example.com', role: 'viewer', status: 'suspended', joinedAt: '2025-03-05', lastLogin: '2025-03-10', loginMethod: 'YouTube', coins: 200, packs: 2, cards: 8, spent: 1000, following: 5 },
-  { id: 5, name: '伊藤翔', email: 'ito@example.com', role: 'viewer', status: 'active', joinedAt: '2025-03-10', lastLogin: '2025-03-18', loginMethod: 'Twitch', coins: 2000, packs: 8, cards: 32, spent: 4000, following: 12 },
-  { id: 6, name: '渡辺真理', email: 'watanabe@example.com', role: 'creator', status: 'active', joinedAt: '2025-02-01', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 7 },
-  { id: 7, name: '高橋悠', email: 'takahashi@example.com', role: 'viewer', status: 'active', joinedAt: '2025-03-18', lastLogin: '2025-03-19', loginMethod: 'X', coins: 500, packs: 1, cards: 4, spent: 500, following: 2 },
-  { id: 8, name: '小林愛', email: 'kobayashi@example.com', role: 'viewer', status: 'active', joinedAt: '2025-01-25', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 3000, packs: 15, cards: 67, spent: 7500, following: 20 },
-  { id: 9, name: '加藤大輔', email: 'kato@example.com', role: 'admin', status: 'active', joinedAt: '2025-01-01', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 0, packs: 0, cards: 0, spent: 0, following: 0 },
-  { id: 10, name: '吉田麻衣', email: 'yoshida@example.com', role: 'viewer', status: 'active', joinedAt: '2025-02-28', lastLogin: '2025-03-17', loginMethod: 'Twitch', coins: 1200, packs: 3, cards: 12, spent: 1500, following: 6 }
+// モック視聴者データ（視聴者のみ）
+const mockViewers = [
+  { id: 1, name: '田中太郎', email: 'tanaka@example.com', status: 'active', joinedAt: '2025-01-15', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 1500, packs: 5, cards: 23, spent: 2500, following: 8 },
+  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', status: 'active', joinedAt: '2025-02-20', lastLogin: '2025-03-19', loginMethod: 'Twitch', coins: 800, packs: 12, cards: 45, spent: 6000, following: 15 },
+  { id: 3, name: '山田美咲', email: 'yamada@example.com', status: 'suspended', joinedAt: '2025-03-05', lastLogin: '2025-03-10', loginMethod: 'YouTube', coins: 200, packs: 2, cards: 8, spent: 1000, following: 5 },
+  { id: 4, name: '伊藤翔', email: 'ito@example.com', status: 'active', joinedAt: '2025-03-10', lastLogin: '2025-03-18', loginMethod: 'Twitch', coins: 2000, packs: 8, cards: 32, spent: 4000, following: 12 },
+  { id: 5, name: '高橋悠', email: 'takahashi@example.com', status: 'active', joinedAt: '2025-03-18', lastLogin: '2025-03-19', loginMethod: 'X', coins: 500, packs: 1, cards: 4, spent: 500, following: 2 },
+  { id: 6, name: '小林愛', email: 'kobayashi@example.com', status: 'active', joinedAt: '2025-01-25', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 3000, packs: 15, cards: 67, spent: 7500, following: 20 },
+  { id: 7, name: '吉田麻衣', email: 'yoshida@example.com', status: 'active', joinedAt: '2025-02-28', lastLogin: '2025-03-17', loginMethod: 'Twitch', coins: 1200, packs: 3, cards: 12, spent: 1500, following: 6 },
+  { id: 8, name: '中村健一', email: 'nakamura@example.com', status: 'active', joinedAt: '2025-01-20', lastLogin: '2025-03-19', loginMethod: 'YouTube', coins: 2500, packs: 10, cards: 42, spent: 5000, following: 9 },
+  { id: 9, name: '松本さくら', email: 'matsumoto@example.com', status: 'active', joinedAt: '2025-02-14', lastLogin: '2025-03-20', loginMethod: 'Twitch', coins: 1800, packs: 7, cards: 28, spent: 3500, following: 11 },
+  { id: 10, name: '井上大地', email: 'inoue@example.com', status: 'suspended', joinedAt: '2025-03-01', lastLogin: '2025-03-08', loginMethod: 'YouTube', coins: 100, packs: 1, cards: 3, spent: 500, following: 3 }
 ];
 
-let filteredUsers = [...mockUsers];
-let currentUserId = null;
+let filteredViewers = [...mockViewers];
+let currentViewerId = null;
 
 document.addEventListener('DOMContentLoaded', () => {
   // ログイン・管理者権限チェック
@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // 統計サマリーを更新
   updateStatsSummary();
 
-  // ユーザー一覧を表示
+  // 視聴者一覧を表示
   renderUserList();
 });
 
@@ -44,7 +44,7 @@ function renderAdminSidebarNav() {
   const currentPath = window.location.pathname;
   const navItems = [
     { href: 'index.html', icon: '📊', label: 'ダッシュボード' },
-    { href: 'users.html', icon: '👥', label: 'ユーザー管理' },
+    { href: 'users.html', icon: '👥', label: '視聴者管理' },
     { href: 'creators.html', icon: '🎬', label: 'ストリーマー管理' },
     { href: 'payouts.html', icon: '💰', label: '売上精算' },
     { href: 'reports.html', icon: '📈', label: 'レポート' },
@@ -66,9 +66,9 @@ function renderAdminSidebarNav() {
  * 統計サマリーを更新
  */
 function updateStatsSummary() {
-  const totalUsers = mockUsers.length;
-  const activeUsers = mockUsers.filter(u => u.status === 'active').length;
-  const suspendedUsers = mockUsers.filter(u => u.status === 'suspended').length;
+  const totalUsers = mockViewers.length;
+  const activeUsers = mockViewers.filter(u => u.status === 'active').length;
+  const suspendedUsers = mockViewers.filter(u => u.status === 'suspended').length;
 
   document.getElementById('totalUsers').textContent = totalUsers;
   document.getElementById('activeUsers').textContent = activeUsers;
@@ -80,25 +80,23 @@ function updateStatsSummary() {
  */
 function applyFilters() {
   const searchQuery = document.getElementById('searchInput')?.value.toLowerCase() || '';
-  const roleFilter = document.getElementById('roleFilter')?.value || '';
   const statusFilter = document.getElementById('statusFilter')?.value || '';
 
-  filteredUsers = mockUsers.filter(user => {
+  filteredViewers = mockViewers.filter(user => {
     const matchesSearch = !searchQuery ||
       user.name.toLowerCase().includes(searchQuery) ||
       user.email.toLowerCase().includes(searchQuery);
 
-    const matchesRole = !roleFilter || user.role === roleFilter;
     const matchesStatus = !statusFilter || user.status === statusFilter;
 
-    return matchesSearch && matchesRole && matchesStatus;
+    return matchesSearch && matchesStatus;
   });
 
   renderUserList();
 }
 
 /**
- * ユーザー一覧を表示
+ * 視聴者一覧を表示
  */
 function renderUserList() {
   const container = document.getElementById('userList');
@@ -106,7 +104,7 @@ function renderUserList() {
 
   if (!container) return;
 
-  if (filteredUsers.length === 0) {
+  if (filteredViewers.length === 0) {
     container.innerHTML = '';
     emptyState?.classList.remove('hidden');
     return;
@@ -114,7 +112,7 @@ function renderUserList() {
 
   emptyState?.classList.add('hidden');
 
-  container.innerHTML = filteredUsers.map(user => `
+  container.innerHTML = filteredViewers.map(user => `
     <div class="user-card" onclick="openUserModal(${user.id})">
       <div class="user-card-main">
         <div class="user-avatar">${user.name.charAt(0)}</div>
@@ -123,7 +121,6 @@ function renderUserList() {
           <div class="user-card-email">${user.email}</div>
         </div>
         <div class="user-card-badges">
-          <span class="badge badge-${user.role}">${getRoleLabel(user.role)}</span>
           <span class="badge badge-status-${user.status}">${getStatusLabel(user.status)}</span>
         </div>
       </div>
@@ -134,18 +131,6 @@ function renderUserList() {
       </div>
     </div>
   `).join('');
-}
-
-/**
- * ロールラベルを取得
- */
-function getRoleLabel(role) {
-  const labels = {
-    viewer: '視聴者',
-    creator: 'ストリーマー',
-    admin: '管理者'
-  };
-  return labels[role] || role;
 }
 
 /**
@@ -161,24 +146,20 @@ function getStatusLabel(status) {
 }
 
 /**
- * ユーザーモーダルを開く
+ * 視聴者モーダルを開く
  */
 function openUserModal(userId) {
-  const user = mockUsers.find(u => u.id === userId);
+  const user = mockViewers.find(u => u.id === userId);
   if (!user) return;
 
-  currentUserId = userId;
+  currentViewerId = userId;
 
   // モーダルの内容を更新
   document.getElementById('modalUserAvatar').textContent = user.name.charAt(0);
   document.getElementById('modalUserName').textContent = user.name;
   document.getElementById('modalUserEmail').textContent = user.email;
 
-  // バッジ
-  const roleBadge = document.getElementById('modalUserRole');
-  roleBadge.textContent = getRoleLabel(user.role);
-  roleBadge.className = `badge badge-${user.role}`;
-
+  // ステータスバッジ
   const statusBadge = document.getElementById('modalUserStatus');
   statusBadge.textContent = getStatusLabel(user.status);
   statusBadge.className = `badge badge-status-${user.status}`;
@@ -210,20 +191,20 @@ function openUserModal(userId) {
 }
 
 /**
- * ユーザーモーダルを閉じる
+ * 視聴者モーダルを閉じる
  */
 function closeUserModal() {
   document.getElementById('userModal').classList.remove('active');
-  currentUserId = null;
+  currentViewerId = null;
 }
 
 /**
- * ユーザーの停止/有効化を切り替え
+ * 視聴者の停止/有効化を切り替え
  */
 function toggleUserSuspend() {
-  if (!currentUserId) return;
+  if (!currentViewerId) return;
 
-  const user = mockUsers.find(u => u.id === currentUserId);
+  const user = mockViewers.find(u => u.id === currentViewerId);
   if (!user) return;
 
   if (user.status === 'suspended') {

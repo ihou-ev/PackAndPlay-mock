@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#667eea">
-  <meta name="description" content="Pack&Play ユーザー管理">
+  <meta name="description" content="Pack&Play 視聴者管理">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="Pack&Play Admin">
-  <title>ユーザー管理 - Pack&Play Admin</title>
+  <title>視聴者管理 - Pack&Play Admin</title>
   <link rel="stylesheet" href="../css/app.css">
   <link rel="stylesheet" href="../css/pages/admin/users.css">
   <link rel="manifest" href="../manifest.json">
@@ -54,8 +54,8 @@
       <!-- ヘッダー -->
       <div class="admin-header">
         <div>
-          <h1 class="admin-title">ユーザー管理</h1>
-          <p class="admin-description">登録ユーザーの管理と監視</p>
+          <h1 class="admin-title">視聴者管理</h1>
+          <p class="admin-description">視聴者アカウントの管理と監視</p>
         </div>
       </div>
 
@@ -63,7 +63,7 @@
       <div class="stats-grid">
         <div class="stat-card">
           <div class="stat-info">
-            <div class="stat-label">総ユーザー</div>
+            <div class="stat-label">総視聴者</div>
             <div class="stat-value" id="totalUsers">0</div>
           </div>
         </div>
@@ -90,11 +90,6 @@
           <input type="text" id="searchInput" class="search-input" placeholder="名前・メールで検索..." oninput="applyFilters()">
         </div>
         <div class="filters-row">
-          <select id="roleFilter" class="filter-select" onchange="applyFilters()">
-            <option value="">すべてのロール</option>
-            <option value="viewer">視聴者</option>
-            <option value="creator">ストリーマー</option>
-          </select>
           <select id="statusFilter" class="filter-select" onchange="applyFilters()">
             <option value="">すべてのステータス</option>
             <option value="active">アクティブ</option>
@@ -111,7 +106,7 @@
       <!-- 空状態 -->
       <div id="emptyState" class="empty-state hidden">
         <div class="empty-state-icon">👤</div>
-        <div class="empty-state-text">ユーザーが見つかりません</div>
+        <div class="empty-state-text">視聴者が見つかりません</div>
         <div class="empty-state-subtext">検索条件を変更してください</div>
       </div>
     </div>
@@ -128,7 +123,6 @@
             <h3 class="user-detail-name" id="modalUserName">ユーザー名</h3>
             <div class="user-detail-email" id="modalUserEmail">email@example.com</div>
             <div class="user-detail-badges">
-              <span class="badge" id="modalUserRole">視聴者</span>
               <span class="badge" id="modalUserStatus">アクティブ</span>
             </div>
           </div>

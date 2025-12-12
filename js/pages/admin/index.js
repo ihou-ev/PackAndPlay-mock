@@ -24,7 +24,7 @@ function renderAdminSidebarNav() {
   const currentPath = window.location.pathname;
   const navItems = [
     { href: 'index.html', icon: '📊', label: 'ダッシュボード' },
-    { href: 'users.html', icon: '👥', label: 'ユーザー管理' },
+    { href: 'users.html', icon: '👥', label: '視聴者管理' },
     { href: 'creators.html', icon: '🎬', label: 'ストリーマー管理' },
     { href: 'payouts.html', icon: '💰', label: '売上精算' },
     { href: 'reports.html', icon: '📈', label: 'レポート' },
