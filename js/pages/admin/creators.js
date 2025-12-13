@@ -1,5 +1,6 @@
 /**
  * ストリーマー管理ページ
+ * renderAdminSidebarNavはmain.jsで定義
  */
 
 let filteredCreators = [...creators];
@@ -20,34 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // ストリーマー一覧を表示
   renderCreatorList();
 });
-
-/**
- * 管理者用サイドバーナビゲーションを生成
- */
-function renderAdminSidebarNav() {
-  const navContainer = document.getElementById('sidebarNav');
-  if (!navContainer) return;
-
-  const currentPath = window.location.pathname;
-  const navItems = [
-    { href: 'index.html', icon: '📊', label: 'ダッシュボード' },
-    { href: 'users.html', icon: '👥', label: '視聴者管理' },
-    { href: 'creators.html', icon: '🎬', label: 'ストリーマー管理' },
-    { href: 'payouts.html', icon: '💰', label: '売上精算' },
-    { href: 'reports.html', icon: '📥', label: 'データエクスポート' },
-    { href: 'settings.html', icon: '⚙️', label: 'システム設定' }
-  ];
-
-  navContainer.innerHTML = navItems.map(item => {
-    const isActive = currentPath.includes(item.href);
-    return `
-      <a href="${item.href}" class="sidebar-nav-link ${isActive ? 'active' : ''}">
-        <span class="sidebar-nav-icon">${item.icon}</span>
-        <span class="sidebar-nav-label">${item.label}</span>
-      </a>
-    `;
-  }).join('');
-}
 
 /**
  * 統計サマリーを更新

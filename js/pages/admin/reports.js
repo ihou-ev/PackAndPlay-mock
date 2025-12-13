@@ -1,120 +1,8 @@
 /**
  * データエクスポートページ
+ * mockViewers, mockPayoutsはmock-data.jsで定義
+ * renderAdminSidebarNavはmain.jsで定義
  */
-
-// モック視聴者データ（users.jsと同じ）
-const mockViewers = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com', status: 'active', joinedAt: '2025-01-15', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 1500, packs: 5, cards: 23, spent: 2500, following: 8 },
-  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', status: 'active', joinedAt: '2025-02-20', lastLogin: '2025-03-19', loginMethod: 'Twitch', coins: 800, packs: 12, cards: 45, spent: 6000, following: 15 },
-  { id: 3, name: '山田美咲', email: 'yamada@example.com', status: 'suspended', joinedAt: '2025-03-05', lastLogin: '2025-03-10', loginMethod: 'YouTube', coins: 200, packs: 2, cards: 8, spent: 1000, following: 5 },
-  { id: 4, name: '伊藤翔', email: 'ito@example.com', status: 'active', joinedAt: '2025-03-10', lastLogin: '2025-03-18', loginMethod: 'Twitch', coins: 2000, packs: 8, cards: 32, spent: 4000, following: 12 },
-  { id: 5, name: '高橋悠', email: 'takahashi@example.com', status: 'active', joinedAt: '2025-03-18', lastLogin: '2025-03-19', loginMethod: 'X', coins: 500, packs: 1, cards: 4, spent: 500, following: 2 },
-  { id: 6, name: '小林愛', email: 'kobayashi@example.com', status: 'active', joinedAt: '2025-01-25', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 3000, packs: 15, cards: 67, spent: 7500, following: 20 },
-  { id: 7, name: '吉田麻衣', email: 'yoshida@example.com', status: 'active', joinedAt: '2025-02-28', lastLogin: '2025-03-17', loginMethod: 'Twitch', coins: 1200, packs: 3, cards: 12, spent: 1500, following: 6 },
-  { id: 8, name: '中村健一', email: 'nakamura@example.com', status: 'active', joinedAt: '2025-01-20', lastLogin: '2025-03-19', loginMethod: 'YouTube', coins: 2500, packs: 10, cards: 42, spent: 5000, following: 9 },
-  { id: 9, name: '松本さくら', email: 'matsumoto@example.com', status: 'active', joinedAt: '2025-02-14', lastLogin: '2025-03-20', loginMethod: 'Twitch', coins: 1800, packs: 7, cards: 28, spent: 3500, following: 11 },
-  { id: 10, name: '井上大地', email: 'inoue@example.com', status: 'suspended', joinedAt: '2025-03-01', lastLogin: '2025-03-08', loginMethod: 'YouTube', coins: 100, packs: 1, cards: 3, spent: 500, following: 3 }
-];
-
-// モック精算データ（payouts.jsと同じ）
-const mockPayouts = [
-  {
-    id: 1,
-    creatorId: 1,
-    creatorName: '田中太郎',
-    creatorSlug: 'tanaka',
-    period: '2025-02',
-    periodStart: '2025-02-01',
-    periodEnd: '2025-02-28',
-    grossSales: 125000,
-    platformFee: 12500,
-    netAmount: 112500,
-    status: 'pending',
-    paidAt: null,
-    bankName: '三菱UFJ銀行',
-    accountHolder: 'タナカ タロウ'
-  },
-  {
-    id: 2,
-    creatorId: 2,
-    creatorName: 'ゲーミングマスター',
-    creatorSlug: 'gamingmaster',
-    period: '2025-02',
-    periodStart: '2025-02-01',
-    periodEnd: '2025-02-28',
-    grossSales: 87000,
-    platformFee: 8700,
-    netAmount: 78300,
-    status: 'pending',
-    paidAt: null,
-    bankName: 'みずほ銀行',
-    accountHolder: 'ゲーミングマスター'
-  },
-  {
-    id: 3,
-    creatorId: 3,
-    creatorName: 'さとうスポーツ',
-    creatorSlug: 'satosports',
-    period: '2025-02',
-    periodStart: '2025-02-01',
-    periodEnd: '2025-02-28',
-    grossSales: 45000,
-    platformFee: 4500,
-    netAmount: 40500,
-    status: 'pending',
-    paidAt: null,
-    bankName: '楽天銀行',
-    accountHolder: 'サトウ スポーツ'
-  },
-  {
-    id: 4,
-    creatorId: 1,
-    creatorName: '田中太郎',
-    creatorSlug: 'tanaka',
-    period: '2025-01',
-    periodStart: '2025-01-01',
-    periodEnd: '2025-01-31',
-    grossSales: 98000,
-    platformFee: 9800,
-    netAmount: 88200,
-    status: 'completed',
-    paidAt: '2025-02-15',
-    bankName: '三菱UFJ銀行',
-    accountHolder: 'タナカ タロウ'
-  },
-  {
-    id: 5,
-    creatorId: 2,
-    creatorName: 'ゲーミングマスター',
-    creatorSlug: 'gamingmaster',
-    period: '2025-01',
-    periodStart: '2025-01-01',
-    periodEnd: '2025-01-31',
-    grossSales: 156000,
-    platformFee: 15600,
-    netAmount: 140400,
-    status: 'completed',
-    paidAt: '2025-02-15',
-    bankName: 'みずほ銀行',
-    accountHolder: 'ゲーミングマスター'
-  },
-  {
-    id: 6,
-    creatorId: 4,
-    creatorName: 'クリエイティブ花子',
-    creatorSlug: 'creativeh',
-    period: '2025-02',
-    periodStart: '2025-02-01',
-    periodEnd: '2025-02-28',
-    grossSales: 23000,
-    platformFee: 2300,
-    netAmount: 20700,
-    status: 'processing',
-    paidAt: null,
-    bankName: '三井住友銀行',
-    accountHolder: 'クリエイティブ ハナコ'
-  }
-];
 
 // エクスポート履歴
 let exportHistory = [];
@@ -133,34 +21,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // エクスポート履歴を表示
   renderExportHistory();
 });
-
-/**
- * 管理者用サイドバーナビゲーションを生成
- */
-function renderAdminSidebarNav() {
-  const navContainer = document.getElementById('sidebarNav');
-  if (!navContainer) return;
-
-  const currentPath = window.location.pathname;
-  const navItems = [
-    { href: 'index.html', icon: '📊', label: 'ダッシュボード' },
-    { href: 'users.html', icon: '👥', label: '視聴者管理' },
-    { href: 'creators.html', icon: '🎬', label: 'ストリーマー管理' },
-    { href: 'payouts.html', icon: '💰', label: '売上精算' },
-    { href: 'reports.html', icon: '📥', label: 'データエクスポート' },
-    { href: 'settings.html', icon: '⚙️', label: 'システム設定' }
-  ];
-
-  navContainer.innerHTML = navItems.map(item => {
-    const isActive = currentPath.includes(item.href);
-    return `
-      <a href="${item.href}" class="sidebar-nav-link ${isActive ? 'active' : ''}">
-        <span class="sidebar-nav-icon">${item.icon}</span>
-        <span class="sidebar-nav-label">${item.label}</span>
-      </a>
-    `;
-  }).join('');
-}
 
 /**
  * データ件数を更新
@@ -261,8 +121,8 @@ function exportPayouts() {
     p.netAmount,
     statusLabels[p.status] || p.status,
     p.paidAt || '',
-    p.bankName,
-    p.accountHolder
+    p.bankInfo?.bankName || '',
+    p.bankInfo?.accountHolder || ''
   ]);
 
   const csv = generateCSV(headers, rows);
@@ -357,12 +217,12 @@ function renderExportHistory() {
   if (exportHistory.length === 0) {
     container.innerHTML = '';
     emptyState?.classList.remove('hidden');
-    emptyState.style.display = '';
+    if (emptyState) emptyState.style.display = '';
     return;
   }
 
   emptyState?.classList.add('hidden');
-  emptyState.style.display = 'none';
+  if (emptyState) emptyState.style.display = 'none';
 
   container.innerHTML = exportHistory.map(item => {
     const date = new Date(item.exportedAt);

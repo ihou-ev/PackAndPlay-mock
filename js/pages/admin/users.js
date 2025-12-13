@@ -1,20 +1,7 @@
 /**
  * 視聴者管理ページ
+ * mockViewersはmock-data.jsで定義
  */
-
-// モック視聴者データ（視聴者のみ）
-const mockViewers = [
-  { id: 1, name: '田中太郎', email: 'tanaka@example.com', status: 'active', joinedAt: '2025-01-15', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 1500, packs: 5, cards: 23, spent: 2500, following: 8 },
-  { id: 2, name: '鈴木花子', email: 'suzuki@example.com', status: 'active', joinedAt: '2025-02-20', lastLogin: '2025-03-19', loginMethod: 'Twitch', coins: 800, packs: 12, cards: 45, spent: 6000, following: 15 },
-  { id: 3, name: '山田美咲', email: 'yamada@example.com', status: 'suspended', joinedAt: '2025-03-05', lastLogin: '2025-03-10', loginMethod: 'YouTube', coins: 200, packs: 2, cards: 8, spent: 1000, following: 5 },
-  { id: 4, name: '伊藤翔', email: 'ito@example.com', status: 'active', joinedAt: '2025-03-10', lastLogin: '2025-03-18', loginMethod: 'Twitch', coins: 2000, packs: 8, cards: 32, spent: 4000, following: 12 },
-  { id: 5, name: '高橋悠', email: 'takahashi@example.com', status: 'active', joinedAt: '2025-03-18', lastLogin: '2025-03-19', loginMethod: 'X', coins: 500, packs: 1, cards: 4, spent: 500, following: 2 },
-  { id: 6, name: '小林愛', email: 'kobayashi@example.com', status: 'active', joinedAt: '2025-01-25', lastLogin: '2025-03-20', loginMethod: 'YouTube', coins: 3000, packs: 15, cards: 67, spent: 7500, following: 20 },
-  { id: 7, name: '吉田麻衣', email: 'yoshida@example.com', status: 'active', joinedAt: '2025-02-28', lastLogin: '2025-03-17', loginMethod: 'Twitch', coins: 1200, packs: 3, cards: 12, spent: 1500, following: 6 },
-  { id: 8, name: '中村健一', email: 'nakamura@example.com', status: 'active', joinedAt: '2025-01-20', lastLogin: '2025-03-19', loginMethod: 'YouTube', coins: 2500, packs: 10, cards: 42, spent: 5000, following: 9 },
-  { id: 9, name: '松本さくら', email: 'matsumoto@example.com', status: 'active', joinedAt: '2025-02-14', lastLogin: '2025-03-20', loginMethod: 'Twitch', coins: 1800, packs: 7, cards: 28, spent: 3500, following: 11 },
-  { id: 10, name: '井上大地', email: 'inoue@example.com', status: 'suspended', joinedAt: '2025-03-01', lastLogin: '2025-03-08', loginMethod: 'YouTube', coins: 100, packs: 1, cards: 3, spent: 500, following: 3 }
-];
 
 let filteredViewers = [...mockViewers];
 let currentViewerId = null;
@@ -33,34 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
   // 視聴者一覧を表示
   renderUserList();
 });
-
-/**
- * 管理者用サイドバーナビゲーションを生成
- */
-function renderAdminSidebarNav() {
-  const navContainer = document.getElementById('sidebarNav');
-  if (!navContainer) return;
-
-  const currentPath = window.location.pathname;
-  const navItems = [
-    { href: 'index.html', icon: '📊', label: 'ダッシュボード' },
-    { href: 'users.html', icon: '👥', label: '視聴者管理' },
-    { href: 'creators.html', icon: '🎬', label: 'ストリーマー管理' },
-    { href: 'payouts.html', icon: '💰', label: '売上精算' },
-    { href: 'reports.html', icon: '📥', label: 'データエクスポート' },
-    { href: 'settings.html', icon: '⚙️', label: 'システム設定' }
-  ];
-
-  navContainer.innerHTML = navItems.map(item => {
-    const isActive = currentPath.includes(item.href);
-    return `
-      <a href="${item.href}" class="sidebar-nav-link ${isActive ? 'active' : ''}">
-        <span class="sidebar-nav-icon">${item.icon}</span>
-        <span class="sidebar-nav-label">${item.label}</span>
-      </a>
-    `;
-  }).join('');
-}
 
 /**
  * 統計サマリーを更新
